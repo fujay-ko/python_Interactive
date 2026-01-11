@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 進階教學：I/O、運算子、條件與迴圈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        .code-font { font-family: 'Fira Code', monospace; }
+
+        /* 程式碼高亮顏色 (針對深色模式調整) */
+        .python-keyword { color: #f9807b; } /* 類似 #d73a49，但更亮 */
+        .python-string { color: #f6ad55; } /* 亮橙色 */
+        .python-func { color: #4dc0b5; } /* 青色 */
+        .python-comment { color: #a0aec0; font-style: italic; } /* 亮灰色 */
+        .python-class { color: #ecc94b; } /* 黃色 */
+        .python-num { color: #79b8ff; } /* 淺藍色數字 */
+        
+        .bit-box { 
+            width: 24px; 
+            height: 32px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border: 1px solid #4a5568; /* 深色邊框 */
+            font-family: 'Fira Code', monospace; 
+        }
+        .bit-active { background-color: #3b82f6; color: white; border-color: #2563eb; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); } /* 深色陰影 */
+        
+        /* Animation for loop visualization */
+        .highlight-row { background-color: rgba(59, 130, 246, 0.2); transition: background-color 0.3s; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen">
+
+    <main class="container mx-auto px-4 py-8 space-y-12 max-w-5xl">
+
+        <!-- Header Section -->
+        <header class="text-center py-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">Python 全方位互動進階課程</h2>
+            <p class="text-lg text-gray-400">I/O 處理、運算子、條件判斷與迴圈進階技巧</p>
+        </header>
+
+        <!-- ================= 第 1 大項：輸入與輸出 ================= -->
+        <div class="border-b-2 border-gray-700 pb-2 mb-8">
+            <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">1</span>輸入與輸出 - 進階</h2>
+        </div>
+
+        <!-- 1. Split Input -->
+        <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-blue-500">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                    <i class="fas fa-keyboard text-blue-500 mr-2"></i>1.1 同行輸入 (split & map)
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font space-y-3">
+                        <div>
+                            <span class="python-comment"># 將輸入切割後逐一賦值 (例如 3 個值)</span><br>
+                            a, b, c = <span class="python-func">map</span>(<span class="python-func">int</span>, input().split())
+                        </div>
+                        <div>
+                            <span class="python-comment"># 將輸入切割後存入串列 (例如任意數量的值)</span><br>
+                            x = [int(i) <span class="python-keyword">for</span> i <span class="python-keyword">in</span> input().split()]
+                        </div>
+                    </div>
+                    <div>
+                         <label class="text-sm font-bold text-gray-400">測試輸入:</label>
+                         <div class="flex gap-2 mt-1">
+                             <input type="text" id="splitInput" value="10 20 30" class="flex-1 p-2 border border-gray-600 rounded code-font bg-gray-900 text-gray-200" oninput="runSplit()">
+                             <button onclick="runSplit()" class="bg-blue-600 text-white px-4 rounded hover:bg-blue-700">執行</button>
+                         </div>
+                         <div id="splitResult" class="mt-2 text-sm text-blue-400 font-mono"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Advanced Print -->
+        <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-green-500">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                    <i class="fas fa-print text-green-500 mr-2"></i>1.2 同行輸出 (end & sep)
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font">
+                        <span class="python-comment"># 使用 for 迴圈搭配 end</span><br>
+                        <span class="python-keyword">for</span> i <span class="python-keyword">in</span> <span class="python-func">range</span>(3):<br>
+                        &nbsp;&nbsp;<span class="python-func">print</span>(i, end="-")<br>
+                        <span class="python-comment"># 輸出: 0-1-2-</span>
+                    </div>
+                    <div>
+                        <div class="flex gap-4 mb-2">
+                            <div class="flex-1">
+                                <label class="text-xs font-bold text-gray-500">sep</label>
+                                <input id="sepInput" value=" | " class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200" oninput="updatePrint()">
+                            </div>
+                            <div class="flex-1">
+                                <label class="text-xs font-bold text-gray-500">end</label>
+                                <input id="endInput" value="..." class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200" oninput="updatePrint()">
+                            </div>
+                        </div>
+                        <div id="printOutput" class="bg-black text-green-400 p-2 rounded code-font text-sm"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Formatting -->
+        <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-purple-500">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                    <i class="fas fa-percentage text-purple-500 mr-2"></i>1.3 格式化輸出 (f-string)
+                </h3>
+                <div class="flex flex-wrap gap-4">
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 flex-1 min-w-[200px]">
+                        <div class="text-xs text-gray-400 mb-1">小數點 (:.2f)</div>
+                        <div class="code-font text-purple-400 font-bold">f"{95.123:.2f}" -> 95.12</div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 flex-1 min-w-[200px]">
+                        <div class="text-xs text-gray-400 mb-1">補零 (:03d)</div>
+                        <div class="code-font text-purple-400 font-bold">f"{5:03d}" -> 005</div>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 flex-1 min-w-[200px]">
+                        <div class="text-xs text-gray-400 mb-1">對齊 (:^6)</div>
+                        <div class="code-font text-purple-400 font-bold">f"{'Hi':^6}" -> "  Hi  "</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= 第 2 大項：運算子 - 進階 ================= -->
+        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+            <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">2</span>運算子 - 進階</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <!-- 2.1 & 2.2 -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-orange-500 p-6 space-y-6">
+                <div>
+                    <h3 class="font-bold text-lg text-gray-100 mb-1">2.1 複合指派運算子 (Augmented Assignment Operators)</h3>
+                    <p class="text-sm text-gray-400 mb-3">
+                        複合指派運算子（如 <code class="code-font bg-gray-700 px-1 rounded">+=</code>, <code class="code-font bg-gray-700 px-1 rounded">-=</code>, <code class="code-font bg-gray-700 px-1 rounded">*=</code> 等）能將數學運算與變數賦值合併，例如 <code class="code-font bg-gray-700 px-1 rounded">x = x + 5</code> 可以簡寫為 <code class="code-font bg-gray-700 px-1 rounded">x += 5</code>，使程式碼更簡潔高效。
+                    </p>
+                    <div class="bg-orange-900/40 p-4 rounded border border-orange-700 flex items-center justify-between">
+                        <div class="code-font text-xl font-bold text-orange-400" id="augValue">x = 10</div>
+                        <div class="space-x-2">
+                            <button onclick="updateAug(5)" class="bg-gray-800 border border-orange-500 text-orange-400 px-3 py-1 rounded hover:bg-orange-900 text-sm code-font">x += 5</button>
+                            <button onclick="updateAug(-5)" class="bg-gray-800 border border-orange-500 text-orange-400 px-3 py-1 rounded hover:bg-orange-900 text-sm code-font">x -= 5</button>
+                            <button onclick="updateAug('reset')" class="text-gray-500 hover:text-gray-300 text-xs px-2">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="border-gray-700">
+                <div>
+                    <h3 class="font-bold text-lg text-gray-100 mb-2">2.2 三元運算子</h3>
+                    <div class="bg-gray-800 text-gray-200 p-3 rounded text-sm code-font mb-3">
+                        status = <span class="text-green-400">"Pass"</span> <span class="python-keyword">if</span> score >= 60 <span class="python-keyword">else</span> <span class="text-red-400">"Fail"</span>
+                    </div>
+                    <div class="flex items-center gap-4 bg-gray-700 p-3 rounded border border-gray-600">
+                        <div>
+                            <label class="text-xs font-bold text-gray-500">Score:</label>
+                            <input type="number" id="ternaryInput" value="80" class="w-20 p-1 border border-gray-600 rounded text-center code-font bg-gray-900 text-gray-200" oninput="checkTernary()">
+                        </div>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <div id="ternaryResult" class="font-bold text-lg text-green-400">Pass</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2.3 Bitwise -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-indigo-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">2.3 位元運算子 (&, |, ^)</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between bg-indigo-900/40 p-3 rounded">
+                        <div class="flex gap-4 text-sm">
+                            <label class="font-bold">A: <input type="number" id="bitA" value="10" class="w-16 p-1 border border-gray-600 rounded text-center bg-gray-900 text-gray-200" oninput="updateBitwise()"></label>
+                            <label class="font-bold">B: <input type="number" id="bitB" value="12" class="w-16 p-1 border border-gray-600 rounded text-center bg-gray-900 text-gray-200" oninput="updateBitwise()"></label>
+                        </div>
+                        <select id="bitOp" class="p-1 border border-gray-600 rounded text-sm font-bold text-indigo-400 bg-gray-900" onchange="updateBitwise()">
+                            <option value="&">& (AND)</option>
+                            <option value="|">| (OR)</option>
+                            <option value="^">^ (XOR)</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2 font-mono text-sm">
+                        <div class="flex items-center justify-end">
+                            <span class="mr-2 text-gray-400">A</span>
+                            <div id="bitsA" class="flex gap-1"></div>
+                        </div>
+                        <div class="flex items-center justify-end">
+                            <span class="mr-2 text-gray-400">B</span>
+                            <div id="bitsB" class="flex gap-1"></div>
+                        </div>
+                        <div class="border-b border-gray-600 my-1"></div>
+                        <div class="flex items-center justify-end">
+                            <span class="mr-2 font-bold text-indigo-400" id="bitOpLabel">&</span>
+                            <div id="bitsRes" class="flex gap-1"></div>
+                        </div>
+                        <div class="text-right text-indigo-400 font-bold mt-1">
+                            Result: <span id="decRes"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2.4 Short Circuit -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-red-500 p-6 lg:col-span-2">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">2.4 短路求值 (Short-circuit Evaluation)</h3>
+                <p class="text-sm text-gray-400 mb-4">
+                    Python 的 <code class="code-font bg-gray-700 px-1 rounded">and</code> 與 <code class="code-font bg-gray-700 px-1 rounded">or</code> 具有「懶惰」特性。
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border border-red-700 rounded-lg p-4 bg-red-900/40">
+                        <h4 class="font-bold text-red-400 mb-2">or 運算 (A or B)</h4>
+                        <div class="flex items-center space-x-4 mb-3">
+                            <button id="btnOrA" onclick="toggleShort('or')" class="px-3 py-1 bg-green-500 text-white rounded shadow text-sm font-bold w-24">A: True</button>
+                            <span class="text-gray-500 font-bold">or</span>
+                            <div class="px-3 py-1 bg-gray-600 text-gray-300 rounded shadow text-sm font-bold w-24 text-center border-2 border-dashed border-gray-500">B: Check()</div>
+                        </div>
+                        <div id="resOr" class="text-sm text-gray-300 p-2 bg-gray-800 rounded border border-red-700">
+                            因為 A 是 True，結果已確定為 True。<br>
+                            <span class="text-red-400 font-bold">B 不會被執行 (短路)</span>
+                        </div>
+                    </div>
+                    <div class="border border-blue-700 rounded-lg p-4 bg-blue-900/40">
+                        <h4 class="font-bold text-blue-400 mb-2">and 運算 (A and B)</h4>
+                        <div class="flex items-center space-x-4 mb-3">
+                            <button id="btnAndA" onclick="toggleShort('and')" class="px-3 py-1 bg-red-500 text-white rounded shadow text-sm font-bold w-24">A: False</button>
+                            <span class="text-gray-500 font-bold">and</span>
+                            <div class="px-3 py-1 bg-gray-600 text-gray-300 rounded shadow text-sm font-bold w-24 text-center border-2 border-dashed border-gray-500">B: Check()</div>
+                        </div>
+                        <div id="resAnd" class="text-sm text-gray-300 p-2 bg-gray-800 rounded border border-blue-700">
+                            因為 A 是 False，結果已確定為 False。<br>
+                            <span class="text-blue-400 font-bold">B 不會被執行 (短路)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= 第 3 大項：條件判斷 - 進階 ================= -->
+        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+            <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">3</span>條件判斷 - 進階</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <!-- 3.1 & 3.3 in & Truthy -->
+            <div class="space-y-8">
+                <!-- 3.1 Using 'in' -->
+                <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-pink-500 p-6">
+                    <h3 class="font-bold text-lg text-gray-100 mb-4">3.1 使用 in 檢查多個值</h3>
+                    <p class="text-sm text-gray-400 mb-3">取代冗長的 <code class="code-font bg-gray-700 px-1 rounded">if x==a or x==b...</code></p>
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
+                        <span class="python-keyword">if</span> role <span class="python-keyword">in</span> [<span class="python-string">"admin"</span>, <span class="python-string">"editor"</span>]:<br>
+                        &nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"Access Granted"</span>)
+                    </div>
+                    <div class="flex gap-3 items-center bg-gray-900/50 p-3 rounded border border-gray-700">
+                        <label class="text-sm font-bold text-gray-400">Role:</label>
+                        <input id="roleInput" type="text" value="guest" class="flex-1 bg-gray-800 border border-gray-600 text-gray-200 rounded px-2 py-1 code-font" oninput="checkRole()">
+                        <span id="roleResult" class="text-sm font-bold text-red-400">Access Denied</span>
+                    </div>
+                </section>
+
+                <!-- 3.3 Truthy/Falsy -->
+                <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-yellow-500 p-6">
+                    <h3 class="font-bold text-lg text-gray-100 mb-4">3.3 真值測試 (Truthy/Falsy)</h3>
+                    <p class="text-sm text-gray-400 mb-3">
+                        Python 視 <code class="code-font text-yellow-400">0</code>, <code class="code-font text-yellow-400">""</code>, <code class="code-font text-yellow-400">[]</code>, <code class="code-font text-yellow-400">None</code> 為 <span class="text-red-400">False</span>。
+                    </p>
+                    
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
+                        score = <span id="truthyDisplayVal" class="text-yellow-400">0</span><br>
+                        <span class="python-keyword">if not</span> score:<br>
+                        &nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"不及格"</span>)
+                    </div>
+
+                    <div class="flex gap-2 mb-2">
+                        <button onclick="checkTruthy(0)" class="flex-1 bg-gray-700 hover:bg-gray-600 py-1 rounded text-sm border border-gray-600">0 (Number)</button>
+                        <button onclick="checkTruthy('')" class="flex-1 bg-gray-700 hover:bg-gray-600 py-1 rounded text-sm border border-gray-600">"" (String)</button>
+                        <button onclick="checkTruthy(100)" class="flex-1 bg-gray-700 hover:bg-gray-600 py-1 rounded text-sm border border-gray-600">100</button>
+                    </div>
+                    <div id="truthyResult" class="bg-black text-red-400 p-2 rounded code-font text-sm text-center">
+                        不及格
+                    </div>
+                </section>
+            </div>
+
+            <!-- 3.2 & 3.4 Nested & Match -->
+            <div class="space-y-8">
+                <!-- 3.2 Nested Simplification -->
+                <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-cyan-500 p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-lg text-gray-100">3.2 巢狀條件簡化</h3>
+                        <button onclick="toggleNested()" class="text-xs bg-cyan-600 text-white px-2 py-1 rounded hover:bg-cyan-700">切換寫法</button>
+                    </div>
+                    
+                    <div id="nestedCodeBlock" class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font relative min-h-[140px]">
+                        <!-- Dynamic Content -->
+                    </div>
+                    <p class="text-right text-xs text-gray-500 mt-2" id="nestedLabel">使用 Guard Clause 提早返回，減少縮排。</p>
+                </section>
+
+                <!-- 3.4 Match Case -->
+                <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-teal-500 p-6">
+                    <h3 class="font-bold text-lg text-gray-100 mb-4">3.4 match-case (Python 3.10+)</h3>
+                    <p class="text-sm text-gray-400 mb-3">結構化模式比對，類似 switch-case 但更強大。</p>
+                    
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
+                        <span class="python-keyword">match</span> status:<br>
+                        &nbsp;&nbsp;<span class="python-keyword">case</span> 200: <span class="python-func">print</span>(<span class="python-string">"OK"</span>)<br>
+                        &nbsp;&nbsp;<span class="python-keyword">case</span> 404: <span class="python-func">print</span>(<span class="python-string">"Not Found"</span>)<br>
+                        &nbsp;&nbsp;<span class="python-keyword">case</span> _: <span class="python-func">print</span>(<span class="python-string">"Error"</span>)
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-gray-900/50 p-3 rounded border border-gray-700">
+                        <label class="text-sm font-bold text-gray-400">Status:</label>
+                        <select id="matchSelect" class="bg-gray-800 text-gray-200 border border-gray-600 rounded px-2 py-1 code-font" onchange="runMatch()">
+                            <option value="200">200</option>
+                            <option value="404">404</option>
+                            <option value="500">500</option>
+                        </select>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <span id="matchResult" class="text-teal-400 font-bold code-font">OK</span>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- ================= 第 4 大項：for 迴圈 - 進階 ================= -->
+        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+            <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">4</span>for 迴圈 - 進階</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+
+            <!-- 4.1 enumerate & zip -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-emerald-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-4">4.1 Enumerate & Zip</h3>
+                <p class="text-sm text-gray-400 mb-3">
+                    <code class="code-font text-emerald-400">enumerate</code> 同時取得索引與值，<code class="code-font text-emerald-400">zip</code> 同時遍歷多個串列。
+                </p>
+                
+                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
+                    <span class="python-keyword">for</span> i, val <span class="python-keyword">in</span> <span class="python-func">enumerate</span>(items):<br>
+                    <span class="python-keyword">for</span> n, s <span class="python-keyword">in</span> <span class="python-func">zip</span>(names, scores):
+                </div>
+
+                <h4 class="font-semibold text-md text-gray-200 mt-4 border-b border-gray-700 pb-1 mb-2">Zip 互動</h4>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <div>
+                        <label class="text-xs text-gray-500 block">List A (Names)</label>
+                        <input id="zipListA" value="Amy, Bob, Cat" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runZip()">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 block">List B (Scores)</label>
+                        <input id="zipListB" value="90, 85, 77" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runZip()">
+                    </div>
+                </div>
+                <button onclick="runZip()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-1 rounded mb-2">Run Zip(A, B)</button>
+                <div id="zipResult" class="bg-black p-2 rounded text-sm text-emerald-400 code-font h-20 overflow-auto border border-emerald-900/50"></div>
+                
+                <hr class="border-gray-700 my-4">
+
+                <h4 class="font-semibold text-md text-gray-200 mt-2 border-b border-gray-700 pb-1 mb-2">Enumerate 互動</h4>
+                <div>
+                    <label class="text-xs text-gray-500 block">List C (Items)</label>
+                    <input id="enumList" value="apple, banana, cherry" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runEnumerate()">
+                </div>
+                <button onclick="runEnumerate()" class="w-full bg-emerald-800 hover:bg-emerald-900 text-white py-1 rounded mt-2 mb-2">Run Enumerate(C)</button>
+                <div id="enumResult" class="bg-black p-2 rounded text-sm text-emerald-400 code-font h-20 overflow-auto border border-emerald-900/50"></div>
+            </section>
+
+            <!-- 4.2 List Comprehension & Reversed -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-violet-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-4">4.2 串列生成式 & Reversed</h3>
+                <p class="text-sm text-gray-400 mb-3">
+                    用一行程式碼建立串列，並可搭配 <code class="code-font text-violet-400">reversed()</code> 反向遍歷。
+                </p>
+                
+                <div id="compCode" class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
+                    <!-- Dynamic code here -->
+                </div>
+
+                <div class="flex items-center gap-4 mb-3">
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-500 block">Expression (use 'x')</label>
+                        <input type="text" id="compExpr" value="x*x" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runComp()">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500 block">Range</label>
+                        <input type="number" id="compRange" value="5" class="w-16 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm text-gray-200" oninput="runComp()">
+                    </div>
+                    <div class="flex items-center pt-4">
+                        <input type="checkbox" id="compRev" class="mr-2" onchange="runComp()">
+                        <label for="compRev" class="text-sm text-gray-300">reversed()</label>
+                    </div>
+                    <button onclick="runComp()" class="ml-auto bg-violet-600 hover:bg-violet-700 text-white px-3 py-1 rounded text-sm self-end">Generate</button>
+                </div>
+                <div id="compResult" class="bg-black p-2 rounded text-sm text-violet-400 code-font border border-violet-900/50">
+                    [0, 1, 4, 9, 16]
+                </div>
+            </section>
+
+            <!-- 4.3 For-Else -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-rose-500 p-6 lg:col-span-2">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">4.3 For-Else 子句</h3>
+                <p class="text-sm text-gray-400 mb-4">
+                    當迴圈<span class="text-rose-400 font-bold">完整執行完畢</span>且<span class="text-rose-400 font-bold">沒有遇到 break</span>時，才會執行 else 區塊。
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font">
+                        <span class="python-keyword">for</span> item <span class="python-keyword">in</span> data:<br>
+                        &nbsp;&nbsp;<span class="python-keyword">if</span> item == target:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"Found!"</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-keyword">break</span><br>
+                        <span class="python-keyword">else</span>:<br>
+                        &nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"Not Found"</span>)
+                    </div>
+                    
+                    <div class="flex flex-col justify-center space-y-4">
+                         <div class="flex gap-2">
+                             <input id="searchList" value="10, 20, 30, 40" class="flex-1 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm text-gray-200 placeholder-gray-500">
+                             <input id="searchTarget" value="25" class="w-16 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm text-gray-200 text-center" placeholder="Val">
+                             <button onclick="runForElse()" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1 rounded text-sm">Search</button>
+                         </div>
+                         <div id="forElseResult" class="text-center text-lg font-bold text-gray-500 border border-dashed border-gray-700 p-2 rounded">
+                             Result will appear here
+                         </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= 第 5 大項：while 迴圈 - 進階 ================= -->
+        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+            <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">5</span>while 迴圈 - 進階</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <!-- 5.1 Flag & While -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-amber-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">5.1 旗標 (Flag) 與 while True</h3>
+                <p class="text-sm text-gray-400 mb-4">使用變數控制迴圈狀態，或使用無窮迴圈配合 break。</p>
+
+                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
+                    <span class="python-comment"># while True 寫法</span><br>
+                    hp = 100<br>
+                    <span class="python-keyword">while</span> <span class="python-keyword">True</span>:<br>
+                    &nbsp;&nbsp;<span class="python-comment"># 假設每次攻擊都扣 20 HP</span><br>
+                    &nbsp;&nbsp;hp -= 20<br>
+                    &nbsp;&nbsp;<span class="python-keyword">if</span> hp <= 0:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"魔物已被擊敗!"</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-keyword">break</span>
+                </div>
+                
+                <div class="bg-gray-900/50 p-4 rounded border border-amber-900/50 flex items-center justify-between mb-4">
+                    <div class="text-center">
+                        <div class="text-xs text-gray-500 mb-1">HP (Flag)</div>
+                        <div id="hpVal" class="text-2xl font-bold text-amber-400 code-font">100</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-gray-500 mb-1">Loop Status</div>
+                        <div id="loopStatus" class="text-sm font-bold text-green-400">Running...</div>
+                    </div>
+                </div>
+                
+                <button onclick="hitMonster()" id="hitBtn" class="w-full bg-gray-700 hover:bg-gray-600 border border-gray-500 text-gray-200 py-2 rounded font-bold transition-colors">
+                    Hit Monster (Damage 20)
+                </button>
+                <button onclick="resetMonster()" class="w-full mt-2 text-xs text-gray-500 hover:text-gray-300">Reset</button>
+            </section>
+
+            <!-- 5.2 Do-While Simulation -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-sky-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">5.2 模擬 Do-While</h3>
+                <p class="text-sm text-gray-400 mb-4">Python 沒有 do-while，但可透過「無窮迴圈 + 條件判斷」實現「至少執行一次」的邏輯。</p>
+                
+                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
+                    <span class="python-keyword">while</span> <span class="python-keyword">True</span>:<br>
+                    &nbsp;&nbsp;pw = <span class="python-func">input</span>(<span class="python-string">"Password: "</span>)<br>
+                    &nbsp;&nbsp;<span class="python-keyword">if</span> pw == <span class="python-string">"1234"</span>: <span class="python-keyword">break</span>
+                </div>
+
+                <div class="flex gap-2">
+                    <input type="password" id="doWhileInput" placeholder="Try 1234" class="flex-1 bg-gray-900 border border-gray-600 rounded px-3 py-1 text-gray-200 code-font">
+                    <button onclick="checkDoWhile()" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-1 rounded">Enter</button>
+                </div>
+                <div id="doWhileMsg" class="mt-2 text-sm text-gray-500 h-5">Waiting for input...</div>
+            </section>
+
+            <!-- 5.3 Loop Invariant -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-fuchsia-500 p-6 lg:col-span-2">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">5.3 迴圈不變式 (Loop Invariant)</h3>
+                <p class="text-sm text-gray-400 mb-4">
+                    在迴圈執行過程中，始終保持為真的性質。用於驗證演算法正確性。
+                    <br>例如：計算總和時，<code class="code-font bg-gray-900 px-1 rounded">current_sum</code> 永遠等於「目前已遍歷元素的總和」。
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1 w-full">
+                        <div class="flex justify-between items-end mb-2 px-1">
+                            <span class="text-xs text-gray-500">List: [10, 5, 8, 3]</span>
+                            <span class="text-xs text-fuchsia-400 font-bold" id="invariantStep">Step: 0</span>
+                        </div>
+                        <!-- Visualization Bar -->
+                        <div class="flex h-10 rounded overflow-hidden border border-gray-600 bg-gray-900" id="invBarContainer">
+                            <div class="flex-1 flex items-center justify-center border-r border-gray-700" id="inv0">10</div>
+                            <div class="flex-1 flex items-center justify-center border-r border-gray-700" id="inv1">5</div>
+                            <div class="flex-1 flex items-center justify-center border-r border-gray-700" id="inv2">8</div>
+                            <div class="flex-1 flex items-center justify-center" id="inv3">3</div>
+                        </div>
+                        <button onclick="nextInvariant()" class="mt-3 w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white py-1 rounded text-sm">Next Step (Iterate)</button>
+                    </div>
+
+                    <div class="flex-1 bg-gray-900 p-4 rounded border border-fuchsia-900/50 w-full">
+                        <h4 class="text-fuchsia-500 font-bold text-sm mb-2 border-b border-gray-700 pb-1">Invariant Check</h4>
+                        <div class="space-y-1 text-sm code-font text-gray-300">
+                            <div>i (Index): <span id="invI" class="text-white">0</span></div>
+                            <div>Total: <span id="invTotal" class="text-white">0</span></div>
+                            <div class="mt-2 text-gray-500 text-xs italic">
+                                Invariant: Total == sum(list[0:i])
+                            </div>
+                            <div id="invStatus" class="text-green-400 font-bold mt-1">True (0 == 0)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+
+        <!-- ================= 第 6 大項：串列 - 進階 ================= -->
+        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+            <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">6</span>串列 - 進階</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- 6.1 Advanced Slicing -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-lime-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">6.1 切片進階 (Advanced Slicing)</h3>
+                <p class="text-sm text-gray-400 mb-4">使用 `[start:stop:step]` 語法，搭配負索引與步進值，可實現更靈活的取值與反轉。</p>
+
+                <div class="mb-3">
+                    <label class="text-xs text-gray-500 block">原始串列 (以逗號分隔)</label>
+                    <input id="sliceList" value="0, 10, 20, 30, 40, 50, 60" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runSlicing()">
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 mb-3">
+                    <div>
+                        <label class="text-xs text-gray-500">Start</label>
+                        <input id="sliceStart" placeholder="None" class="w-full bg-gray-900 border border-gray-600 rounded p-1 text-sm code-font text-center" oninput="runSlicing()">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Stop</label>
+                        <input id="sliceStop" placeholder="None" class="w-full bg-gray-900 border border-gray-600 rounded p-1 text-sm code-font text-center" oninput="runSlicing()">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Step</label>
+                        <input id="sliceStep" placeholder="None" class="w-full bg-gray-900 border border-gray-600 rounded p-1 text-sm code-font text-center" oninput="runSlicing()">
+                    </div>
+                </div>
+                 <div class="flex gap-2 mb-3">
+                    <button onclick="setSliceExample(null, null, -1)" class="flex-1 text-xs bg-gray-700 hover:bg-gray-600 py-1 rounded">反轉 [::-1]</button>
+                    <button onclick="setSliceExample(1, null, 2)" class="flex-1 text-xs bg-gray-700 hover:bg-gray-600 py-1 rounded">隔位取值 [1::2]</button>
+                 </div>
+
+                <div id="sliceResult" class="bg-black p-2 rounded text-sm text-lime-400 code-font border border-lime-900/50 min-h-[50px]"></div>
+            </section>
+
+            <!-- 6.2 Shallow vs Deep Copy -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-cyan-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">6.2 淺拷貝 vs 深拷貝</h3>
+                <p class="text-sm text-gray-400 mb-4">
+                    <code class="code-font">copy()</code> 是淺拷貝 (只複製第一層)，<code class="code-font">deepcopy()</code> 是深拷貝 (遞迴複製所有)。
+                </p>
+
+                <div class="flex items-center gap-2 mb-3">
+                    <label class="text-sm text-gray-400">修改 `original[0][0]` 為:</label>
+                    <input id="copyValue" value="99" class="w-16 bg-gray-900 border border-gray-600 rounded p-1 text-sm code-font text-center" oninput="runCopy()">
+                </div>
+                
+                <div class="space-y-2 text-sm code-font">
+                    <div id="copyOriginal" class="bg-gray-900/50 p-2 rounded"></div>
+                    <div id="copyShallow" class="bg-gray-900/50 p-2 rounded"></div>
+                    <div id="copyDeep" class="bg-gray-900/50 p-2 rounded"></div>
+                </div>
+                 <p class="text-xs text-gray-500 mt-2 italic">* 深拷貝需要 `import copy` 模組。</p>
+            </section>
+
+            <!-- 6.3 Multidimensional Lists -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-pink-500 p-6 lg:col-span-2">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">6.3 多維串列 (矩陣)</h3>
+                <p class="text-sm text-gray-400 mb-4">透過巢狀串列來模擬矩陣，並用 `matrix[row][col]` 的方式存取元素。</p>
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div id="matrixContainer" class="grid grid-cols-3 gap-1 bg-gray-900 p-2 rounded border border-gray-700 self-start">
+                        <!-- Matrix cells will be generated here -->
+                    </div>
+                    <div class="flex-1 w-full">
+                        <div class="flex items-center gap-2 mb-3">
+                             <label class="text-sm text-gray-400">Row:</label>
+                             <input type="number" id="matrixRow" value="0" min="0" max="2" class="w-16 bg-gray-900 border border-gray-600 rounded p-1 text-sm code-font text-center" oninput="runMatrix()">
+                             <label class="text-sm text-gray-400">Col:</label>
+                             <input type="number" id="matrixCol" value="0" min="0" max="2" class="w-16 bg-gray-900 border border-gray-600 rounded p-1 text-sm code-font text-center" oninput="runMatrix()">
+                        </div>
+                        <div id="matrixResult" class="bg-black p-3 rounded text-pink-400 code-font border border-pink-900/50"></div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 6.4 sort() vs sorted() -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-yellow-500 p-6">
+                 <h3 class="font-bold text-lg text-gray-100 mb-2">6.4 `sort()` vs `sorted()`</h3>
+                 <p class="text-sm text-gray-400 mb-4">`sort()` 原地排序，`sorted()` 回傳新串列。可搭配 `key` 參數自訂排序邏輯。</p>
+
+                 <div class="mb-3">
+                    <label class="text-xs text-gray-500 block">原始資料 (以逗號分隔)</label>
+                    <input id="sortList" value="5, 1, 4, 3, 2" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runSort()">
+                 </div>
+
+                 <div class="grid grid-cols-2 gap-2 mb-3">
+                     <button onclick="runSort('sort')" class="bg-yellow-600 hover:bg-yellow-700 text-black py-1 rounded text-sm font-bold">執行 list.sort()</button>
+                     <button onclick="runSort('sorted')" class="bg-yellow-800 hover:bg-yellow-900 text-white py-1 rounded text-sm font-bold">執行 sorted(list)</button>
+                 </div>
+
+                 <div class="space-y-2 text-sm code-font">
+                    <div id="sortOriginal" class="bg-gray-900/50 p-2 rounded"></div>
+                    <div id="sortResult" class="bg-black p-2 rounded border border-yellow-900/50 min-h-[70px]"></div>
+                 </div>
+            </section>
+
+            <!-- 6.5 List Unpacking -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-purple-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-2">6.5 串列解包 (Unpacking)</h3>
+                <p class="text-sm text-gray-400 mb-4">將串列元素快速賦值給多個變數，可使用 `*` 捕捉剩餘項目。</p>
+                
+                <div class="mb-3">
+                    <label class="text-xs text-gray-500 block">輸入串列 (以逗號分隔)</label>
+                    <input id="unpackList" value="10, 20, 30, 40, 50" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runUnpack()">
+                 </div>
+
+                 <div id="unpackResult" class="space-y-2 text-sm code-font text-purple-300">
+                    <!-- Unpacking results here -->
+                 </div>
+            </section>
+        </div>
+
+        <!-- ================= 第 7 大項：字串 - 進階 ================= -->
+        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+            <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">7</span>字串 - 進階</h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+
+            <!-- 7.1 格式化進階: 對齊、填充、千分位 -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-yellow-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-4">7.1 格式化進階: 對齊、填充、千分位</h3>
+                <p class="text-sm text-gray-400 mb-3">使用 f-string 進行字串格式化，可控制對齊、填充字符及數字千分位。</p>
+                <div class="space-y-3">
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font">
+                        <span class="python-comment"># 右對齊，寬度為 10</span><br>
+                        result = <span class="python-string">f"{'Hello':>10}"</span> <span class="python-comment"># '     Hello'</span>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font">
+                        <span class="python-comment"># 居中對齊，寬度為 10，用 '*' 填充</span><br>
+                        result = <span class="python-string">f"{'Python':*^10}"</span> <span class="python-comment"># '**Python**'</span>
+                    </div>
+                    <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font">
+                        <span class="python-comment"># 數字千分位逗號</span><br>
+                        result = <span class="python-string">f"{1234567:,}"</span> <span class="python-comment"># '1,234,567'</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7.2 正則表達式(Regular Expression)基礎 -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-orange-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-4">7.2 正則表達式(Regular Expression)基礎</h3>
+                <p class="text-sm text-gray-400 mb-3">
+                    使用 <code class="code-font text-orange-400">re</code> 模組進行複雜的字串匹配與操作。<br>
+                    常見函數：<code class="code-font text-orange-400">re.search()</code>, <code class="code-font text-orange-400">re.findall()</code>, <code class="code-font text-orange-400">re.sub()</code>
+                </p>
+                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font">
+                    <span class="python-keyword">import</span> re<br>
+                    text = <span class="python-string">"My phone number is 123-456-7890."</span><br>
+                    pattern = <span class="python-string">r"\d{3}-\d{3}-\d{4}"</span><br>
+                    match = re.<span class="python-func">search</span>(pattern, text)<br>
+                    <span class="python-keyword">if</span> match:<br>
+                    &nbsp;&nbsp;<span class="python-func">print</span>(match.group()) <span class="python-comment"># 輸出: 123-456-7890</span>
+                </div>
+            </section>
+
+            <!-- 7.3 字串編碼: Unicode、UTF-8 -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-blue-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-4">7.3 字串編碼: Unicode、UTF-8</h3>
+                <p class="text-sm text-gray-400 mb-3">
+                    字串在 Python 3 預設為 Unicode。使用 <code class="code-font text-blue-400">.encode()</code> 和 <code class="code-font text-blue-400">.decode()</code> 進行編碼轉換。
+                </p>
+                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font">
+                    s = <span class="python-string">"你好"</span><br>
+                    encoded_s = s.<span class="python-func">encode</span>(<span class="python-string">"utf-8"</span>)<br>
+                    <span class="python-func">print</span>(encoded_s) <span class="python-comment"># 輸出: b'\xe4\xbd\xa0\xe5\xa5\xbd'</span><br>
+                    decoded_s = encoded_s.<span class="python-func">decode</span>(<span class="python-string">"utf-8"</span>)<br>
+                    <span class="python-func">print</span>(decoded_s) <span class="python-comment"># 輸出: 你好</span>
+                </div>
+            </section>
+
+            <!-- 7.4 join() vs 重複串接(效能) -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-green-500 p-6">
+                <h3 class="font-bold text-lg text-gray-100 mb-4">7.4 join() vs 重複串接(效能)</h3>
+                <p class="text-sm text-gray-400 mb-3">
+                    <code class="code-font text-green-400">str.join()</code> 對於拼接大量字串比使用 <code class="code-font text-green-400">+</code> 運算子效率更高。
+                </p>
+                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font">
+                    words = [<span class="python-string">"Hello"</span>, <span class="python-string">"world"</span>, <span class="python-string">"from"</span>, <span class="python-string">"Python"</span>]<br>
+                    <span class="python-comment"># 使用 join (推薦)</span><br>
+                    sentence_join = <span class="python-string">" "</span>.<span class="python-func">join</span>(words)<br>
+                    <span class="python-func">print</span>(sentence_join) <span class="python-comment"># 輸出: Hello world from Python</span><br><br>
+                    <span class="python-comment"># 使用 + 運算子 (效率較差)</span><br>
+                    sentence_concat = <span class="python-string">""</span><br>
+                    <span class="python-keyword">for</span> word <span class="python-keyword">in</span> words:<br>
+                    &nbsp;&nbsp;sentence_concat += word + <span class="python-string">" "</span><br>
+                    <span class="python-func">print</span>(sentence_concat.strip()) <span class="python-comment"># 輸出: Hello world from Python</span>
+                </div>
+            </section>
+
+            <!-- 7.5 多行字串、原始字串 -->
+            <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-red-500 p-6 lg:col-span-2">
+                <h3 class="font-bold text-lg text-gray-100 mb-4">7.5 多行字串、原始字串</h3>
+                <p class="text-sm text-gray-400 mb-3">
+                    多行字串使用三引號 <code class="code-font text-red-400">"""..."""</code> 或 <code class="code-font text-red-400">'''...'''</code>。原始字串加前綴 <code class="code-font text-red-400">r</code>，避免反斜線逸出。
+                </p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font">
+                        <span class="python-comment"># 多行字串</span><br>
+                        multi_line = <span class="python-string">"""This is<br>a multi-line<br>string."""</span><br>
+                        <span class="python-func">print</span>(multi_line)
+                    </div>
+                    <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font">
+                        <span class="python-comment"># 原始字串 (常用於正則表達式或檔案路徑)</span><br>
+                        path = <span class="python-string">r"C:\Users\Name\Documents\file.txt"</span><br>
+                        <span class="python-func">print</span>(path)
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="text-center text-gray-500 text-sm py-8">
+            <p>Generated for Python Advanced Learning</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- 1. Split Logic --- 
+        function runSplit() {
+            const val = document.getElementById('splitInput').value;
+            const parts = val.trim().split(/\s+/).filter(s => s !== ''); // Filter out empty strings from split
+            
+            let outputHTML = "";
+
+            // Simulate a, b, c = map(int, input().split())
+            if (parts.length === 3) { // Strictly 3 values for a, b, c assignment
+                try {
+                    const a = parseInt(parts[0]);
+                    const b = parseInt(parts[1]);
+                    const c = parseInt(parts[2]);
+                    if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                         outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
+                         outputHTML += `<div><span class=\"text-red-400\">Error: 賦值需要 3 個數字，且輸入必須為數字</span></div>`;
+                    } else {
+                        outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
+                        outputHTML += `<div>a = ${a}</div>`;
+                        outputHTML += `<div>b = ${b}</div>`;
+                        outputHTML += `<div>c = ${c}</div>`;
+                    }
+                } catch (e) {
+                    outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
+                    outputHTML += `<div><span class=\"text-red-400\">Error: 賦值需要 3 個數字，且輸入必須為數字</span></div>`;
+                }
+            } else {
+                outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
+                outputHTML += `<div><span class=\"text-red-400\">Error: 需要恰好 3 個數字進行賦值</span></div>`;
+            }
+
+            outputHTML += `<hr class=\"border-gray-700 my-2\">`; // Separator
+
+            // Simulate x = [int(i) for i in input().split()]
+            let listCompValues = [];
+            let listCompError = false;
+            if (parts.length > 0) { // Check if input is not empty
+                for (const p of parts) {
+                    const num = parseInt(p);
+                    if (isNaN(num)) {
+                        listCompError = true;
+                        break;
+                    }
+                    listCompValues.push(num);
+                }
+            }
+
+            if (listCompError) {
+                outputHTML += `<div class=\"mb-2\">x = [int(i) for i in input().split()]:</div>`;
+                outputHTML += `<div><span class=\"text-red-400\">Error: 串列生成式中的輸入必須為數字</span></div>`;
+            } else {
+                outputHTML += `<div class=\"mb-2\">x = [int(i) for i in input().split()]:</div>`;
+                outputHTML += `<div>x = [${listCompValues.join(', ')}]</div>`;
+            }
+            
+            document.getElementById('splitResult').innerHTML = outputHTML;
+        }
+
+        // --- 1. Print Logic ---
+        function updatePrint() {
+            const sep = document.getElementById('sepInput').value;
+            const end = document.getElementById('endInput').value;
+            let res = "";
+            for(let i=0; i<3; i++) res += i + end;
+            let sepRes = ["Apple", "Banana", "Cherry"].join(sep);
+            document.getElementById('printOutput').innerHTML = 
+                `<div>Loop output: ${res}</div><div class="mt-1 text-gray-400">Sep output:  ${sepRes}</div>`;
+        }
+
+        // --- 2.1 Augmented ---
+        let augVal = 10;
+        function updateAug(op) {
+            if (op === 'reset') augVal = 10;
+            else augVal += op;
+            document.getElementById('augValue').innerText = `x = ${augVal}`;
+        }
+
+        // --- 2.2 Ternary ---
+        function checkTernary() {
+            const score = parseInt(document.getElementById('ternaryInput').value) || 0;
+            const res = score >= 60 ? "Pass" : "Fail";
+            const el = document.getElementById('ternaryResult');
+            el.innerText = res;
+            el.className = `font-bold text-lg ${res === 'Pass' ? 'text-green-400' : 'text-red-400'}`;
+        }
+
+        // --- 2.3 Bitwise ---
+        function updateBitwise() {
+            const a = parseInt(document.getElementById('bitA').value) || 0;
+            const b = parseInt(document.getElementById('bitB').value) || 0;
+            const op = document.getElementById('bitOp').value;
+            let res = 0;
+            if (op === '&') res = a & b;
+            if (op === '|') res = a | b;
+            if (op === '^') res = a ^ b;
+
+            document.getElementById('decRes').innerText = res;
+            document.getElementById('bitOpLabel').innerText = op;
+            renderBits(a, 'bitsA');
+            renderBits(b, 'bitsB');
+            renderBits(res, 'bitsRes', true);
+        }
+
+        function renderBits(num, elemId, isResult=false) {
+            const container = document.getElementById(elemId);
+            container.innerHTML = '';
+            for (let i = 7; i >= 0; i--) {
+                const bit = (num >> i) & 1;
+                const div = document.createElement('div');
+                const bgColor = bit ? (isResult ? 'bg-indigo-600 text-white border-indigo-600' : 'bit-active') : 'bg-gray-800 text-gray-400';
+                div.className = `bit-box text-xs rounded ${bgColor}`;
+                div.innerText = bit;
+                container.appendChild(div);
+            }
+        }
+
+        // --- 2.4 Short Circuit ---
+        let orState = true; 
+        let andState = false;
+
+        function toggleShort(mode) {
+            if (mode === 'or') {
+                orState = !orState;
+                const btn = document.getElementById('btnOrA');
+                const res = document.getElementById('resOr');
+                if (orState) {
+                    btn.innerText = "A: True";
+                    btn.className = "px-3 py-1 bg-green-500 text-white rounded shadow text-sm font-bold w-24";
+                    res.innerHTML = `A 為 True。<br><span class="text-red-400 font-bold">B 不會被執行 (短路)</span>`;
+                } else {
+                    btn.innerText = "A: False";
+                    btn.className = "px-3 py-1 bg-red-500 text-white rounded shadow text-sm font-bold w-24";
+                    res.innerHTML = `A 為 False。<br><span class="text-green-400 font-bold">必須執行 B 才能確認結果</span>`;
+                }
+            } else {
+                andState = !andState;
+                const btn = document.getElementById('btnAndA');
+                const res = document.getElementById('resAnd');
+                if (!andState) {
+                    btn.innerText = "A: False";
+                    btn.className = "px-3 py-1 bg-red-500 text-white rounded shadow text-sm font-bold w-24";
+                    res.innerHTML = `A 為 False。<br><span class="text-blue-400 font-bold">B 被短路 (不執行)</span>`;
+                } else {
+                    btn.innerText = "A: True";
+                    btn.className = "px-3 py-1 bg-green-500 text-white rounded shadow text-sm font-bold w-24";
+                    res.innerHTML = `A 為 True。<br><span class="text-green-400 font-bold">必須執行 B 才能確認結果</span>`;
+                }
+            }
+        }
+
+        // --- 3.1 Role Check (in) ---
+        function checkRole() {
+            const role = document.getElementById('roleInput').value.trim();
+            const allowed = ['admin', 'editor'];
+            const resEl = document.getElementById('roleResult');
+            if (allowed.includes(role)) {
+                resEl.innerText = "Access Granted";
+                resEl.className = "text-sm font-bold text-green-400";
+            } else {
+                resEl.innerText = "Access Denied";
+                resEl.className = "text-sm font-bold text-red-400";
+            }
+        }
+
+        // --- 3.2 Nested Toggle ---
+        let isNested = true;
+        function toggleNested() {
+            isNested = !isNested;
+            const container = document.getElementById('nestedCodeBlock');
+            const label = document.getElementById('nestedLabel');
+            
+            if (isNested) {
+                container.innerHTML = `
+                    <span class="python-keyword">if</span> user.is_active:<br>
+                    &nbsp;&nbsp;<span class="python-keyword">if</span> user.has_permission:<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"Allowed"</span>)
+                `;
+                label.innerText = "傳統巢狀寫法，層級較深。";
+            } else {
+                container.innerHTML = `
+                    <span class="python-keyword">if not</span> user.is_active: <span class="python-keyword">return</span><br>
+                    <span class="python-keyword">if not</span> user.has_permission: <span class="python-keyword">return</span><br>
+                    <span class="python-func">print</span>(<span class="python-string">"Allowed"</span>)
+                `;
+                label.innerText = "使用 Guard Clause 提早返回，邏輯扁平化。";
+            }
+        }
+
+        // --- 3.3 Truthy Checker ---
+        function checkTruthy(val) {
+            let displayVal = val;
+            let isTruthy = !!val;
+            if (typeof val === 'string') {
+                 displayVal = `"${val}"`;
+                 isTruthy = val.length > 0;
+            }
+            
+            document.getElementById('truthyDisplayVal').innerText = displayVal;
+            const resEl = document.getElementById('truthyResult');
+            
+            if (!isTruthy) {
+                resEl.innerText = "不及格 (False)";
+                resEl.className = "bg-black text-red-400 p-2 rounded code-font text-sm text-center border border-red-900";
+            } else {
+                resEl.innerText = "及格 (True)";
+                resEl.className = "bg-black text-green-400 p-2 rounded code-font text-sm text-center border border-green-900";
+            }
+        }
+
+        // --- 3.4 Match Case ---
+        function runMatch() {
+            const status = document.getElementById('matchSelect').value;
+            const resEl = document.getElementById('matchResult');
+            switch(status) {
+                case '200': 
+                    resEl.innerText = "OK";
+                    resEl.className = "text-teal-400 font-bold code-font";
+                    break;
+                case '404': 
+                    resEl.innerText = "Not Found";
+                    resEl.className = "text-orange-400 font-bold code-font";
+                    break;
+                default: 
+                    resEl.innerText = "Error";
+                    resEl.className = "text-red-400 font-bold code-font";
+            }
+        }
+
+        // --- 4.1 Zip ---
+        function runZip() {
+            const a = document.getElementById('zipListA').value.split(',').map(s=>s.trim());
+            const b = document.getElementById('zipListB').value.split(',').map(s=>s.trim());
+            
+            let resHTML = "";
+            const len = Math.min(a.length, b.length);
+            
+            for(let i=0; i<len; i++) {
+                resHTML += `(${a[i]}, ${b[i]})<br>`;
+            }
+            document.getElementById('zipResult').innerHTML = resHTML || "Lists empty";
+        }
+
+        // --- 4.1 Enumerate ---
+        function runEnumerate() {
+            const c = document.getElementById('enumList').value.split(',').map(s=>s.trim());
+            let resHTML = "";
+            for(let i=0; i<c.length; i++) {
+                if(c[i]) { // Ensure not empty string
+                    resHTML += `(${i}, '${c[i]}')<br>`;
+                }
+            }
+            document.getElementById('enumResult').innerHTML = resHTML || "List empty";
+        }
+
+        // --- 4.2 Comprehension ---
+        function runComp() {
+            const rangeVal = parseInt(document.getElementById('compRange').value) || 5;
+            const isRev = document.getElementById('compRev').checked;
+            const expr = document.getElementById('compExpr').value || 'x*x';
+            
+            // Update code display
+            const codeEl = document.getElementById('compCode');
+            const rangeFunc = isRev ? `reversed(range(${rangeVal}))` : `range(${rangeVal})`;
+            codeEl.innerHTML = `nums = [${expr} <span class="python-keyword">for</span> x <span class="python-keyword">in</span> <span class="python-func">${rangeFunc}</span>]`;
+
+            let arr = [];
+            for(let i=0; i<rangeVal; i++) arr.push(i);
+            
+            if (isRev) arr.reverse();
+            
+            const resEl = document.getElementById('compResult');
+            try {
+                const func = new Function('x', 'return ' + expr);
+                const res = arr.map(func);
+                resEl.innerText = `[${res.join(', ')}]`;
+                resEl.className = "bg-black p-2 rounded text-sm text-violet-400 code-font border border-violet-900/50";
+            } catch (e) {
+                resEl.innerText = `Error in expression: ${e.message}`;
+                resEl.className = "bg-black p-2 rounded text-sm text-red-400 code-font border border-red-900/50";
+            }
+        }
+
+        // --- 4.3 For-Else ---
+        function runForElse() {
+            const list = document.getElementById('searchList').value.split(',').map(s=>parseInt(s.trim()));
+            const target = parseInt(document.getElementById('searchTarget').value);
+            const resBox = document.getElementById('forElseResult');
+            
+            let found = false;
+            for(let num of list) {
+                if (num === target) {
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (found) {
+                resBox.innerHTML = `<span class="text-green-400">Found ${target}!</span><br><span class="text-xs text-gray-400">Break 執行，跳過 Else</span>`;
+                resBox.className = "text-center text-lg font-bold border border-green-900 bg-green-900/20 p-2 rounded";
+            } else {
+                resBox.innerHTML = `<span class="text-rose-400">Not Found</span><br><span class="text-xs text-gray-400">Else 區塊執行</span>`;
+                resBox.className = "text-center text-lg font-bold border border-rose-900 bg-rose-900/20 p-2 rounded";
+            }
+        }
+
+        // --- 5.1 Flag & While ---
+        let hp = 100;
+        function hitMonster() {
+            if (hp <= 0) return;
+            hp -= 20;
+            if (hp < 0) hp = 0;
+            updateMonsterUI();
+        }
+        
+        function resetMonster() {
+            hp = 100;
+            updateMonsterUI();
+        }
+
+        function updateMonsterUI() {
+            const hpEl = document.getElementById('hpVal');
+            const statusEl = document.getElementById('loopStatus');
+            
+            hpEl.innerText = hp;
+            if (hp > 0) {
+                statusEl.innerText = "While Loop Running...";
+                statusEl.className = "text-sm font-bold text-green-400";
+                hpEl.className = "text-2xl font-bold text-amber-400 code-font";
+            } else {
+                statusEl.innerText = "Loop Terminated (Flag=False)";
+                statusEl.className = "text-sm font-bold text-red-400";
+                hpEl.className = "text-2xl font-bold text-gray-600 code-font";
+            }
+        }
+
+        // --- 5.2 Do-While ---
+        function checkDoWhile() {
+            const input = document.getElementById('doWhileInput');
+            const msg = document.getElementById('doWhileMsg');
+            
+            // Simulate the loop iteration
+            msg.innerText = "Checking...";
+            setTimeout(() => {
+                if (input.value === '1234') {
+                    msg.innerText = "Correct! Break executed.";
+                    msg.className = "mt-2 text-sm text-green-400 font-bold";
+                } else {
+                    msg.innerText = "Wrong! Loop continues...";
+                    msg.className = "mt-2 text-sm text-red-400 font-bold";
+                    input.value = "";
+                    input.focus();
+                }
+            }, 300);
+        }
+
+        // --- 5.3 Invariant ---
+        const invData = [10, 5, 8, 3];
+        let invStep = 0;
+        
+        function nextInvariant() {
+            // Reset if end
+            if (invStep > invData.length) {
+                invStep = 0;
+            }
+            
+            // Calculate logic
+            const currentSum = invData.slice(0, invStep).reduce((a,b)=>a+b, 0);
+            
+            // UI Updates
+            document.getElementById('invariantStep').innerText = `Step: ${invStep}`;
+            document.getElementById('invI').innerText = invStep;
+            document.getElementById('invTotal').innerText = currentSum;
+            
+            // Highlight bar
+            for(let i=0; i<invData.length; i++) {
+                const el = document.getElementById(`inv${i}`);
+                if (i < invStep) {
+                    el.className = "flex-1 flex items-center justify-center border-r border-gray-700 bg-fuchsia-900/50 text-white transition-all";
+                } else {
+                    el.className = "flex-1 flex items-center justify-center border-r border-gray-700 bg-transparent text-gray-500 transition-all";
+                }
+            }
+            
+            invStep++;
+        }
+
+        // --- 6.1 Slicing ---
+        function runSlicing() {
+            const listStr = document.getElementById('sliceList').value;
+            const startStr = document.getElementById('sliceStart').value;
+            const stopStr = document.getElementById('sliceStop').value;
+            const stepStr = document.getElementById('sliceStep').value;
+
+            // This is a simplified simulation of Python's slice.
+            // It doesn't cover all edge cases but demonstrates the main concepts.
+            const originalList = listStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            
+            let code = `list[${startStr || ''}:${stopStr || ''}:${stepStr || ''}]`;
+            let result = [];
+            try {
+                // A simplified eval-like approach for demonstration purposes
+                let py_code = `l = [${originalList.map(s => `'${s}'`).join(',')}]
+`
+                py_code += `print(l[${startStr || 'None'}:${stopStr || 'None'}:${stepStr || 'None'}])`
+                
+                // This is a placeholder for a real Python execution environment.
+                // We'll simulate the logic in JS.
+                let temp_list = [...originalList];
+                const start = startStr === '' ? null : parseInt(startStr);
+                const stop = stopStr === '' ? null : parseInt(stopStr);
+                const step = stepStr === '' ? 1 : parseInt(stepStr);
+
+                if(step === 0) throw new Error("slice step cannot be zero");
+
+                const len = temp_list.length;
+                const i_start = start === null ? (step > 0 ? 0 : len - 1) : (start < 0 ? len + start : start);
+                const i_stop = stop === null ? (step > 0 ? len : -1) : (stop < 0 ? len + stop : stop);
+                
+                for(let i = i_start; (step > 0 ? i < i_stop : i > i_stop); i += step) {
+                    if(i >= 0 && i < len) {
+                       result.push(temp_list[i]);
+                    }
+                }
+            } catch (e) {
+                result = [`Error: ${e.message}`];
+            }
+
+            document.getElementById('sliceResult').innerHTML = 
+                `<div class="text-gray-400 text-xs mb-1">${code}</div>` + 
+                `<div>Result: [${result.join(', ')}]</div>`;
+        }
+        function setSliceExample(start, stop, step) {
+            document.getElementById('sliceStart').value = start === null ? '' : start;
+            document.getElementById('sliceStop').value = stop === null ? '' : stop;
+            document.getElementById('sliceStep').value = step === null ? '' : step;
+            runSlicing();
+        }
+
+        // --- 6.2 Copy ---
+        function runCopy() {
+            const newValue = document.getElementById('copyValue').value;
+            let original = [['A', 'B'], ['C', 'D']];
+            
+            // For visualization, we create copies and then modify them to show the effect.
+            let shallowCopy = original.map(inner => [...inner]);
+            let deepCopy = JSON.parse(JSON.stringify(original)); // Simple deep copy for visualization
+
+            const original_repr = (list) => `[${list.map(i => `['${i[0]}', '${i[1]}']`).join(', ')}]`;
+
+            // Modify original
+            original[0][0] = newValue;
+            // A real shallow copy would be affected. We simulate it.
+            shallowCopy[0][0] = newValue;
+
+            document.getElementById('copyOriginal').innerHTML = `<b>Original:</b> <span>${original_repr(original)}</span> <span class="text-gray-500 ml-2">// Modified</span>`;
+            document.getElementById('copyShallow').innerHTML = `<b>Shallow:</b>  <span>${original_repr(shallowCopy)}</span> <span class="text-red-400 ml-2">// Changed!</span>`;
+            document.getElementById('copyDeep').innerHTML = `<b>Deep:</b>     <span>${original_repr(deepCopy)}</span> <span class="text-green-400 ml-2">// Unchanged</span>`;
+        }
+
+        // --- 6.3 Matrix ---
+        const matrixData = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+        function runMatrix() {
+            const row = parseInt(document.getElementById('matrixRow').value);
+            const col = parseInt(document.getElementById('matrixCol').value);
+            
+            const container = document.getElementById('matrixContainer');
+            container.innerHTML = '';
+            for(let r=0; r<3; r++) {
+                for(let c=0; c<3; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'w-10 h-10 flex items-center justify-center rounded bg-gray-700 border border-gray-600';
+                    if(r === row && c === col) {
+                        cell.classList.add('bg-pink-500', 'text-white', 'font-bold', 'scale-110');
+                    }
+                    cell.innerText = matrixData[r][c];
+                    container.appendChild(cell);
+                }
+            }
+
+            if(row >= 0 && row < 3 && col >= 0 && col < 3) {
+                document.getElementById('matrixResult').innerHTML = `matrix[${row}][${col}] -> <span class="font-bold text-xl">${matrixData[row][col]}</span>`;
+            } else {
+                 document.getElementById('matrixResult').innerHTML = `<span class="text-red-400">Error: Index out of bounds.</span>`;
+            }
+        }
+        
+        // --- 6.4 Sort ---
+        function runSort(mode) {
+            const listStr = document.getElementById('sortList').value;
+            if (!listStr.trim()) return; // Do nothing if input is empty
+            const originalList = listStr.split(',').map(s => s.trim());
+            const numericList = originalList.map(s => parseInt(s)).filter(n => !isNaN(n));
+            const isNumeric = numericList.length === originalList.length;
+
+            const sortOriginalEl = document.getElementById('sortOriginal');
+            const sortResultEl = document.getElementById('sortResult');
+            
+            // Always reset original display
+            sortOriginalEl.innerHTML = `<b>Original:</b> [${originalList.map(s => isNumeric ? s : `'${s}'`).join(', ')}]`;
+            
+            if (!mode) { // Initial call
+                sortResultEl.innerHTML = '';
+                return;
+            }
+
+            let displayList = [...originalList];
+            
+            const numComparator = (a, b) => a - b;
+            const strComparator = (a, b) => a.localeCompare(b);
+            const comparator = isNumeric ? numComparator : strComparator;
+
+            if (mode === 'sort') {
+                displayList.sort(comparator); // In-place sort
+                 sortResultEl.innerHTML = `<div><code class="text-yellow-400">list.sort()</code></div>` +
+                    `<div><b>Result:</b> <span class="text-gray-500">(returns None)</span></div>`+ 
+                    `<div><b>List After:</b>  [${displayList.map(s => isNumeric ? s : `'${s}'`).join(', ')}] <span class="text-red-400">// Original changed</span></div>`;
+            } else if (mode === 'sorted') {
+                const newList = [...displayList].sort(comparator);
+                sortResultEl.innerHTML = `<div><code class="text-yellow-400">sorted(list)</code></div>` +
+                    `<div><b>Result:</b> [${newList.map(s => isNumeric ? s : `'${s}'`).join(', ')}]</div>` +
+                    `<div><b>List After:</b>  [${originalList.map(s => isNumeric ? s : `'${s}'`).join(', ')}] <span class="text-green-400">// Original unchanged</span></div>`;
+            }
+        }
+        
+        // --- 6.5 Unpack ---
+        function runUnpack() {
+            const listStr = document.getElementById('unpackList').value;
+            const list = listStr.split(',').map(s => s.trim()).filter(s => s !== '');
+            let resHTML = '';
+            
+            // Basic
+            resHTML += '<div class="bg-gray-900 p-2 rounded"><div><code class="text-purple-400">a, b, c = list</code></div>';
+            if (list.length === 3) {
+                resHTML += `<span class="text-gray-300"> > a=${list[0]}, b=${list[1]}, c=${list[2]}</span>`;
+            } else {
+                resHTML += `<span class="text-red-400"> > Error: needs 3 elements, got ${list.length}</span>`;
+            }
+            resHTML += '</div>';
+
+            // Extended
+            resHTML += '<div class="bg-gray-900 p-2 rounded mt-2"><div><code class="text-purple-400">a, *mid, z = list</code></div>';
+            if (list.length >= 2) {
+                const a = list[0];
+                const z = list[list.length-1];
+                const mid = list.slice(1, -1);
+                resHTML += `<span class="text-gray-300"> > a=${a}, mid=[${mid.join(', ')}], z=${z}</span>`;
+            } else {
+                resHTML += `<span class="text-red-400"> > Error: needs at least 2 elements</span>`;
+            }
+            resHTML += '</div>';
+            
+            document.getElementById('unpackResult').innerHTML = resHTML;
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePrint();
+            updateBitwise();
+            checkTernary();
+            checkRole();
+            toggleNested(); // Init nested view
+            runSplit(); // Init split input result
+            runZip(); // Init zip result
+            runEnumerate(); // Init enumerate result
+            runComp(); // Init list comprehension result
+            updateMonsterUI();
+            
+            // Init Section 6
+            runSlicing();
+            runCopy();
+            runMatrix();
+            runSort();
+            runUnpack();
+
+            // Init Invariant
+            document.getElementById('inv0').innerText = invData[0];
+            document.getElementById('inv1').innerText = invData[1];
+            document.getElementById('inv2').innerText = invData[2];
+            document.getElementById('inv3').innerText = invData[3];
+        });
+    </script>
+</body>
+</html>

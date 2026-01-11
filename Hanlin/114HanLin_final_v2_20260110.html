@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 概念互動練習網頁</title>
+    <!-- 使用 Tailwind CSS 進行快速排版 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 簡單的自定義樣式 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+            
+            /* 禁止選取文字 (防止複製) */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+        
+        /* 允許輸入框與程式碼區塊內的文字被選取，方便操作與學習 */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .tab-btn.active {
+            background-color: #3b82f6; /* 藍色 */
+            color: white;
+            border-bottom: 2px solid #1d4ed8;
+        }
+        .code-block {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #374151;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+        }
+        hr.divider {
+            border: 0;
+            height: 1px;
+            background: #e5e7eb;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8" oncontextmenu="return false;"> 
+<!-- 加入 oncontextmenu="return false;" 禁用右鍵選單 -->
+
+    <!-- 將 max-w-5xl 調整為 max-w-7xl 以增加網頁寬度 -->
+    <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="bg-gray-800 p-6 text-white">
+            <h1 class="text-2xl font-bold">Python 程式設計概念互動網頁 (翰林版)</h1>
+            <p class="text-gray-300 mt-2">對應章節：2-2 變數、運算、判斷與迴圈</p>
+        </div>
+
+        <!-- 導航分頁：移除 overflow-x-auto，使用 flex 均分 -->
+        <div class="flex border-b border-gray-200">
+            <button onclick="switchTab('greeting')" id="tab-greeting" class="tab-btn active flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-gray-100 transition">
+                1. 變數與輸入輸出
+            </button>
+            <button onclick="switchTab('average')" id="tab-average" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-gray-100 transition">
+                2. 變數與運算
+            </button>
+            <button onclick="switchTab('grade')" id="tab-grade" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-gray-100 transition">
+                3. 條件判斷
+            </button>
+            <button onclick="switchTab('loop')" id="tab-loop" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-gray-100 transition">
+                4. 計次式迴圈
+            </button>
+            <button onclick="switchTab('password')" id="tab-password" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-gray-100 transition">
+                5. 條件式迴圈
+            </button>
+        </div>
+
+        <!-- 內容區域 -->
+        <div class="p-6">
+
+            <!-- 1. 打招呼區塊 -->
+            <div id="content-greeting" class="tab-content block">
+                <h2 class="text-xl font-bold mb-4 text-blue-600">哈囉(input/print)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="input-group mb-4">
+                            <label>請問您的名字是？ (name)</label>
+                            <input type="text" id="inputName" placeholder="例如：阿顯">
+                        </div>
+                        
+                        <!-- 換行符號切換 -->
+                        <div class="flex items-center mb-4 bg-blue-50 p-2 rounded border border-blue-100">
+                            <input type="checkbox" id="useNewline" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="updateGreetingCode()">
+                            <label for="useNewline" class="ml-2 text-sm font-medium text-gray-700">在提示字串後加入換行符號 (\n)</label>
+                        </div>
+
+                        <button onclick="runGreeting()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">
+                            執行程式
+                        </button>
+                        
+                        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded">
+                            <h3 class="font-bold text-green-800">執行結果 (模擬 Console):</h3>
+                            <p id="resultGreeting" class="text-xl mt-2 text-green-700 font-mono" style="white-space: pre-wrap;">等待輸入...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-2">對應程式碼邏輯：</h3>
+                        <pre id="codeGreeting" class="code-block">
+# 這是 Python 邏輯的概念展示
+# input() 讀取輸入，回傳的是「字串 (str)」型態
+# 變數 name 儲存了輸入值，所以 name 的型態也是字串
+name = input('What is your name?')
+
+# print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格
+print('Hello', name, '!')
+                        </pre>
+                        <div class="mt-4 p-3 bg-gray-100 rounded text-sm text-gray-700 border-l-4 border-blue-500">
+                            <p class="font-bold mb-1">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>變數型態</strong>：<code>name</code> 是 <strong>字串 (str)</strong>。</li>
+                                <li><strong>input()</strong>：讀取的使用者輸入永遠是 <strong>字串</strong>。</li>
+                                <li><strong>型態轉換</strong>：若需要計算，需用 <code>int()</code> 轉成整數；若要拼接數字與字串，需用 <code>str()</code> 轉成字串。</li>
+                                <li><strong>註解 (#)</strong>：寫給人看的說明，程式會忽略。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 求平均數區塊 -->
+            <div id="content-average" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4 text-blue-600">求平均數 (變數與運算)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="input-group mb-4">
+                            <label>請輸入數字 x：</label>
+                            <input type="number" id="numX" placeholder="輸入數字">
+                        </div>
+                        <div class="input-group mb-4">
+                            <label>請輸入數字 y：</label>
+                            <input type="number" id="numY" placeholder="輸入數字">
+                        </div>
+
+                        <!-- 換行符號切換 (求平均數) -->
+                        <div class="flex items-center mb-4 bg-blue-50 p-2 rounded border border-blue-100">
+                            <input type="checkbox" id="useNewlineAverage" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="updateAverageCode()">
+                            <label for="useNewlineAverage" class="ml-2 text-sm font-medium text-gray-700">在提示字串後加入換行符號 (\n)</label>
+                        </div>
+
+                        <button onclick="runAverage()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">計算平均</button>
+                        
+                        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded">
+                            <h3 class="font-bold text-green-800">執行結果 (模擬 Console):</h3>
+                            <p id="resultAverage" class="text-xl mt-2 text-green-700 font-mono" style="white-space: pre-wrap;">等待計算...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-2">對應程式碼邏輯：</h3>
+                        <pre id="codeAverage" class="code-block">
+# input() 讀取的是字串，無法直接做數學運算
+# 必須使用 int() 函式，將字串轉換成「整數 (int)」
+x = int(input('Please enter number x:\n'))
+y = int(input('Please enter number y:\n'))
+
+# 計算平均，結果會是小數 (float)
+z = (x + y) / 2
+
+# print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格
+print('Average is',z)
+# print 輸出時，若用 + 號連接，兩邊必須都是字串
+# 使用 str() 函式將數字 z 轉換成字串，才能與 'Average is ' 組合
+#print('Average is ' + str(z))  
+                        </pre>
+                         <p class="text-xs text-gray-500 mt-2 italic">* 提示：觀察 input() 函式中是否包含 \n 對執行結果的影響。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 學期成績區塊 (含 a051) -->
+            <div id="content-grade" class="tab-content hidden">
+                
+                <!-- 原有的學期成績 -->
+                <h2 class="text-xl font-bold mb-4 text-blue-600">計算學期成績 (if/else)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <div class="input-group mb-2">
+                            <label>作業成績 (40%)：</label>
+                            <input type="number" id="scoreWork" placeholder="0-100">
+                        </div>
+                        <div class="input-group mb-2">
+                            <label>測驗成績 (40%)：</label>
+                            <input type="number" id="scoreExam" placeholder="0-100">
+                        </div>
+                        <div class="input-group mb-4">
+                            <label>平時成績 (20%)：</label>
+                            <input type="number" id="scoreRoutine" placeholder="0-100">
+                        </div>
+
+                        <div class="flex items-center mb-4 bg-blue-50 p-2 rounded border border-blue-100">
+                            <input type="checkbox" id="useNewlineGrade" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="updateGradeCode()">
+                            <label for="useNewlineGrade" class="ml-2 text-sm font-medium text-gray-700">在提示字串後加入換行符號 (\n)</label>
+                        </div>
+
+                        <button onclick="runGrade()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">計算並判斷</button>
+                        
+                        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded">
+                            <h3 class="font-bold text-green-800">執行結果 (模擬 Console):</h3>
+                            <p id="resultGrade" class="text-lg mt-2 text-green-700 font-mono" style="white-space: pre-wrap;">等待計算...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-2">對應程式碼邏輯：</h3>
+                        <pre id="codeGrade" class="code-block">
+# 使用 int() 將輸入的字串轉換成整數
+x = int(input('Please enter homework grades:\n'))
+y = int(input('Please enter quiz score:\n'))
+z = int(input('Please enter your usual grades:\n'))
+
+# 計算加權分數，結果為浮點數 (float)
+grade = x * 0.4 + y * 0.4 + z * 0.2
+
+# print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格
+# 所以這裡不需要用 str() 轉換 grade
+print('Semester grades are', grade ,'points.')
+
+# 判斷及格與否 (注意縮排)
+if grade < 60:
+    # 條件成立時執行 (縮排)
+    print('Failed!')
+else:
+    # 條件不成立時執行 (縮排)
+    print('Pass!')                        </pre>
+                        <div class="mt-4 p-3 bg-gray-100 rounded text-sm text-gray-700 border-l-4 border-blue-500">
+                            <p class="font-bold mb-1">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>if</strong> 與 <strong>else</strong> 結尾都要有冒號 <code>:</code></li>
+                                <li>Python 使用<strong>縮排 (Indentation)</strong> 來區分程式區塊，通常為 <strong>1 個 Tab 鍵</strong>或 <strong>4 個空白鍵</strong>。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- 新增：a051 課堂練習 -->
+                <h2 class="text-xl font-bold mb-4 text-purple-600">－個人平均成績比較(if/elif/else)</h2>
+                <p class="text-gray-600 mb-4 text-sm">輸入國文、英文及數學成績，計算個人平均後，與班級總平均 (國70/英75/數65，平均 70) 比較。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="input-group mb-2">
+                            <label>國文成績 (x)：</label>
+                            <input type="number" id="a051_chinese" placeholder="0-100">
+                        </div>
+                        <div class="input-group mb-2">
+                            <label>英文成績 (y)：</label>
+                            <input type="number" id="a051_english" placeholder="0-100">
+                        </div>
+                        <div class="input-group mb-4">
+                            <label>數學成績 (z)：</label>
+                            <input type="number" id="a051_math" placeholder="0-100">
+                        </div>
+
+                        <div class="flex items-center mb-4 bg-purple-50 p-2 rounded border border-purple-100">
+                            <input type="checkbox" id="useNewlineA051" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500" onchange="updateA051Code()">
+                            <label for="useNewlineA051" class="ml-2 text-sm font-medium text-gray-700">在提示字串後加入換行符號 (\n)</label>
+                        </div>
+
+                        <button onclick="runA051()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 w-full">執行比較</button>
+                        
+                        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded">
+                            <h3 class="font-bold text-green-800">執行結果 (模擬 Console):</h3>
+                            <p id="resultA051" class="text-lg mt-2 text-green-700 font-mono" style="white-space: pre-wrap;">等待執行...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-2">對應程式碼邏輯：</h3>
+                        <pre id="codeA051" class="code-block">
+# 讀取國、英、數成績，記得用 int() 轉成整數
+x = int(input('Chinese score:\n'))
+y = int(input('English score:\n'))
+z = int(input('Math score:\n'))
+
+# 計算個人平均 (a)
+a = (x + y + z) / 3
+# 班級總平均 (b) = (70+75+65)/3 = 70
+b = 70
+
+# 進行比較 (if-elif-else)
+if a > b:
+    print('You are great')
+elif a < b:
+    print('Keep on')
+else:
+    # 兩者相等
+    print('Come on')                        </pre>
+                        <p class="text-xs text-gray-500 mt-2 italic">* 提示：elif 是 "else if" 的縮寫，用於多重條件判斷。</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 4. 累加計算區塊 -->
+            <div id="content-loop" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4 text-blue-600">累加計算 (for迴圈)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="input-group mb-4">
+                            <label>請輸入數字 n (計算 1+..+n)：</label>
+                            <input type="number" id="numN" placeholder="例如：10" value="10">
+                        </div>
+
+                        <!-- 換行符號切換 (累加計算) -->
+                        <div class="flex items-center mb-4 bg-blue-50 p-2 rounded border border-blue-100">
+                            <input type="checkbox" id="useNewlineLoop" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" onchange="updateLoopCode()">
+                            <label for="useNewlineLoop" class="ml-2 text-sm font-medium text-gray-700">在提示字串後加入換行符號 (\n)</label>
+                        </div>
+
+                        <button onclick="runLoop()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">開始累加</button>
+                        
+                        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded">
+                            <h3 class="font-bold text-green-800">執行結果 (模擬 Console):</h3>
+                            <p id="resultLoop" class="text-xl mt-2 text-green-700 font-mono" style="white-space: pre-wrap;">等待執行...</p>
+                            <div id="loopSteps" class="text-sm text-gray-500 mt-2 max-h-32 overflow-y-auto border-t border-gray-200 pt-2 mt-2"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-2">對應程式碼邏輯：</h3>
+                        <pre id="codeLoop" class="code-block">
+# 輸入必須用 int() 轉換成整數
+n = int(input('Please enter the number n:'))
+total = 0
+
+# 迴圈：從 1 執行到 n
+# i 的型態是整數 (int)，range() 產生從 1 到 n 的數字序列
+for i in range(1, n + 1):
+    total = total + i   # 縮排，重複執行                     
+    # 另一種寫法： total += i 
+
+# print 輸出時，若用 + 號連接，兩邊必須都是字串
+# 使用 str() 函式將數字 n 及 total 轉換成字串，                            
+print('1+2+...+' + str(n) + '=' + str(total))
+# f-string 格式化輸出，較簡潔且易讀，會自動將 {} 內的變數 (不論是 int 或 float) 轉換為字串顯示
+#print請選一個輸出方式使用
+#print(f'1+2+...+{n}={total}')                          </pre>
+                        <div class="mt-4 p-3 bg-gray-100 rounded text-sm text-gray-700 border-l-4 border-blue-500">
+                            <p class="font-bold mb-1">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>for 迴圈</strong>：用於重複執行程式碼。<code>range(1, n+1)</code> 代表產生從 1 到 n 的數字序列。</li>
+                                <li><strong>冒號 (:)</strong>：`for` 語句結尾必須加上冒號，告訴 Python 接下來是迴圈的內容。</li>
+                                <li><strong>縮排 (Indentation)</strong>：迴圈內部的程式碼 (如 <code>total += i</code>) 必須縮排 (1個Tab或4個空白)，表示它們屬於這個迴圈。</li>
+                                <li><strong>f-string</strong>：字串前加上 <code>f</code>，可以在 <code>{{}}</code> 內直接放入變數，例如 <code>{{total}}</code>，讓字串組合更直觀。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 密碼檢查區塊 (修正模擬) -->
+            <div id="content-password" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4 text-indigo-600">密碼檢查程式 (while 迴圈)</h2>
+                <p class="text-gray-600 mb-4">預設密碼為 <code>137</code>。若第一次輸入錯誤，可再嘗試兩次 (共3次)。三次錯誤則鎖定帳號。</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="space-y-3 mb-4">
+                            <div class="input-group">
+                                <label>第 1 次輸入密碼：</label>
+                                <input type="text" id="pwd_1" placeholder="輸入密碼">
+                            </div>
+                            <div class="input-group">
+                                <label>第 2 次輸入密碼 (若需要)：</label>
+                                <input type="text" id="pwd_2" placeholder="輸入密碼">
+                            </div>
+                            <div class="input-group">
+                                <label>第 3 次輸入密碼 (若需要)：</label>
+                                <input type="text" id="pwd_3" placeholder="輸入密碼">
+                            </div>
+                        </div>
+
+                        <div class="flex items-center mb-4 bg-indigo-50 p-2 rounded border border-indigo-100">
+                            <input type="checkbox" id="useNewlinePwd" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" onchange="updatePasswordCode()">
+                            <label for="useNewlinePwd" class="ml-2 text-sm font-medium text-gray-700">在提示字串後加入換行符號 (\n)</label>
+                        </div>
+
+                        <button onclick="runPassword()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 w-full">執行檢查</button>
+                        
+                        <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded">
+                            <h3 class="font-bold text-green-800">執行結果 (模擬 Console):</h3>
+                            <p id="resultPassword" class="text-lg mt-2 text-green-700 font-mono" style="white-space: pre-wrap;">等待執行...</p>
+                            <div id="passwordSteps" class="text-sm text-gray-500 mt-2 max-h-32 overflow-y-auto border-t border-gray-200 pt-2 mt-2"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-2">對應程式碼邏輯：</h3>
+                        <pre id="codePassword" class="code-block">
+password = "137"
+times = 1     # 將輸入的次數設為 1 存到變數 times。
+password2 = input('Please enter password:\n') 
+
+# 使用 while 迴圈，當密碼不正確且次數小於 3 時執行
+while (password != password2) and (times < 3):
+    print('Wrong password!')
+    times = times + 1   # 錯誤次數加 1
+    # 再次輸入密碼
+    password2 = input('Please enter password:\n')
+
+# 跳出迴圈表示密碼正確或已達 3 次錯誤
+
+# 使用雙向選擇結構判斷結果
+if password2 == password:
+    # 當密碼相符，呈現歡迎使用本系統
+    print('Welcome to this system.')
+else:
+    # 當密碼不符，呈現帳號鎖定
+    print('Enter the wrong password 3 times, the account is locked.')                        </pre>
+                        <div class="mt-4 p-3 bg-gray-100 rounded text-sm text-gray-700 border-l-4 border-blue-500">
+                            <p class="font-bold mb-1">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>while 迴圈</strong>：當條件成立時，重複執行區塊內的程式碼。</li>
+                                <li><strong>複合條件 (and)</strong>：同時滿足「密碼不對」且「次數還沒到」才會繼續問。</li>
+                                <li><strong>計數器 (Counter)</strong>：使用變數 <code>times</code> 紀錄次數，並在每次錯誤後更新它。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="bg-gray-100 p-4 border-t border-gray-200 text-sm text-gray-600">
+            <p><strong>提示：</strong> 您可以使用滑鼠右鍵點擊此頁面，選擇「檢視原始碼」或用記事本開啟此 HTML 檔案，找到下方 &lt;script&gt; 區塊來修改程式邏輯。</p>
+        </div>
+    </div>
+
+    <!-- 
+      ======================================================= 
+      JAVASCRIPT 程式區
+      如果您想修改程式邏輯，請修改以下的 JavaScript 程式碼
+      ======================================================= 
+    -->
+    <script>
+        // --- 1. 打招呼邏輯 ---
+        function updateGreetingCode() {
+            const useNewline = document.getElementById('useNewline').checked;
+            const codeElem = document.getElementById('codeGreeting');
+            const newlineStr = useNewline ? '\\n' : '';
+            
+            let code = "# 這是 Python 邏輯的概念展示\n";
+            code += "# input() 讀取輸入，回傳的是「字串 (str)」型態\n";
+            code += "# 變數 name 儲存了輸入值，所以 name 的型態也是字串\n";
+            code += `name = input('What is your name?${newlineStr}')\n\n`;
+            code += "# print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格\n";
+            code += "# 若用加號 (+) 拼接不同型態(如數字)，需用 str() 進行轉型\n";
+            code += `print('Hello', name, '!')`;
+            
+            codeElem.innerText = code;
+        }
+
+        function runGreeting() {
+            let name = document.getElementById('inputName').value;
+            let useNewline = document.getElementById('useNewline').checked;
+            
+            if (!name) {
+                alert("請先輸入名字！");
+                return;
+            }
+
+            const promptStr = "What is your name?";
+            let outputText = "";
+
+            if (useNewline) {
+                outputText = promptStr + "\n" + name + "\n";
+            } else {
+                outputText = promptStr + name + "\n";
+            }
+
+            outputText += "Hello " + name + " !";
+            document.getElementById('resultGreeting').innerText = outputText;
+        }
+
+        // --- 2. 求平均數邏輯 ---
+        function updateAverageCode() {
+            const useNewline = document.getElementById('useNewlineAverage').checked;
+            const codeElem = document.getElementById('codeAverage');
+            const newlineStr = useNewline ? '\\n' : '';
+            
+            let code = `# input() 讀取的是字串，無法直接做數學運算\n`;
+            code += `# 必須使用 int() 函式，將字串轉換成「整數 (int)」\n`;
+            code += `x = int(input('Please enter number x:${newlineStr}'))\n`;
+            code += `y = int(input('Please enter number y:${newlineStr}'))\n\n`;
+            code += `# 計算平均，結果會是小數 (float)\n`;
+            code += `z = (x + y) / 2\n\n`;
+            code += `# print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格\n`;
+            code += `# 所以這裡不需要用 str() 轉換 z\n`;
+            code += `print('Average is', z)`;
+            
+            codeElem.innerText = code;
+        }
+
+        function runAverage() {
+            let xStr = document.getElementById('numX').value;
+            let yStr = document.getElementById('numY').value;
+            let x = parseFloat(xStr);
+            let y = parseFloat(yStr);
+            let useNewline = document.getElementById('useNewlineAverage').checked;
+
+            if (isNaN(x) || isNaN(y)) {
+                alert("請輸入有效的數字！");
+                return;
+            }
+
+            let z = (x + y) / 2;
+            
+            const promptX = "Please enter number x:";
+            const promptY = "Please enter number y:";
+            
+            let outputText = "";
+            if (useNewline) {
+                outputText += promptX + "\n" + xStr + "\n";
+                outputText += promptY + "\n" + yStr + "\n";
+            } else {
+                outputText += promptX + xStr + "\n";
+                outputText += promptY + yStr + "\n";
+            }
+            
+            outputText += "Average is " + z;
+            document.getElementById('resultAverage').innerText = outputText;
+        }
+
+        // --- 3. 學期成績邏輯 ---
+        function updateGradeCode() {
+            const useNewline = document.getElementById('useNewlineGrade').checked;
+            const codeElem = document.getElementById('codeGrade');
+            const newlineStr = useNewline ? '\\n' : '';
+            
+            let code = `# 使用 int() 將輸入的字串轉換成整數\n`;
+            code += `x = int(input('Please enter homework grades:${newlineStr}'))\n`;
+            code += `y = int(input('Please enter quiz score:${newlineStr}'))\n`;
+            code += `z = int(input('Please enter your usual grades:${newlineStr}'))\n\n`;
+            code += `# 計算加權分數，結果為浮點數 (float)\n`;
+            code += `grade = x * 0.4 + y * 0.4 + z * 0.2\n\n`;
+            code += `# print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格\n`;
+            code += `# 所以這裡不需要用 str() 轉換 grade\n`;
+            code += `print('Semester grades are', grade ,'points.')\n\n`;
+            code += `# 判斷及格與否 (注意縮排)\n`;
+            code += `if grade < 60:\n`;
+            code += `    # 條件成立時執行 (縮排)\n`;
+            code += `    print('Failed!')\n`;
+            code += `else:\n`;
+            code += `    # 條件不成立時執行 (縮排)\n`;
+            code += `    print('Pass!')`;
+            
+            codeElem.innerText = code;
+        }
+
+        function runGrade() {
+            let xStr = document.getElementById('scoreWork').value;
+            let yStr = document.getElementById('scoreExam').value;
+            let zStr = document.getElementById('scoreRoutine').value;
+            let x = parseFloat(xStr) || 0;
+            let y = parseFloat(yStr) || 0;
+            let z = parseFloat(zStr) || 0;
+            let useNewline = document.getElementById('useNewlineGrade').checked;
+
+            let grade = (x * 0.4) + (y * 0.4) + (z * 0.2);
+            let status = (grade < 60) ? "Failed!" : "Pass!";
+
+            const promptX = "Please enter homework grades:";
+            const promptY = "Please enter quiz score:";
+            const promptZ = "Please enter your usual grades:";
+
+            let outputText = "";
+            if (useNewline) {
+                outputText += promptX + "\n" + (xStr || '0') + "\n";
+                outputText += promptY + "\n" + (yStr || '0') + "\n";
+                outputText += promptZ + "\n" + (zStr || '0') + "\n";
+            } else {
+                outputText += promptX + (xStr || '0') + "\n";
+                outputText += promptY + (yStr || '0') + "\n";
+                outputText += promptZ + (zStr || '0') + "\n";
+            }
+
+            outputText += "Semester grades are " + grade.toFixed(1) + " points.\n";
+            outputText += status;
+            document.getElementById('resultGrade').innerText = outputText;
+        }
+
+        // --- 3.5 a051 邏輯 ---
+        function updateA051Code() {
+            const useNewline = document.getElementById('useNewlineA051').checked;
+            const codeElem = document.getElementById('codeA051');
+            const newlineStr = useNewline ? '\\n' : '';
+            
+            let code = `# 讀取國、英、數成績，記得用 int() 轉成整數\n`;
+            code += `x = int(input('Chinese score:${newlineStr}'))\n`;
+            code += `y = int(input('English score:${newlineStr}'))\n`;
+            code += `z = int(input('Math score:${newlineStr}'))\n\n`;
+            code += `# 計算個人平均 (a)\n`;
+            code += `a = (x + y + z) / 3\n`;
+            code += `# 班級總平均 (b) = (70+75+65)/3 = 70\n`;
+            code += `b = 70\n\n`;
+            code += `# 進行比較 (if-elif-else)\n`;
+            code += `if a > b:\n`;
+            code += `    print('You are great')\n`;
+            code += `elif a < b:\n`;
+            code += `    print('Keep on')\n`;
+            code += `else:\n`;
+            code += `    # 兩者相等\n`;
+            code += `    print('Come on')`;
+            
+            codeElem.innerText = code;
+        }
+
+        function runA051() {
+            let xStr = document.getElementById('a051_chinese').value;
+            let yStr = document.getElementById('a051_english').value;
+            let zStr = document.getElementById('a051_math').value;
+            let x = parseFloat(xStr) || 0;
+            let y = parseFloat(yStr) || 0;
+            let z = parseFloat(zStr) || 0;
+            let useNewline = document.getElementById('useNewlineA051').checked;
+
+            let a = (x + y + z) / 3;
+            let b = 70;
+            let resultMsg = "";
+
+            if (a > b) resultMsg = "You are great";
+            else if (a < b) resultMsg = "Keep on";
+            else resultMsg = "Come on";
+
+            let outputText = "";
+            if (useNewline) {
+                outputText += "Chinese score:\n" + (xStr || '0') + "\n";
+                outputText += "English score:\n" + (yStr || '0') + "\n";
+                outputText += "Math score:\n" + (zStr || '0') + "\n";
+            } else {
+                outputText += "Chinese score:" + (xStr || '0') + "\n";
+                outputText += "English score:" + (yStr || '0') + "\n";
+                outputText += "Math score:" + (zStr || '0') + "\n";
+            }
+            outputText += resultMsg;
+            document.getElementById('resultA051').innerText = outputText;
+        }
+
+        // --- 4. 累加計算邏輯 ---
+        function updateLoopCode() {
+            const useNewline = document.getElementById('useNewlineLoop').checked;
+            const codeElem = document.getElementById('codeLoop');
+            const newlineStr = useNewline ? '\\n' : '';
+
+            let code = `# range() 需要整數參數，所以輸入必須用 int() 轉換\n`;
+            code += `n = int(input('Please enter the number n:${newlineStr}'))\n`;
+            code += `total = 0\n\n`;
+            code += `# 迴圈：從 1 執行到 n\n`;
+            code += `# i 的型態是整數 (int)\n`;
+            code += `for i in range(1, n + 1):\n`;
+            code += `    total += i  # 縮排，重複執行\n\n`;
+            code += `# f-string 格式化輸出\n`;
+            code += `# f-string 會自動將 {{}} 內的變數 (不論是 int 或 float) 轉換為字串顯示\n`;
+            code += `print(f'1+2+...+{n}={total}')`;
+            
+            codeElem.innerText = code;
+        }
+
+        function runLoop() {
+            let nStr = document.getElementById('numN').value;
+            let n = parseInt(nStr);
+            let resultElem = document.getElementById('resultLoop');
+            let stepsElem = document.getElementById('loopSteps');
+            let useNewline = document.getElementById('useNewlineLoop').checked;
+            
+            if (isNaN(n) || n <= 0) {
+                alert("請輸入大於 0 的整數");
+                return;
+            }
+
+            let sum = 0;
+            let stepsHTML = ""; 
+
+            for (let i = 1; i <= n; i++) {
+                sum = sum + i;
+                if (n <= 100) {
+                    stepsHTML += `第 ${i} 次：i = ${i}, 目前總和 = ${sum}<br>`;
+                }
+            }
+            if (n > 100) {
+                stepsHTML = "（項目過多，僅顯示最終結果）";
+            }
+            stepsElem.innerHTML = stepsHTML;
+
+            const promptStr = "Please enter the number n:";
+            let outputText = "";
+            if (useNewline) {
+                outputText += promptStr + "\n" + nStr + "\n";
+            } else {
+                outputText += promptStr + nStr + "\n";
+            }
+            outputText += `1+2+...+${n}=${sum}`;
+            resultElem.innerText = outputText;
+        }
+
+        // --- 5. 密碼檢查邏輯 (修正模擬) ---
+        function updatePasswordCode() {
+            const useNewline = document.getElementById('useNewlinePwd').checked;
+            const codeElem = document.getElementById('codePassword');
+            const newlineStr = useNewline ? '\\n' : '';
+
+            let code = `password = "137"\n`;
+            code += `times = 1     # 將輸入的次數設為 1 存到變數 times。
+`;
+            code += `password2 = input('Please enter password:${newlineStr}') 
+
+`;
+            code += `# 使用 while 迴圈，當密碼不正確且次數小於 3 時執行\n`;
+            code += `while (password != password2) and (times < 3):\n`;
+            code += `    print('Wrong password!')\n`;
+            code += `    times = times + 1   # 錯誤次數加 1\n`;
+            code += `    # 再次輸入密碼\n`;
+            code += `    password2 = input('Please enter password:${newlineStr}')\n\n`;
+            code += `# 跳出迴圈表示密碼正確或已達 3 次錯誤\n\n`;
+            code += `# 使用雙向選擇結構判斷結果\n`;
+            code += `if password2 == password:\n`;
+            code += `    # 當密碼相符，呈現歡迎使用本系統\n`;
+            code += `    print('Welcome to this system.')\n`;
+            code += `else:\n`;
+            code += `    # 當密碼不符，呈現帳號鎖定\n`;
+            code += `    print('Enter the wrong password 3 times, the account is locked.')`;
+            
+            codeElem.innerText = code;
+        }
+
+        function runPassword() {
+            const pwds = [
+                document.getElementById('pwd_1').value,
+                document.getElementById('pwd_2').value,
+                document.getElementById('pwd_3').value
+            ];
+            const useNewline = document.getElementById('useNewlinePwd').checked;
+            const correctPwd = "137";
+            let resultElem = document.getElementById('resultPassword');
+            let stepsElem = document.getElementById('passwordSteps'); 
+            
+            let outputText = ""; 
+            let stepsHTML = ""; 
+
+            const promptStr = "Please enter password:";
+            
+            let times = 1;
+            let password2 = pwds[0];
+
+            if (useNewline) {
+                outputText += promptStr + "\n" + (password2 || "") + "\n";
+            } else {
+                outputText += promptStr + (password2 || "") + "\n";
+            }
+            
+            stepsHTML += `第 ${times} 次執行 (迴圈外): 輸入 ${password2 || "(空)"}`;
+            if (password2 === correctPwd) {
+                 stepsHTML += " (正確，不進入迴圈)<br>";
+            } else {
+                 stepsHTML += " (錯誤，準備進入迴圈)<br>";
+            }
+
+            while (password2 !== correctPwd && times < 3) {
+                outputText += "Wrong password!\n";
+                times = times + 1;
+                password2 = pwds[times - 1]; 
+                
+                if (useNewline) {
+                    outputText += promptStr + "\n" + (password2 || "") + "\n";
+                } else {
+                    outputText += promptStr + (password2 || "") + "\n";
+                }
+                
+                stepsHTML += `第 ${times} 次執行 (迴圈內): 輸入 ${password2 || "(空)"}`;
+                if (password2 === correctPwd) {
+                     stepsHTML += " (正確，跳出迴圈)<br>";
+                } else {
+                     stepsHTML += ` (錯誤，次數為 ${times})<br>`;
+                }
+            }
+
+            if (password2 === correctPwd) {
+                outputText += "Welcome to this system.";
+            } else {
+                if (times === 3 && password2 !== correctPwd) {
+                    outputText += "Enter the wrong password 3 times, the account is locked.";
+                }
+            }
+
+            resultElem.innerText = outputText;
+            if (stepsElem) stepsElem.innerHTML = stepsHTML;
+        }
+
+        // --- 頁面切換功能 ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const content = document.getElementById('content-' + tabName);
+            content.classList.remove('hidden');
+            content.classList.add('block');
+            
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // 綁定 Enter 鍵觸發執行
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = {
+                'inputName': runGreeting,
+                'numX': runAverage,
+                'numY': runAverage,
+                'scoreWork': runGrade,
+                'scoreExam': runGrade,
+                'scoreRoutine': runGrade,
+                'numN': runLoop,
+                'a051_chinese': runA051,
+                'a051_english': runA051,
+                'a051_math': runA051,
+                'pwd_1': runPassword,
+                'pwd_2': runPassword,
+                'pwd_3': runPassword
+            };
+
+            for (let id in inputs) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') inputs[id]();
+                    });
+                }
+            }
+            
+            updateGreetingCode();
+            updateAverageCode();
+            updateGradeCode();
+            updateA051Code();
+            updateLoopCode();
+            updatePasswordCode();
+        });
+    </script>
+</body>
+</html>

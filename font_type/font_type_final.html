@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字形實驗室 | Type Lab</title>
+    <style>
+        :root {
+            --primary-bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --half-color: #1976D2; /* 藍色：半形/原始 */
+            --half-bg: #E3F2FD;
+            --full-color: #388E3C; /* 綠色：全形/轉換 */
+            --full-bg: #E8F5E9;
+            --grid-line: #e0e0e0;
+        }
+
+        body {
+            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background-color: var(--primary-bg);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        p.subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        /* 格線背景設定 - 核心視覺 */
+        .grid-bg {
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 20px 20px; /* 每一格 20px */
+            background-position: -1px -1px;
+        }
+
+        /* 卡片容器 */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            border-left: 5px solid transparent;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        /* ----------------------------------
+           區塊 1: 大小寫 (Case Study) 
+           ---------------------------------- */
+        .case-card { border-left-color: #9C27B0; }
+        
+        .case-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-case { background: #f3e5f5; color: #9C27B0; }
+        .btn-case:hover, .btn-case.active { background: #9C27B0; color: white; }
+
+        /* ----------------------------------
+           區塊 2: 全形半形 (Width Lab) 
+           ---------------------------------- */
+        .width-card { border-left-color: var(--full-color); }
+
+        .comparison-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .comparison-box { grid-template-columns: 1fr; }
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .label-half { color: var(--half-color); }
+        .label-full { color: var(--full-color); }
+
+        /* 輸入框核心樣式 */
+        textarea {
+            width: 100%;
+            height: 120px;
+            font-family: 'Courier New', Courier, monospace; /* 等寬字體是關鍵 */
+            font-size: 20px; /* 配合格線 */
+            line-height: 20px; /* 配合格線 */
+            padding: 0; /* 貼齊格線 */
+            border: 1px solid #ccc;
+            resize: none;
+            outline: none;
+            letter-spacing: 0;
+            box-sizing: border-box; /* 確保 padding 不影響寬度計算 */
+        }
+
+        /* 透過 padding 讓文字對齊格線中間 */
+        .textarea-wrapper {
+            padding: 10px; /* 留邊 */
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        #halfInput {
+            background-color: rgba(227, 242, 253, 0.3); /* 淡藍透明 */
+            color: var(--half-color);
+        }
+
+        #fullOutput {
+            background-color: rgba(232, 245, 233, 0.3); /* 淡綠透明 */
+            color: var(--full-color);
+        }
+
+        /* ----------------------------------
+           區塊 3: 切換指南 (Switcher)
+           ---------------------------------- */
+        .key-card { border-left-color: #FF9800; }
+        
+        .keyboard-visual {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .key {
+            border: 2px solid #333;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-family: monospace;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #333;
+            background: white;
+            transition: 0.1s;
+        }
+
+        .key.active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #333;
+            background: #FFECB3;
+            border-color: #FF9800;
+        }
+
+        .switch-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+        
+        .tab.active {
+            opacity: 1;
+            border-bottom: 3px solid #FF9800;
+            font-weight: bold;
+        }
+
+        /* 標點符號提示 */
+        .highlight-mark {
+            background-color: yellow;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>字形實驗室 Type Lab</h1>
+    <p class="subtitle">互動式理解全形、半形與大小寫的奧秘</p>
+
+    <div class="container">
+
+        <div class="card case-card">
+            <h2>1. 英文大小寫 (Case Sensitivity)</h2>
+            <div class="card-desc">
+                英文有大小寫之分，但<b>中文沒有</b>。點擊下方按鈕或輸入文字體驗差異。
+            </div>
+            <div class="case-controls">
+                <button class="btn btn-case" onclick="setCase('upper')">全部大寫 (UPPER)</button>
+                <button class="btn btn-case" onclick="setCase('lower')">全部小寫 (lower)</button>
+                <button class="btn btn-case active" onclick="setCase('original')">還原</button>
+            </div>
+            <div class="textarea-wrapper grid-bg">
+                <textarea id="caseInput" placeholder="Type English here... 試著輸入英文">Type English here...</textarea>
+            </div>
+        </div>
+
+        <div class="card width-card">
+            <h2>2. 全形與半形 (Width Comparison)</h2>
+            <div class="card-desc">
+                觀察背景格線：<b>半形字</b>佔半格或一格空間，<b>全形字</b>強制佔用兩個半形空間（正方形）。
+                <br>試著輸入：123, abc, ( )
+            </div>
+            
+            <div class="comparison-box">
+                <div class="input-group">
+                    <label class="label-half">🔵 半形 (Half-width) / 原始輸入</label>
+                    <div class="textarea-wrapper grid-bg">
+                        <textarea id="halfInput" placeholder="在此輸入半形字元...">Hello,123</textarea>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="label-full">🟢 全形 (Full-width) / 自動轉換</label>
+                    <div class="textarea-wrapper grid-bg">
+                        <textarea id="fullOutput" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card key-card">
+            <h2>3. 鍵盤切換指南</h2>
+            <div class="switch-tabs">
+                <div class="tab active" onclick="showInstructionTab('win-half-full')">全形/半形</div>
+                <div class="tab" onclick="showInstructionTab('win-case')">大小寫</div>
+                <div class="tab" onclick="showInstructionTab('win-ime')">中英模式</div>
+            </div>
+            <div id="instruction-text" class="card-desc">
+                Windows 切換全形/半形：通常使用 <b>Shift + 空白鍵</b>
+            </div>
+            <div class="keyboard-visual" id="keyboard-visual">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // 功能 1: 大小寫轉換
+        // ==========================================
+        const caseInput = document.getElementById('caseInput');
+        let originalText = caseInput.value;
+
+        // 監聽輸入以保存原始文字
+        caseInput.addEventListener('input', (e) => {
+            originalText = e.target.value;
+        });
+
+        function setCase(type) {
+            // 更新按鈕狀態
+            document.querySelectorAll('.btn-case').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (type === 'upper') {
+                caseInput.value = originalText.toUpperCase();
+            } else if (type === 'lower') {
+                caseInput.value = originalText.toLowerCase();
+            } else {
+                caseInput.value = originalText;
+            }
+        }
+
+        // ==========================================
+        // 功能 2: 全形半形轉換 (核心邏輯)
+        // ==========================================
+        const halfInput = document.getElementById('halfInput');
+        const fullOutput = document.getElementById('fullOutput');
+
+        function toFullWidth(str) {
+            let result = "";
+            for (let i = 0; i < str.length; i++) {
+                let code = str.charCodeAt(i);
+                // ASCII 範圍 33-126 (標準半形符號與英數)
+                if (code >= 33 && code <= 126) {
+                    result += String.fromCharCode(code + 65248);
+                } 
+                // 空白鍵例外處理 (32 -> 12288)
+                else if (code === 32) {
+                    result += String.fromCharCode(12288);
+                } 
+                // 其他字元 (如中文字) 保持不變
+                else {
+                    result += str.charAt(i);
+                }
+            }
+            return result;
+        }
+
+        function updateConversion() {
+            const val = halfInput.value;
+            const converted = toFullWidth(val);
+            fullOutput.value = converted;
+        }
+
+        // 綁定事件：打字時即時轉換
+        halfInput.addEventListener('input', updateConversion);
+        
+        // 初始化執行一次
+        updateConversion();
+
+
+        // ==========================================
+        // 功能 3: 切換教學互動
+        // ==========================================
+        const instructionText = document.getElementById('instruction-text');
+        const keyboardVisual = document.getElementById('keyboard-visual');
+
+        function showInstructionTab(tabId) {
+            // 切換 Tab 樣式
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[onclick="showInstructionTab('${tabId}')"]`).classList.add('active');
+
+            // 模擬按鍵動畫效果
+            animateKeys();
+            
+            const instructionMap = {
+                'win-half-full': {
+                    text: "Windows 切換全形/半形：通常使用 <b>Shift + 空白鍵</b> 。",
+                    keys: [{ id: 'key-shift', text: 'Shift' }, { id: 'key-plus', text: '+' }, { id: 'key-space', text: 'Space' }]
+                },
+                'win-case': {
+                    text: "Windows 大小寫切換：按 <b>Caps Lock</b> 鍵即可切換英文大小寫，指示燈亮表示大寫模式。<br>此外，在<b>小寫輸入狀態</b>下，按 <b>Shift 鍵 + 任意英文字元鍵</b> 可以打出該字元的大寫形式；對於數字和符號鍵，Shift 鍵則是用來輸入鍵盤上方的<b>第二個符號</b>（例如 Shift + 1 = !，Shift + ; = :）。",
+                    keys: [{ id: 'key-caps', text: 'Caps Lock' }]            
+                },
+                'win-ime': {
+                    text: "Windows 中英模式切換：使用 <b>Shift</b> 鍵可在中文輸入法和英數輸入法之間切換。",
+                    keys: [{ id: 'key-shift', text: 'Shift' }]
+                }
+            };
+
+            const currentInstruction = instructionMap[tabId];
+            if (currentInstruction) {
+                instructionText.innerHTML = currentInstruction.text;
+                
+                // Clear existing keys and re-render
+                keyboardVisual.innerHTML = ''; 
+                currentInstruction.keys.forEach(keyData => {
+                    const keyElement = document.createElement('div');
+                    keyElement.classList.add('key');
+                    keyElement.id = keyData.id;
+                    keyElement.innerText = keyData.text;
+                    keyboardVisual.appendChild(keyElement);
+                });
+            }
+        }
+        showInstructionTab('win-half-full'); // Default to Windows Half/Full instruction on load
+
+        function animateKeys() {
+            const keys = keyboardVisual.querySelectorAll('.key'); // Select keys within keyboardVisual
+            keys.forEach(k => k.classList.add('active'));
+            setTimeout(() => {
+                keys.forEach(k => k.classList.remove('active'));
+            }, 300);
+        }
+
+    </script>
+</body>
+</html>

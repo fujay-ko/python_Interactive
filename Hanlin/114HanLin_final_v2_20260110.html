@@ -257,7 +257,7 @@ else:
                 <hr class="divider">
 
                 <!-- 新增：a051 課堂練習 -->
-                <h2 class="text-xl font-bold mb-4 text-purple-600">－個人平均成績比較(if/elif/else)</h2>
+                <h2 class="text-xl font-bold mb-4 text-purple-600">個人平均成績比較(if/elif/else)</h2>
                 <p class="text-gray-600 mb-4 text-sm">輸入國文、英文及數學成績，計算個人平均後，與班級總平均 (國70/英75/數65，平均 70) 比較。</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -273,11 +273,6 @@ else:
                         <div class="input-group mb-4">
                             <label>數學成績 (z)：</label>
                             <input type="number" id="a051_math" placeholder="0-100">
-                        </div>
-
-                        <div class="flex items-center mb-4 bg-purple-50 p-2 rounded border border-purple-100">
-                            <input type="checkbox" id="useNewlineA051" class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500" onchange="updateA051Code()">
-                            <label for="useNewlineA051" class="ml-2 text-sm font-medium text-gray-700">在提示字串後加入換行符號 (\n)</label>
                         </div>
 
                         <button onclick="runA051()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 w-full">執行比較</button>
@@ -602,14 +597,12 @@ else:
 
         // --- 3.5 a051 邏輯 ---
         function updateA051Code() {
-            const useNewline = document.getElementById('useNewlineA051').checked;
             const codeElem = document.getElementById('codeA051');
-            const newlineStr = useNewline ? '\\n' : '';
             
             let code = `# 讀取國、英、數成績，記得用 int() 轉成整數\n`;
-            code += `x = int(input('Chinese score:${newlineStr}'))\n`;
-            code += `y = int(input('English score:${newlineStr}'))\n`;
-            code += `z = int(input('Math score:${newlineStr}'))\n\n`;
+            code += `x = int(input())\n`;
+            code += `y = int(input())\n`;
+            code += `z = int(input())\n\n`;
             code += `# 計算個人平均 (a)\n`;
             code += `a = (x + y + z) / 3\n`;
             code += `# 班級總平均 (b) = (70+75+65)/3 = 70\n`;
@@ -633,7 +626,6 @@ else:
             let x = parseFloat(xStr) || 0;
             let y = parseFloat(yStr) || 0;
             let z = parseFloat(zStr) || 0;
-            let useNewline = document.getElementById('useNewlineA051').checked;
 
             let a = (x + y + z) / 3;
             let b = 70;
@@ -644,16 +636,12 @@ else:
             else resultMsg = "Come on";
 
             let outputText = "";
-            if (useNewline) {
-                outputText += "Chinese score:\n" + (xStr || '0') + "\n";
-                outputText += "English score:\n" + (yStr || '0') + "\n";
-                outputText += "Math score:\n" + (zStr || '0') + "\n";
-            } else {
-                outputText += "Chinese score:" + (xStr || '0') + "\n";
-                outputText += "English score:" + (yStr || '0') + "\n";
-                outputText += "Math score:" + (zStr || '0') + "\n";
-            }
+            // 模擬 input() 沒有提示詞的情況，直接顯示輸入的值
+            outputText += (xStr || '0') + "\n";
+            outputText += (yStr || '0') + "\n";
+            outputText += (zStr || '0') + "\n";
             outputText += resultMsg;
+
             document.getElementById('resultA051').innerText = outputText;
         }
 

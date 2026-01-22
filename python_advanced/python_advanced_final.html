@@ -57,6 +57,28 @@
                 <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
                     <i class="fas fa-keyboard text-blue-500 mr-2"></i>1.1 同行輸入 (split & map)
                 </h3>
+                <!-- 步驟分解 -->
+                <div class="bg-blue-900/30 border border-blue-700 rounded-lg p-4 mb-4">
+                    <div class="text-xs font-bold text-blue-300 mb-3">📋 程式執行步驟（以輸入 "10 20 30" 為例）</div>
+                    <div class="flex flex-col gap-2 text-sm">
+                        <div class="flex items-start gap-3">
+                            <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                            <div><code class="code-font text-blue-300">input()</code> <span class="text-gray-300">取得一整行字串 →</span> <code class="code-font text-yellow-300">"10 20 30"</code></div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                            <div><code class="code-font text-blue-300">.split()</code> <span class="text-gray-300">用空格切開，變成清單 →</span> <code class="code-font text-yellow-300">["10", "20", "30"]</code> <span class="text-gray-500 text-xs">（還是字串！）</span></div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                            <div><code class="code-font text-blue-300">map(int, ...)</code> <span class="text-gray-300">把每個字串轉成數字 →</span> <code class="code-font text-yellow-300">[10, 20, 30]</code></div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">4</span>
+                            <div><code class="code-font text-blue-300">a, b, c =</code> <span class="text-gray-300">分別放進三個變數 →</span> <code class="code-font text-yellow-300">a=10, b=20, c=30</code></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font space-y-3">
                         <div>
@@ -96,11 +118,11 @@
                     <div>
                         <div class="flex gap-4 mb-2">
                             <div class="flex-1">
-                                <label class="text-xs font-bold text-gray-500">sep</label>
+                                <label class="text-xs font-bold text-gray-400">sep <span class="text-gray-500 font-normal">— 每個值之間的分隔符號（預設是空格）</span></label>
                                 <input id="sepInput" value=" | " class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200" oninput="updatePrint()">
                             </div>
                             <div class="flex-1">
-                                <label class="text-xs font-bold text-gray-500">end</label>
+                                <label class="text-xs font-bold text-gray-400">end <span class="text-gray-500 font-normal">— 整行印完後結尾加什麼（預設是換行）</span></label>
                                 <input id="endInput" value="..." class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200" oninput="updatePrint()">
                             </div>
                         </div>
@@ -116,19 +138,158 @@
                 <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
                     <i class="fas fa-percentage text-purple-500 mr-2"></i>1.3 格式化輸出 (f-string)
                 </h3>
-                <div class="flex flex-wrap gap-4">
-                    <div class="bg-gray-700 p-3 rounded border border-gray-600 flex-1 min-w-[200px]">
-                        <div class="text-xs text-gray-400 mb-1">小數點 (:.2f)</div>
-                        <div class="code-font text-purple-400 font-bold">f"{95.123:.2f}" -> 95.12</div>
+                <p class="text-sm text-gray-400 mb-4">
+                    在字串引號前加上 <code class="code-font bg-gray-700 px-1 rounded">f</code> 或 <code class="code-font bg-gray-700 px-1 rounded">F</code>，即可在字串中使用 <code class="code-font bg-gray-700 px-1 rounded">{}</code> 嵌入變數或運算式。冒號 <code class="code-font bg-gray-700 px-1 rounded">:</code> 後面接的是<strong class="text-purple-300">格式規則</strong>，讓你控制數字或文字的顯示方式。
+                </p>
+
+                <!-- 語法結構圖 -->
+                <div class="bg-gray-900 border border-purple-700 rounded-lg p-4 mb-6">
+                    <div class="text-xs text-gray-400 mb-2 font-bold">📐 語法結構</div>
+                    <div class="code-font text-sm text-center">
+                        <span class="text-gray-400">f"{ </span><span class="text-yellow-300">值</span><span class="text-gray-400"> : </span><span class="text-pink-400">填充字元</span><span class="text-gray-400"> </span><span class="text-green-400">對齊方式</span><span class="text-gray-400"> </span><span class="text-blue-400">寬度</span><span class="text-gray-400"> . </span><span class="text-orange-400">精度</span><span class="text-gray-400"> </span><span class="text-purple-400">型別</span><span class="text-gray-400"> }"</span>
                     </div>
-                    <div class="bg-gray-700 p-3 rounded border border-gray-600 flex-1 min-w-[200px]">
-                        <div class="text-xs text-gray-400 mb-1">補零 (:03d)</div>
-                        <div class="code-font text-purple-400 font-bold">f"{5:03d}" -> 005</div>
+                    <div class="flex justify-center gap-4 mt-2 flex-wrap text-xs">
+                        <span class="text-yellow-300">● 值：變數或數字</span>
+                        <span class="text-pink-400">● 填充字元：如 0 或空格</span>
+                        <span class="text-green-400">● 對齊：^ &lt; &gt;</span>
+                        <span class="text-blue-400">● 寬度：總字元數</span>
+                        <span class="text-orange-400">● 精度：小數位數</span>
+                        <span class="text-purple-400">● 型別：f / d / s</span>
                     </div>
-                    <div class="bg-gray-700 p-3 rounded border border-gray-600 flex-1 min-w-[200px]">
-                        <div class="text-xs text-gray-400 mb-1">對齊 (:^6)</div>
-                        <div class="code-font text-purple-400 font-bold">f"{'Hi':^6}" -> "  Hi  "</div>
+                    <div class="text-xs text-gray-500 mt-1 text-center">（以上選項皆為選填，依需求組合使用）</div>
+                </div>
+
+                <!-- 互動示範 -->
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font space-y-2">
+                        <div>
+                            <span class="python-comment"># 定義變數</span><br>
+                            name = <span class="python-string">"Alice"</span><br>
+                            score = <span class="python-num">95.123</span><br>
+                            <span class="python-comment"># 使用 f-string 格式化</span><br>
+                            msg = <span class="python-string">f"Hi, {name}. Score: {score:.2f}"</span><br>
+                            <span class="python-func">print</span>(msg)
+                        </div>
                     </div>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-xs text-gray-500 block">Name:</label>
+                                <input id="fName" value="Alice" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runFormat()">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-500 block">Score:</label>
+                                <input type="number" id="fScore" value="95.123" step="0.001" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runFormat()">
+                            </div>
+                        </div>
+                        <div id="formatOutput" class="bg-black p-3 rounded code-font text-sm text-purple-400 border border-purple-900/50 min-h-[48px] flex items-center">
+                            Hi, Alice. Score: 95.12
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 三種格式詳細說明 -->
+                <div class="space-y-4">
+
+                    <!-- 小數點 -->
+                    <div class="bg-gray-700 rounded-lg border border-gray-600 overflow-hidden">
+                        <div class="flex items-center gap-2 bg-purple-900/50 px-4 py-2 border-b border-gray-600">
+                            <span class="text-purple-300 font-bold text-sm">🔢 小數點位數 <code class="code-font bg-gray-800 px-1 rounded">:.2f</code></span>
+                            <span class="text-xs text-gray-400">— 常用於金額、成績、科學數據</span>
+                        </div>
+                        <div class="p-4 grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-xs text-gray-400 mb-2">語法說明：<code class="code-font">. 精度 f</code></div>
+                                <div class="flex gap-3 text-xs mb-3">
+                                    <span class="bg-orange-900/50 border border-orange-700 text-orange-300 px-2 py-1 rounded"><code>.2</code> = 顯示 2 位小數</span>
+                                    <span class="bg-purple-900/50 border border-purple-700 text-purple-300 px-2 py-1 rounded"><code>f</code> = float 浮點數</span>
+                                </div>
+                                <div class="bg-gray-900 p-3 rounded text-xs code-font space-y-1">
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"{<span class="python-num">95.123</span>:.0f}"</span>) <span class="python-comment"># 95（無小數）</span></div>
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"{<span class="python-num">95.123</span>:.2f}"</span>) <span class="python-comment"># 95.12</span></div>
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"{<span class="python-num">95.123</span>:.4f}"</span>) <span class="python-comment"># 95.1230</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 rounded p-3">
+                                <div class="text-xs text-gray-400 mb-2">▶ 試試看：</div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <span class="text-xs text-gray-400">數字:</span>
+                                    <input type="number" id="floatVal" value="95.123" step="0.001" class="w-28 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-xs code-font text-gray-200" oninput="runFloatDemo()">
+                                    <span class="text-xs text-gray-400">小數位:</span>
+                                    <input type="number" id="floatPrec" value="2" min="0" max="6" class="w-14 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-xs code-font text-gray-200" oninput="runFloatDemo()">
+                                </div>
+                                <div id="floatDemoOut" class="bg-black p-2 rounded code-font text-xs text-purple-400 border border-purple-900/50"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 補零 -->
+                    <div class="bg-gray-700 rounded-lg border border-gray-600 overflow-hidden">
+                        <div class="flex items-center gap-2 bg-blue-900/50 px-4 py-2 border-b border-gray-600">
+                            <span class="text-blue-300 font-bold text-sm">0️⃣ 補零 <code class="code-font bg-gray-800 px-1 rounded">:03d</code></span>
+                            <span class="text-xs text-gray-400">— 常用於編號、時間（如 09:05:03）</span>
+                        </div>
+                        <div class="p-4 grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-xs text-gray-400 mb-2">語法說明：<code class="code-font">填充字元 寬度 d</code></div>
+                                <div class="flex gap-3 text-xs mb-3">
+                                    <span class="bg-pink-900/50 border border-pink-700 text-pink-300 px-2 py-1 rounded"><code>0</code> = 用 0 填充</span>
+                                    <span class="bg-blue-900/50 border border-blue-700 text-blue-300 px-2 py-1 rounded"><code>3</code> = 總共 3 位</span>
+                                    <span class="bg-purple-900/50 border border-purple-700 text-purple-300 px-2 py-1 rounded"><code>d</code> = 整數</span>
+                                </div>
+                                <div class="bg-gray-900 p-3 rounded text-xs code-font space-y-1">
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"{<span class="python-num">5</span>:d}"</span>)  &nbsp;<span class="python-comment"># 5（不補零）</span></div>
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"{<span class="python-num">5</span>:3d}"</span>)  &nbsp;<span class="python-comment">#   5（補空格）</span></div>
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"{<span class="python-num">5</span>:03d}"</span>) <span class="python-comment"># 005（補零）</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 rounded p-3">
+                                <div class="text-xs text-gray-400 mb-2">▶ 試試看：</div>
+                                <div class="flex gap-2 items-center mb-2">
+                                    <span class="text-xs text-gray-400">整數:</span>
+                                    <input type="number" id="zeroVal" value="5" class="w-20 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-xs code-font text-gray-200" oninput="runZeroDemo()">
+                                    <span class="text-xs text-gray-400">總位數:</span>
+                                    <input type="number" id="zeroWidth" value="3" min="1" max="8" class="w-14 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-xs code-font text-gray-200" oninput="runZeroDemo()">
+                                </div>
+                                <div id="zeroDemoOut" class="bg-black p-2 rounded code-font text-xs text-blue-400 border border-blue-900/50"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 對齊 -->
+                    <div class="bg-gray-700 rounded-lg border border-gray-600 overflow-hidden">
+                        <div class="flex items-center gap-2 bg-green-900/50 px-4 py-2 border-b border-gray-600">
+                            <span class="text-green-300 font-bold text-sm">↔️ 對齊 <code class="code-font bg-gray-800 px-1 rounded">:^6</code></span>
+                            <span class="text-xs text-gray-400">— 常用於製作整齊的表格輸出</span>
+                        </div>
+                        <div class="p-4 grid md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-xs text-gray-400 mb-2">語法說明：<code class="code-font">對齊方式 寬度</code></div>
+                                <div class="flex gap-2 text-xs mb-3 flex-wrap">
+                                    <span class="bg-green-900/50 border border-green-700 text-green-300 px-2 py-1 rounded"><code>^</code> = 置中</span>
+                                    <span class="bg-yellow-900/50 border border-yellow-700 text-yellow-300 px-2 py-1 rounded"><code>&lt;</code> = 靠左</span>
+                                    <span class="bg-red-900/50 border border-red-700 text-red-300 px-2 py-1 rounded"><code>&gt;</code> = 靠右</span>
+                                    <span class="bg-blue-900/50 border border-blue-700 text-blue-300 px-2 py-1 rounded"><code>6</code> = 總寬度 6</span>
+                                </div>
+                                <div class="bg-gray-900 p-3 rounded text-xs code-font space-y-1">
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"|{'Hi':^6}|"</span>) <span class="python-comment"># |  Hi  |</span></div>
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"|{'Hi':&lt;6}|"</span>) <span class="python-comment"># |Hi    |</span></div>
+                                    <div><span class="python-func">print</span>(<span class="python-string">f"|{'Hi':&gt;6}|"</span>) <span class="python-comment"># |    Hi|</span></div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 rounded p-3">
+                                <div class="text-xs text-gray-400 mb-2">▶ 試試看：</div>
+                                <div class="flex gap-2 items-center mb-2 flex-wrap">
+                                    <span class="text-xs text-gray-400">文字:</span>
+                                    <input id="alignText" value="Hi" class="w-20 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-xs code-font text-gray-200" oninput="runAlignDemo()">
+                                    <span class="text-xs text-gray-400">寬度:</span>
+                                    <input type="number" id="alignWidth" value="8" min="2" max="16" class="w-14 bg-gray-900 border border-gray-600 rounded px-2 py-1 text-xs code-font text-gray-200" oninput="runAlignDemo()">
+                                </div>
+                                <div id="alignDemoOut" class="bg-black p-2 rounded code-font text-xs text-green-400 border border-green-900/50 space-y-1"></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -177,6 +338,30 @@
             <!-- 2.3 Bitwise -->
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-indigo-500 p-6">
                 <h3 class="font-bold text-lg text-gray-100 mb-2">2.3 位元運算子 (&, |, ^)</h3>
+                <p class="text-sm text-gray-400 mb-3">
+                    電腦用 <span class="text-white font-bold">0 和 1</span> 儲存所有資料，位元運算就是對每個 0/1 逐一進行運算。就像一排燈的開關：<span class="text-indigo-300 font-bold">AND</span> 是「兩個都開才算開」、<span class="text-indigo-300 font-bold">OR</span> 是「任一個開就算開」、<span class="text-indigo-300 font-bold">XOR</span> 是「只有一個開才算開」。
+                </p>
+                <!-- 對照表 -->
+                <div class="grid grid-cols-3 gap-2 mb-4 text-xs text-center">
+                    <div class="bg-indigo-900/40 border border-indigo-700 rounded p-2">
+                        <div class="font-bold text-indigo-300 mb-1">AND (&)</div>
+                        <div class="text-gray-400">兩個都是 1 → 1</div>
+                        <div class="text-gray-400">其他情況 → 0</div>
+                        <div class="code-font mt-1 text-gray-300">1&1=<span class="text-green-400">1</span>　1&0=<span class="text-red-400">0</span></div>
+                    </div>
+                    <div class="bg-indigo-900/40 border border-indigo-700 rounded p-2">
+                        <div class="font-bold text-indigo-300 mb-1">OR (|)</div>
+                        <div class="text-gray-400">任一個是 1 → 1</div>
+                        <div class="text-gray-400">都是 0 → 0</div>
+                        <div class="code-font mt-1 text-gray-300">1|0=<span class="text-green-400">1</span>　0|0=<span class="text-red-400">0</span></div>
+                    </div>
+                    <div class="bg-indigo-900/40 border border-indigo-700 rounded p-2">
+                        <div class="font-bold text-indigo-300 mb-1">XOR (^)</div>
+                        <div class="text-gray-400">兩個不同 → 1</div>
+                        <div class="text-gray-400">兩個相同 → 0</div>
+                        <div class="code-font mt-1 text-gray-300">1^0=<span class="text-green-400">1</span>　1^1=<span class="text-red-400">0</span></div>
+                    </div>
+                </div>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between bg-indigo-900/40 p-3 rounded">
                         <div class="flex gap-4 text-sm">
@@ -214,12 +399,13 @@
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-red-500 p-6 lg:col-span-2">
                 <h3 class="font-bold text-lg text-gray-100 mb-2">2.4 短路求值 (Short-circuit Evaluation)</h3>
                 <p class="text-sm text-gray-400 mb-4">
-                    Python 的 <code class="code-font bg-gray-700 px-1 rounded">and</code> 與 <code class="code-font bg-gray-700 px-1 rounded">or</code> 具有「懶惰」特性。
+                    Python 在計算 <code class="code-font bg-gray-700 px-1 rounded">and</code> / <code class="code-font bg-gray-700 px-1 rounded">or</code> 時，只要已經能確定結果，就<span class="text-white font-bold">不會繼續往後算</span>。這就像電路短路一樣，電流不再繼續流下去。
                 </p>
 
                 <div class="grid md:grid-cols-2 gap-8">
                     <div class="border border-red-700 rounded-lg p-4 bg-red-900/40">
-                        <h4 class="font-bold text-red-400 mb-2">or 運算 (A or B)</h4>
+                        <h4 class="font-bold text-red-400 mb-1">or 運算 (A or B)</h4>
+                        <p class="text-xs text-gray-400 mb-3">只要 A 是 True，結果一定是 True，B 不需要再看。</p>
                         <div class="flex items-center space-x-4 mb-3">
                             <button id="btnOrA" onclick="toggleShort('or')" class="px-3 py-1 bg-green-500 text-white rounded shadow text-sm font-bold w-24">A: True</button>
                             <span class="text-gray-500 font-bold">or</span>
@@ -231,7 +417,8 @@
                         </div>
                     </div>
                     <div class="border border-blue-700 rounded-lg p-4 bg-blue-900/40">
-                        <h4 class="font-bold text-blue-400 mb-2">and 運算 (A and B)</h4>
+                        <h4 class="font-bold text-blue-400 mb-1">and 運算 (A and B)</h4>
+                        <p class="text-xs text-gray-400 mb-3">只要 A 是 False，結果一定是 False，B 不需要再看。</p>
                         <div class="flex items-center space-x-4 mb-3">
                             <button id="btnAndA" onclick="toggleShort('and')" class="px-3 py-1 bg-red-500 text-white rounded shadow text-sm font-bold w-24">A: False</button>
                             <span class="text-gray-500 font-bold">and</span>
@@ -273,9 +460,15 @@
                 <!-- 3.3 Truthy/Falsy -->
                 <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-yellow-500 p-6">
                     <h3 class="font-bold text-lg text-gray-100 mb-4">3.3 真值測試 (Truthy/Falsy)</h3>
-                    <p class="text-sm text-gray-400 mb-3">
-                        Python 視 <code class="code-font text-yellow-400">0</code>, <code class="code-font text-yellow-400">""</code>, <code class="code-font text-yellow-400">[]</code>, <code class="code-font text-yellow-400">None</code> 為 <span class="text-red-400">False</span>。
+                    <p class="text-sm text-gray-400 mb-2">
+                        Python 視 <code class="code-font text-yellow-400">0</code>, <code class="code-font text-yellow-400">""</code>, <code class="code-font text-yellow-400">[]</code>, <code class="code-font text-yellow-400">None</code> 為 <span class="text-red-400 font-bold">False</span>，其他大多數值為 <span class="text-green-400 font-bold">True</span>。
                     </p>
+                    <!-- if not vs == 0 對照 -->
+                    <div class="bg-gray-900 border border-yellow-800 rounded p-3 mb-3 text-xs space-y-1">
+                        <div class="text-yellow-300 font-bold mb-1">⚠️ if not score 和 if score == 0 的差別：</div>
+                        <div class="text-gray-300"><code class="code-font text-yellow-400">if not score</code> → score 是 <span class="text-red-400">0、""、[]</span> 時都會成立</div>
+                        <div class="text-gray-300"><code class="code-font text-yellow-400">if score == 0</code> → 只有 score 剛好等於 <span class="text-red-400">0</span> 才會成立</div>
+                    </div>
                     
                     <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
                         score = <span id="truthyDisplayVal" class="text-yellow-400">0</span><br>
@@ -298,21 +491,23 @@
             <div class="space-y-8">
                 <!-- 3.2 Nested Simplification -->
                 <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-cyan-500 p-6">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-center mb-2">
                         <h3 class="font-bold text-lg text-gray-100">3.2 巢狀條件簡化</h3>
                         <button onclick="toggleNested()" class="text-xs bg-cyan-600 text-white px-2 py-1 rounded hover:bg-cyan-700">切換寫法</button>
                     </div>
-                    
+                    <p class="text-xs text-gray-400 mb-3">
+                        <span class="text-cyan-300 font-bold">Guard Clause（守衛條件）</span>：先把不符合的情況擋掉，讓主要邏輯不用縮那麼深，程式更好讀。
+                    </p>
                     <div id="nestedCodeBlock" class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font relative min-h-[140px]">
                         <!-- Dynamic Content -->
                     </div>
-                    <p class="text-right text-xs text-gray-500 mt-2" id="nestedLabel">使用 Guard Clause 提早返回，減少縮排。</p>
+                    <p class="text-right text-xs mt-2" id="nestedLabel"></p>
                 </section>
 
                 <!-- 3.4 Match Case -->
                 <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-teal-500 p-6">
                     <h3 class="font-bold text-lg text-gray-100 mb-4">3.4 match-case (Python 3.10+)</h3>
-                    <p class="text-sm text-gray-400 mb-3">結構化模式比對，類似 switch-case 但更強大。</p>
+                    <p class="text-sm text-gray-400 mb-3">當你要根據同一個變數的<span class="text-white font-bold">不同值</span>做不同的事，用 <code class="code-font text-teal-400">match-case</code> 比寫很多個 <code class="code-font text-teal-400">if-elif</code> 更清楚。<code class="code-font text-teal-400">case _</code> 代表「其他所有情況」。</p>
                     
                     <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
                         <span class="python-keyword">match</span> status:<br>
@@ -392,7 +587,12 @@
 
                 <div class="flex items-center gap-4 mb-3">
                     <div class="flex-1">
-                        <label class="text-xs text-gray-500 block">Expression (use 'x')</label>
+                        <label class="text-xs text-gray-500 block">運算式 (用 'x' 代表每個數字)</label>
+                        <div class="flex gap-1 mt-1 mb-1">
+                            <button onclick="setExpr('x*x')" class="text-xs bg-gray-700 hover:bg-violet-700 border border-gray-600 px-2 py-0.5 rounded">x*x 平方</button>
+                            <button onclick="setExpr('x+1')" class="text-xs bg-gray-700 hover:bg-violet-700 border border-gray-600 px-2 py-0.5 rounded">x+1 加一</button>
+                            <button onclick="setExpr('x*2')" class="text-xs bg-gray-700 hover:bg-violet-700 border border-gray-600 px-2 py-0.5 rounded">x*2 加倍</button>
+                        </div>
                         <input type="text" id="compExpr" value="x*x" class="w-full bg-gray-900 border border-gray-600 rounded px-2 py-1 text-sm code-font text-gray-200" oninput="runComp()">
                     </div>
                     <div>
@@ -502,9 +702,11 @@
             <!-- 5.3 Loop Invariant -->
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-fuchsia-500 p-6 lg:col-span-2">
                 <h3 class="font-bold text-lg text-gray-100 mb-2">5.3 迴圈不變式 (Loop Invariant)</h3>
+                <p class="text-sm text-gray-400 mb-2">
+                    就像你在數零錢，每數一枚，手上的錢就多一枚。「<span class="text-fuchsia-300 font-bold">數過的總和一定正確</span>」這個規律在每次迴圈都成立，就是不變式。
+                </p>
                 <p class="text-sm text-gray-400 mb-4">
-                    在迴圈執行過程中，始終保持為真的性質。用於驗證演算法正確性。
-                    <br>例如：計算總和時，<code class="code-font bg-gray-900 px-1 rounded">current_sum</code> 永遠等於「目前已遍歷元素的總和」。
+                    保證：走到第 <code class="code-font text-fuchsia-400">i</code> 步時，<code class="code-font text-fuchsia-400">Total</code> 一定等於前 <code class="code-font text-fuchsia-400">i</code> 個數字的總和。這個性質可以幫助我們確認程式是否寫對了。
                 </p>
 
                 <div class="flex flex-col md:flex-row gap-8 items-center">
@@ -582,7 +784,8 @@
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-cyan-500 p-6">
                 <h3 class="font-bold text-lg text-gray-100 mb-2">6.2 淺拷貝 vs 深拷貝</h3>
                 <p class="text-sm text-gray-400 mb-4">
-                    <code class="code-font">copy()</code> 是淺拷貝 (只複製第一層)，<code class="code-font">deepcopy()</code> 是深拷貝 (遞迴複製所有)。
+                    淺拷貝像是<span class="text-cyan-300 font-bold">複印一本書的目錄</span>，內容頁還是共用的——改了原本的內容，複印本也會跟著變。深拷貝像是<span class="text-green-300 font-bold">把整本書連內容都重新印一份</span>，兩本完全獨立，互不影響。
+                    <br><code class="code-font text-cyan-400">copy()</code> 是淺拷貝（只複製第一層），<code class="code-font text-green-400">deepcopy()</code> 是深拷貝（全部都重新複製）。
                 </p>
 
                 <div class="flex items-center gap-2 mb-3">
@@ -831,6 +1034,38 @@
                 `<div>Loop output: ${res}</div><div class="mt-1 text-gray-400">Sep output:  ${sepRes}</div>`;
         }
 
+        // --- 1.3 Formatting Logic ---
+        function runFormat() {
+            const name = document.getElementById('fName').value;
+            const scoreInput = document.getElementById('fScore').value;
+            const score = parseFloat(scoreInput);
+            const output = document.getElementById('formatOutput');
+            
+            if (name && !isNaN(score)) {
+                output.innerText = `Hi, ${name}. Score: ${score.toFixed(2)}`;
+                output.className = "bg-black p-3 rounded code-font text-sm text-purple-400 border border-purple-900/50 min-h-[48px] flex items-center";
+            } else {
+                output.innerText = "請輸入有效的姓名與分數";
+                output.className = "bg-black p-3 rounded code-font text-sm text-red-400 border border-red-900/50 min-h-[48px] flex items-center";
+            }
+        }
+
+        // --- 1.3 Formatting Logic ---
+        function runFormat() {
+            const name = document.getElementById('fName').value;
+            const scoreInput = document.getElementById('fScore').value;
+            const score = parseFloat(scoreInput);
+            const output = document.getElementById('formatOutput');
+            
+            if (name && !isNaN(score)) {
+                output.innerText = `Hi, ${name}. Score: ${score.toFixed(2)}`;
+                output.className = "bg-black p-3 rounded code-font text-sm text-purple-400 border border-purple-900/50 min-h-[48px] flex items-center";
+            } else {
+                output.innerText = "請輸入有效的姓名與分數";
+                output.className = "bg-black p-3 rounded code-font text-sm text-red-400 border border-red-900/50 min-h-[48px] flex items-center";
+            }
+        }
+
         // --- 2.1 Augmented ---
         let augVal = 10;
         function updateAug(op) {
@@ -939,14 +1174,14 @@
                     &nbsp;&nbsp;<span class="python-keyword">if</span> user.has_permission:<br>
                     &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"Allowed"</span>)
                 `;
-                label.innerText = "傳統巢狀寫法，層級較深。";
+                label.innerText = "❌ 傳統巢狀寫法：縮排深，不容易看出主要邏輯。";
             } else {
                 container.innerHTML = `
                     <span class="python-keyword">if not</span> user.is_active: <span class="python-keyword">return</span><br>
                     <span class="python-keyword">if not</span> user.has_permission: <span class="python-keyword">return</span><br>
                     <span class="python-func">print</span>(<span class="python-string">"Allowed"</span>)
                 `;
-                label.innerText = "使用 Guard Clause 提早返回，邏輯扁平化。";
+                label.innerText = "✅ Guard Clause：先排除例外，主要邏輯清楚好讀。";
             }
         }
 
@@ -1316,6 +1551,47 @@
             document.getElementById('unpackResult').innerHTML = resHTML;
         }
 
+        // --- 4.2 Quick expr setter ---
+        function setExpr(expr) {
+            document.getElementById('compExpr').value = expr;
+            runComp();
+        }
+
+        // --- 1.3 Float Demo ---
+        function runFloatDemo() {
+            const val = parseFloat(document.getElementById('floatVal').value) || 0;
+            const prec = parseInt(document.getElementById('floatPrec').value) || 0;
+            const result = val.toFixed(prec);
+            document.getElementById('floatDemoOut').innerHTML =
+                `f"{${val}:.${prec}f}" → <span class="font-bold">${result}</span>`;
+        }
+
+        // --- 1.3 Zero Padding Demo ---
+        function runZeroDemo() {
+            const val = parseInt(document.getElementById('zeroVal').value) || 0;
+            const width = parseInt(document.getElementById('zeroWidth').value) || 1;
+            const noZero = String(val);
+            const withSpace = String(val).padStart(width, ' ');
+            const withZero = String(val).padStart(width, '0');
+            document.getElementById('zeroDemoOut').innerHTML =
+                `<div>不補 &nbsp;&nbsp;: ${noZero}</div>` +
+                `<div>補空格: |${withSpace}|</div>` +
+                `<div>補零 &nbsp;&nbsp;: <span class="font-bold text-white">${withZero}</span></div>`;
+        }
+
+        // --- 1.3 Align Demo ---
+        function runAlignDemo() {
+            const text = document.getElementById('alignText').value || '';
+            const width = parseInt(document.getElementById('alignWidth').value) || 2;
+            const center = text.padStart(Math.floor((width + text.length) / 2), ' ').padEnd(width, ' ');
+            const left = text.padEnd(width, ' ');
+            const right = text.padStart(width, ' ');
+            document.getElementById('alignDemoOut').innerHTML =
+                `<div>置中 ^${width}: |${center}|</div>` +
+                `<div>靠左 &lt;${width}: |${left}|</div>` +
+                `<div>靠右 &gt;${width}: |${right}|</div>`;
+        }
+
         // Init
         document.addEventListener('DOMContentLoaded', () => {
             updatePrint();
@@ -1324,6 +1600,9 @@
             checkRole();
             toggleNested(); // Init nested view
             runSplit(); // Init split input result
+            runFloatDemo();
+            runZeroDemo();
+            runAlignDemo();
             runZip(); // Init zip result
             runEnumerate(); // Init enumerate result
             runComp(); // Init list comprehension result

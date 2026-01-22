@@ -95,6 +95,7 @@
             <!-- 1. 打招呼區塊 -->
             <div id="content-greeting" class="tab-content block">
                 <h2 class="text-xl font-bold mb-4 text-blue-600">哈囉(input/print)</h2>
+                <p class="text-gray-600 mb-4 text-sm">請設計一個程式，讓使用者輸入名字後，電腦會將名字呈現在畫面上與使用者打招呼。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="input-group mb-4">
@@ -144,6 +145,7 @@ print('Hello', name, '!')
             <!-- 2. 求平均數區塊 -->
             <div id="content-average" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4 text-blue-600">求平均數 (變數與運算)</h2>
+                <p class="text-gray-600 mb-4 text-sm">請設計一個程式，讓使用者輸入兩個數字後，再呈現兩個數字的平均值。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="input-group mb-4">
@@ -195,6 +197,7 @@ print('Average is',z)
                 
                 <!-- 原有的學期成績 -->
                 <h2 class="text-xl font-bold mb-4 text-blue-600">計算學期成績 (if/else)</h2>
+                <p class="text-gray-600 mb-4 text-sm">請設計一個程式，讓使用者輸入各項成績後，再將各項成績轉換為學期成績，並判斷學期成績是否及格？（其中，作業成績占 40％，測驗成績占 40％，平時成績占20％，學期成績 60 分為及格分數。）</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div>
                         <div class="input-group mb-2">
@@ -258,7 +261,7 @@ else:
 
                 <!-- 新增：a051 課堂練習 -->
                 <h2 class="text-xl font-bold mb-4 text-purple-600">個人平均成績比較(if/elif/else)</h2>
-                <p class="text-gray-600 mb-4 text-sm">輸入國文、英文及數學成績，計算個人平均後，與班級總平均 (國70/英75/數65，平均 70) 比較。</p>
+                <p class="text-gray-600 mb-4 text-sm">請設計一個程式，讓使用者輸入自己的國文、英文及數學段考成績後，計算個人平均成績，再與班級總平均成績相比，並判斷個人平均成績是否高於、低於或等於班級總平均成績。（其中，國文的班級平均成績為 70 分，英文的班級平均成績為 75 分，數學的班級平均成績為 65 分。）</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -307,11 +310,201 @@ else:
                     </div>
                 </div>
 
+                <hr class="divider">
+
+                <!-- 新增：運算子與邏輯說明 (數線圖解版) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h2 class="text-xl font-bold mb-4 text-indigo-600">比較運算子 (數線圖解)</h2>
+                        <div class="bg-white p-4 rounded shadow-sm overflow-x-auto">
+                            <!-- Helper function for drawing number lines -->
+                            <div class="space-y-6">
+                                <!-- Greater Than -->
+                                <div>
+                                    <p class="font-bold text-gray-700 mb-1">x &gt; 60 (大於)</p>
+                                    <svg width="300" height="40" class="w-full">
+                                        <line x1="10" y1="20" x2="290" y2="20" stroke="#ccc" stroke-width="2" />
+                                        <text x="150" y="35" text-anchor="middle" font-size="12" fill="#666">60</text>
+                                        <!-- Range -->
+                                        <line x1="150" y1="20" x2="290" y2="20" stroke="#ef4444" stroke-width="4" />
+                                        <polygon points="290,15 290,25 300,20" fill="#ef4444" />
+                                        <!-- Point (Hollow) -->
+                                        <circle cx="150" cy="20" r="4" fill="white" stroke="#ef4444" stroke-width="2" />
+                                    </svg>
+                                    <p class="text-xs text-gray-500">空心圓：不包含 60</p>
+                                </div>
+
+                                <!-- Greater Than or Equal -->
+                                <div>
+                                    <p class="font-bold text-gray-700 mb-1">x &gt;= 60 (大於等於)</p>
+                                    <svg width="300" height="40" class="w-full">
+                                        <line x1="10" y1="20" x2="290" y2="20" stroke="#ccc" stroke-width="2" />
+                                        <text x="150" y="35" text-anchor="middle" font-size="12" fill="#666">60</text>
+                                        <!-- Range -->
+                                        <line x1="150" y1="20" x2="290" y2="20" stroke="#ef4444" stroke-width="4" />
+                                        <polygon points="290,15 290,25 300,20" fill="#ef4444" />
+                                        <!-- Point (Solid) -->
+                                        <circle cx="150" cy="20" r="4" fill="#ef4444" />
+                                    </svg>
+                                    <p class="text-xs text-gray-500">實心圓：包含 60</p>
+                                </div>
+
+                                <!-- Equal -->
+                                <div>
+                                    <p class="font-bold text-gray-700 mb-1">x == 60 (等於)</p>
+                                    <svg width="300" height="40" class="w-full">
+                                        <line x1="10" y1="20" x2="290" y2="20" stroke="#ccc" stroke-width="2" />
+                                        <text x="150" y="35" text-anchor="middle" font-size="12" fill="#666">60</text>
+                                        <!-- Point (Solid) -->
+                                        <circle cx="150" cy="20" r="5" fill="#3b82f6" />
+                                    </svg>
+                                    <p class="text-xs text-gray-500">單點：剛好是 60</p>
+                                </div>
+                                
+                                <!-- Not Equal -->
+                                <div>
+                                    <p class="font-bold text-gray-700 mb-1">x != 60 (不等於)</p>
+                                    <svg width="300" height="40" class="w-full">
+                                        <line x1="10" y1="20" x2="290" y2="20" stroke="#ef4444" stroke-width="4" />
+                                        <polygon points="290,15 290,25 300,20" fill="#ef4444" />
+                                        <polygon points="10,15 10,25 0,20" fill="#ef4444" />
+                                        <text x="150" y="35" text-anchor="middle" font-size="12" fill="#666">60</text>
+                                        <!-- Point (Hollow) -->
+                                        <circle cx="150" cy="20" r="4" fill="white" stroke="#ef4444" stroke-width="2" />
+                                    </svg>
+                                    <p class="text-xs text-gray-500">全部紅線，只有 60 是空心</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold mb-4 text-indigo-600">流程控制邏輯 (if/elif/else)</h2>
+                        <div class="bg-white p-4 rounded shadow-sm">
+                            <p class="text-sm text-gray-600 mb-4">
+                                程式邏輯像是在數線上切蛋糕，<code>if</code> 先切走一塊，剩下的才輪到 <code>elif</code> 切，最後剩下的給 <code>else</code>。
+                            </p>
+                            
+                            <!-- Visualization for Grade Example -->
+                            <h3 class="font-bold text-gray-800 mb-2">範例：成績判斷 (0-100)</h3>
+                            <svg viewBox="0 0 300 100" class="w-full h-auto">
+                                <!-- Base Line -->
+                                <line x1="10" y1="50" x2="290" y2="50" stroke="#ccc" stroke-width="2" />
+                                <text x="10" y="70" text-anchor="middle" font-size="10" fill="#666">0</text>
+                                <text x="290" y="70" text-anchor="middle" font-size="10" fill="#666">100</text>
+
+                                <!-- Fail Zone (if grade < 60) -->
+                                <line x1="10" y1="50" x2="160" y2="50" stroke="#ef4444" stroke-width="10" opacity="0.6" />
+                                <text x="85" y="40" text-anchor="middle" font-size="12" fill="#ef4444" font-weight="bold">不及格 (Fail)</text>
+                                <text x="85" y="85" text-anchor="middle" font-size="10" fill="#666">if grade &lt; 60</text>
+
+                                <!-- Pass Zone (else) -->
+                                <line x1="160" y1="50" x2="290" y2="50" stroke="#22c55e" stroke-width="10" opacity="0.6" />
+                                <text x="225" y="40" text-anchor="middle" font-size="12" fill="#22c55e" font-weight="bold">及格 (Pass)</text>
+                                <text x="225" y="85" text-anchor="middle" font-size="10" fill="#666">else</text>
+
+                                <!-- Divider at 60 -->
+                                <line x1="160" y1="40" x2="160" y2="60" stroke="#333" stroke-width="1" />
+                                <text x="160" y="70" text-anchor="middle" font-size="10" fill="#333">60</text>
+                            </svg>
+
+                            <div class="mt-6 border-t pt-4">
+                                <h3 class="font-bold text-gray-800 mb-2">範例：個人成績比較 (a, b)</h3>
+                                <p class="text-xs text-gray-500 mb-2">b 為班級平均 (70)</p>
+                                <svg viewBox="0 0 300 100" class="w-full h-auto">
+                                    <!-- Base Line -->
+                                    <line x1="10" y1="50" x2="290" y2="50" stroke="#ccc" stroke-width="2" />
+                                    
+                                    <!-- Center Point (b) -->
+                                    <line x1="150" y1="40" x2="150" y2="60" stroke="#333" stroke-width="1" />
+                                    <text x="150" y="75" text-anchor="middle" font-size="12" fill="#333" font-weight="bold">b (70)</text>
+
+                                    <!-- Range: a > b -->
+                                    <line x1="155" y1="50" x2="290" y2="50" stroke="#3b82f6" stroke-width="8" opacity="0.6" />
+                                    <text x="220" y="35" text-anchor="middle" font-size="10" fill="#3b82f6">if a &gt; b</text>
+
+                                    <!-- Range: a < b -->
+                                    <line x1="10" y1="50" x2="145" y2="50" stroke="#eab308" stroke-width="8" opacity="0.6" />
+                                    <text x="80" y="35" text-anchor="middle" font-size="10" fill="#eab308">elif a &lt; b</text>
+
+                                    <!-- Point: a == b -->
+                                    <circle cx="150" cy="50" r="4" fill="#a855f7" />
+                                    <text x="150" y="90" text-anchor="middle" font-size="10" fill="#a855f7">else (a == b)</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <h2 class="text-xl font-bold mb-4 text-indigo-600">進階邏輯範圍圖解 (以 18 到 25 為例)</h2>
+                    <div class="bg-white p-4 rounded shadow-sm">
+                        <p class="text-sm text-gray-600 mb-4">
+                            觀察 <strong>and (且)</strong> 與 <strong>or (或)</strong> 在數線上的不同表現：
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- AND Logic -->
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-2">1. 介於 18 到 25 之間 (AND)</h3>
+                                <p class="font-mono text-sm text-blue-600 mb-2">if age &gt;= 18 <span class="font-bold text-red-600">and</span> age &lt;= 25:</p>
+                                <svg viewBox="0 0 300 60" class="w-full h-auto">
+                                    <!-- Base Line -->
+                                    <line x1="10" y1="30" x2="290" y2="30" stroke="#ccc" stroke-width="2" />
+                                    
+                                    <!-- Labels -->
+                                    <text x="10" y="50" text-anchor="middle" font-size="10" fill="#666">0</text>
+                                    <text x="290" y="50" text-anchor="middle" font-size="10" fill="#666">100</text>
+                                    <text x="80" y="50" text-anchor="middle" font-size="10" fill="#333">18</text>
+                                    <text x="130" y="50" text-anchor="middle" font-size="10" fill="#333">25</text>
+
+                                    <!-- Range -->
+                                    <line x1="80" y1="30" x2="130" y2="30" stroke="#3b82f6" stroke-width="8" opacity="0.8" />
+                                    
+                                    <!-- Points -->
+                                    <circle cx="80" cy="30" r="4" fill="#3b82f6" />
+                                    <circle cx="130" cy="30" r="4" fill="#3b82f6" />
+                                    
+                                    <text x="105" y="20" text-anchor="middle" font-size="10" fill="#3b82f6">交集區域</text>
+                                </svg>
+                                <p class="text-xs text-gray-500 mt-1">同時符合兩個條件，只選中間重疊的部分。</p>
+                            </div>
+
+                            <!-- OR Logic -->
+                            <div>
+                                <h3 class="font-bold text-gray-800 mb-2">2. 小於 18 或 大於 25 (OR)</h3>
+                                <p class="font-mono text-sm text-green-600 mb-2">if age &lt; 18 <span class="font-bold text-red-600">or</span> age &gt; 25:</p>
+                                <svg viewBox="0 0 300 60" class="w-full h-auto">
+                                    <!-- Base Line -->
+                                    <line x1="10" y1="30" x2="290" y2="30" stroke="#ccc" stroke-width="2" />
+                                    
+                                    <!-- Labels -->
+                                    <text x="10" y="50" text-anchor="middle" font-size="10" fill="#666">0</text>
+                                    <text x="290" y="50" text-anchor="middle" font-size="10" fill="#666">100</text>
+                                    <text x="80" y="50" text-anchor="middle" font-size="10" fill="#333">18</text>
+                                    <text x="130" y="50" text-anchor="middle" font-size="10" fill="#333">25</text>
+
+                                    <!-- Range 1 (< 18) -->
+                                    <line x1="10" y1="30" x2="80" y2="30" stroke="#22c55e" stroke-width="8" opacity="0.8" />
+                                    <circle cx="80" cy="30" r="4" fill="white" stroke="#22c55e" stroke-width="2" />
+
+                                    <!-- Range 2 (> 25) -->
+                                    <line x1="130" y1="30" x2="290" y2="30" stroke="#22c55e" stroke-width="8" opacity="0.8" />
+                                    <circle cx="130" cy="30" r="4" fill="white" stroke="#22c55e" stroke-width="2" />
+                                    
+                                    <text x="45" y="20" text-anchor="middle" font-size="10" fill="#22c55e">&lt; 18</text>
+                                    <text x="210" y="20" text-anchor="middle" font-size="10" fill="#22c55e">&gt; 25</text>
+                                </svg>
+                                <p class="text-xs text-gray-500 mt-1">只要符合其中一個條件就算，包含兩邊外側。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- 4. 累加計算區塊 -->
             <div id="content-loop" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4 text-blue-600">累加計算 (for迴圈)</h2>
+                <p class="text-gray-600 mb-4 text-sm">請設計一個程式，讓使用者輸入一個正整數 n，然後計算並顯示從 1 加到 n 的總和 (1 + 2 + ... + n)。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="input-group mb-4">
@@ -552,7 +745,7 @@ else:
             code += `# print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格\n`;
             code += `# 所以這裡不需要用 str() 轉換 grade\n`;
             code += `print('Semester grades are', grade ,'points.')\n\n`;
-            code += `# 判斷及格與否 (注意縮排)\n`;
+            code += `# 判斷及格與否 (注意縮排及冒號)\n`;
             code += `if grade < 60:\n`;
             code += `    # 條件成立時執行 (縮排)\n`;
             code += `    print('Failed!')\n`;
@@ -651,16 +844,20 @@ else:
             const codeElem = document.getElementById('codeLoop');
             const newlineStr = useNewline ? '\\n' : '';
 
-            let code = `# range() 需要整數參數，所以輸入必須用 int() 轉換\n`;
+            let code = `# 輸入必須用 int() 轉換成整數\n`;
             code += `n = int(input('Please enter the number n:${newlineStr}'))\n`;
             code += `total = 0\n\n`;
             code += `# 迴圈：從 1 執行到 n\n`;
-            code += `# i 的型態是整數 (int)\n`;
+            code += `# i 的型態是整數 (int)i 的型態是整數 (int)，range() 產生從 1 到 n 的數字序列\n`;
             code += `for i in range(1, n + 1):\n`;
-            code += `    total += i  # 縮排，重複執行\n\n`;
-            code += `# f-string 格式化輸出\n`;
-            code += `# f-string 會自動將 {{}} 內的變數 (不論是 int 或 float) 轉換為字串顯示\n`;
-            code += `print(f'1+2+...+{n}={total}')`;
+            code += `    total = total + i  # 縮排，重複執行\n`;
+            code += `    # 另一種寫法： total += i \n\n`;
+            code += `# print 輸出時，若用 + 號連接，兩邊必須都是字串\n`;
+            code += `# 使用 str() 函式將數字 n 及 total 轉換成字串，\n`;
+            code += `print('1+2+...+' + str(n) + '=' + str(total))\n`;
+            code += `# f-string 格式化輸出，較簡潔且易讀，會自動將 {} 內的變數 (不論是 int 或 float) 轉換為字串顯示\n`;
+            code += `# print請選一個輸出方式使用\n`;
+            code += `#print(f'1+2+...+{n}={total}')`;
             
             codeElem.innerText = code;
         }

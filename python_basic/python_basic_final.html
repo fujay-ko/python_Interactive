@@ -83,6 +83,80 @@
             </div>
         </section>
 
+        <!-- SYNTAX COLOR DICTIONARY (New) -->
+        <section id="syntax-colors" class="relative overflow-hidden rounded-xl border border-slate-700 bg-slate-800 shadow-lg">
+            <div class="flex items-center gap-2 border-b border-slate-700 bg-slate-900/50 p-4">
+                <i data-lucide="palette" class="w-5 h-5 text-pink-400"></i>
+                <h2 class="text-lg font-bold text-slate-100">顏色小字典：編輯器的「色彩密碼」</h2>
+                <span class="ml-auto text-[10px] text-slate-500 bg-slate-950 px-2 py-1 rounded">點擊下方色塊查看詳細說明</span>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    
+                    <!-- Variable -->
+                    <button onclick="showColorDetail('variable')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-400 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-slate-200 mb-3 shadow-[0_0_10px_rgba(226,232,240,0.3)]"></div>
+                        <div class="text-xs font-bold text-slate-200 mb-1">白色／淺藍</div>
+                        <div class="text-[10px] text-slate-500">變數 (Variable)</div>
+                    </button>
+
+                    <!-- Custom Function -->
+                    <button onclick="showColorDetail('func-custom')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-sky-400 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-sky-400 mb-3 shadow-[0_0_10px_rgba(56,189,248,0.3)]"></div>
+                        <div class="text-xs font-bold text-sky-400 mb-1">藍色</div>
+                        <div class="text-[10px] text-slate-500">函式 (自訂)</div>
+                    </button>
+
+                    <!-- Built-in Function -->
+                    <button onclick="showColorDetail('func-builtin')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-blue-500 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-blue-500 mb-3 shadow-[0_0_10px_rgba(59,130,246,0.3)]"></div>
+                        <div class="text-xs font-bold text-blue-500 mb-1">藍色</div>
+                        <div class="text-[10px] text-slate-500">函式 (內建)</div>
+                    </button>
+
+                    <!-- Keyword -->
+                    <button onclick="showColorDetail('keyword')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-violet-400 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-violet-400 mb-3 shadow-[0_0_10px_rgba(167,139,250,0.3)]"></div>
+                        <div class="text-xs font-bold text-violet-400 mb-1">紫色</div>
+                        <div class="text-[10px] text-slate-500">關鍵字</div>
+                    </button>
+
+                    <!-- Number -->
+                    <button onclick="showColorDetail('number')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-orange-400 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-orange-400 mb-3 shadow-[0_0_10px_rgba(251,146,60,0.3)]"></div>
+                        <div class="text-xs font-bold text-orange-400 mb-1">橘色</div>
+                        <div class="text-[10px] text-slate-500">數字</div>
+                    </button>
+
+                    <!-- String -->
+                    <button onclick="showColorDetail('string')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-400 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-emerald-400 mb-3 shadow-[0_0_10px_rgba(52,211,153,0.3)]"></div>
+                        <div class="text-xs font-bold text-emerald-400 mb-1">綠色</div>
+                        <div class="text-[10px] text-slate-500">字串</div>
+                    </button>
+
+                </div>
+
+                <!-- Detail Panel (Hidden by default, shown on click) -->
+                <div id="color-detail-panel" class="mt-6 hidden animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-700 shadow-inner">
+                        <div class="flex items-start gap-4">
+                            <div id="detail-icon-bg" class="p-3 rounded-lg">
+                                <i id="detail-icon" data-lucide="info" class="w-6 h-6"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 id="detail-title" class="text-lg font-bold mb-1">點擊上方色塊</h3>
+                                <p id="detail-desc" class="text-sm text-slate-400 mb-3">查看各個顏色在程式碼中代表的意義與生活範例。</p>
+                                <div id="detail-code-box" class="bg-black/50 p-3 rounded font-mono text-xs border border-slate-800">
+                                    <code id="detail-code-content"># 範例程式碼將顯示在此</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- STEP 0: NAMING RULES -->
         <section id="naming-section" class="relative overflow-hidden rounded-xl border border-slate-700 bg-slate-800 shadow-lg">
             <div class="flex items-center gap-2 border-b border-slate-700 bg-slate-900/50 p-4">
@@ -110,6 +184,72 @@
                         <div id="var-name-icon" class="absolute right-3 top-2.5 text-slate-500"><i data-lucide="help-circle" class="w-5 h-5"></i></div>
                     </div>
                     <div id="var-name-feedback" class="text-xs font-mono min-h-[1.5em] text-slate-500 transition-colors duration-300">請輸入名稱以檢查合法性...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 0.5: VARIABLES VS FUNCTIONS (New) -->
+        <section id="concept-comparison" class="relative overflow-hidden rounded-xl border border-violet-500/50 bg-slate-800 shadow-lg shadow-violet-500/10">
+            <div class="flex items-center gap-2 border-b border-violet-500/50 bg-violet-900/30 p-4">
+                <span class="flex h-6 w-6 items-center justify-center rounded-full bg-violet-500 text-sm font-bold text-white">0.5</span>
+                <h2 class="text-lg font-bold text-violet-100">變數 vs 函式：資料盒與工具箱</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid gap-6 md:grid-cols-2">
+                    <!-- Variable Card -->
+                    <div class="p-5 rounded-xl bg-slate-900 border border-slate-700 hover:border-blue-400 transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-blue-500/20 rounded-lg text-blue-400"><i data-lucide="package" class="w-6 h-6"></i></div>
+                            <h3 class="text-xl font-bold text-blue-300">變數 (Variable)</h3>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4 font-medium">像是一個「書包」或「標籤盒」，用來把資料存在裡面，方便以後拿出來用。</p>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between text-xs bg-black/40 p-2 rounded">
+                                <span class="text-slate-500">生活比喻</span>
+                                <span class="text-blue-300 font-bold">冰箱裡的雞蛋</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs bg-black/40 p-2 rounded">
+                                <span class="text-slate-500">編輯器顏色</span>
+                                <span class="text-white border-b border-white">通常是白色或淺藍色</span>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded font-mono text-sm border-l-4 border-blue-500">
+                                <span class="text-white">eggs</span> = <span class="text-amber-400">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Function Card -->
+                    <div class="p-5 rounded-xl bg-slate-900 border border-slate-700 hover:border-yellow-400 transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 bg-yellow-500/20 rounded-lg text-yellow-400"><i data-lucide="chef-hat" class="w-6 h-6"></i></div>
+                            <h3 class="text-xl font-bold text-yellow-300">函式 (Function)</h3>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4 font-medium">像是一份「食譜」或「遙控器按鍵」，你呼叫它的名字，它就幫你執行動作。</p>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between text-xs bg-black/40 p-2 rounded">
+                                <span class="text-slate-500">生活比喻</span>
+                                <span class="text-yellow-300 font-bold">炒飯的食譜</span>
+                            </div>
+                            <div class="flex items-center justify-between text-xs bg-black/40 p-2 rounded">
+                                <span class="text-slate-500">編輯器顏色</span>
+                                <span class="text-yellow-400 font-bold">通常是黃色或藍色</span>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded font-mono text-sm border-l-4 border-yellow-500">
+                                <span class="text-yellow-400">print</span>(<span class="text-green-400">"Hello"</span>)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Color Secret -->
+                <div class="mt-6 p-4 rounded-lg bg-indigo-900/20 border border-indigo-500/30">
+                    <h4 class="text-sm font-bold text-indigo-300 mb-2 flex items-center gap-2">
+                        <i data-lucide="palette" class="w-4 h-4"></i> 編輯器的「顏色小密碼」
+                    </h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        編輯器替不同角色的程式碼上色（語法高亮），是為了讓你一眼分辨誰是「存資料的（變數）」，誰是「做事情的（函式）」。
+                        <span class="text-indigo-200 font-bold">記住：括號 () 通常跟著函式出現，那是叫它「動起來」的訊號！</span>
+                    </p>
                 </div>
             </div>
         </section>
@@ -847,6 +987,36 @@
             'index': { title: 'IndexError', badCode: 'my_list = [1, 2, 3]\nprint(my_list[3])', goodCode: 'my_list = [1, 2, 3]\nprint(my_list[2])', msg: 'IndexError: list index out of range', tip: '確保索引值在 0 到 length-1 之間', desc: '試圖存取串列中不存在的索引位置。' },
             'logic': { title: 'LogicError', badCode: 'score = 95\nif score = 100:\n    print("Perfect")', goodCode: 'score = 95\nif score == 100:\n    print("Perfect")', msg: "SyntaxError (logic related): invalid syntax. Maybe you meant '=='?", tip: '比較用 ==，賦值用 =', desc: '邏輯錯誤不會讓程式停下來，但結果是錯的，最難找到！' }
         };
+
+        const colorData = {
+            'variable': { title: '白色／淺藍 — 變數', desc: '這是用來儲存資料的「箱子」。你可以給它一個名字，然後把數字或文字放進去。', code: 'score = 100  # score 就是變數', icon: 'package', color: 'bg-slate-700', text: 'text-slate-200' },
+            'func-custom': { title: '藍色 — 函式 (自訂)', desc: '你自己寫的「指令群」。可以把一連串動作包起來，重複使用。', code: 'def say_hello():  # say_hello 是自訂函式\n    print("Hi!")', icon: 'chef-hat', color: 'bg-sky-500/20', text: 'text-sky-400' },
+            'func-builtin': { title: '藍色 — 函式 (內建)', desc: 'Python 原本就幫你寫好的功能，直接呼叫就能用！', code: 'print("Hello")  # print 是內建函式\nlen([1, 2, 3])  # len 也是內建的', icon: 'wrench', color: 'bg-blue-500/20', text: 'text-blue-500' },
+            'keyword': { title: '紫色 — 關鍵字', desc: 'Python 規定好的特殊單字，有特定功能，不能拿來當變數名稱喔！', code: 'if score > 60:  # if 是關鍵字\n    break       # break 也是關鍵字', icon: 'key', color: 'bg-violet-500/20', text: 'text-violet-400' },
+            'number': { title: '橘色 — 數字', desc: '代表數值資料，可以用來做加減乘除。', code: 'age = 18  # 18 是整數\npi = 3.14 # 3.14 是浮點數', icon: 'binary', color: 'bg-orange-500/20', text: 'text-orange-400' },
+            'string': { title: '綠色 — 字串', desc: '被成對引號包住的文字。電腦會把它當成純文字處理。', code: 'name = "小明"  # "小明" 是字串\nmsg = \'你好\'  # \'你好\' 也是字串', icon: 'type', color: 'bg-emerald-500/20', text: 'text-emerald-400' }
+        };
+
+        function showColorDetail(type) {
+            const data = colorData[type];
+            const panel = document.getElementById('color-detail-panel');
+            const title = document.getElementById('detail-title');
+            const desc = document.getElementById('detail-desc');
+            const code = document.getElementById('detail-code-content');
+            const iconBg = document.getElementById('detail-icon-bg');
+            const icon = document.getElementById('detail-icon');
+
+            title.innerText = data.title;
+            title.className = `text-lg font-bold mb-1 ${data.text}`;
+            desc.innerText = data.desc;
+            code.innerText = data.code;
+            iconBg.className = `p-3 rounded-lg ${data.color}`;
+            icon.setAttribute('data-lucide', data.icon);
+            icon.className = `w-6 h-6 ${data.text}`;
+            
+            panel.classList.remove('hidden');
+            lucide.createIcons();
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderAll();

@@ -4,399 +4,1113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>字形實驗室 | Type Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-bg: #f5f7fa;
-            --card-bg: #ffffff;
-            --text-color: #333;
-            --half-color: #1976D2; /* 藍色：半形/原始 */
-            --half-bg: #E3F2FD;
-            --full-color: #388E3C; /* 綠色：全形/轉換 */
-            --full-bg: #E8F5E9;
-            --grid-line: #e0e0e0;
+            --bg:#f0f2f7; --card:#fff; --text:#1a1f36; --muted:#6b7280;
+            --half-color:#1565C0; --half-bg:#dbeafe;
+            --full-color:#166534; --full-bg:#dcfce7;
+            --quiz-color:#b91c1c; --identify-color:#c2410c;
+            --accent:#7c3aed; --grid-line:#e2e8f0; --border:#e5e7eb;
+            --header-bg:#1a1f36;
         }
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{-webkit-user-select:none;-moz-user-select:none;user-select:none;}
+        textarea,input,select{-webkit-user-select:text;-moz-user-select:text;user-select:text;}
+        body{font-family:'Noto Sans TC',"Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-        body {
-            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
-            background-color: var(--primary-bg);
-            margin: 0;
-            padding: 20px;
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        /* Header */
+        .site-header{background:var(--header-bg);color:#fff;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+        .site-header h1{font-size:1.1rem;font-weight:900;letter-spacing:.06em;}
+        .site-header h1 span{color:#a78bfa;}
+        #timer-display{font-family:'JetBrains Mono',monospace;font-size:1.35rem;font-weight:700;background:rgba(255,255,255,.1);padding:5px 15px;border-radius:8px;letter-spacing:.1em;color:#fbbf24;display:none;}
+        #timer-display.running{display:block;}
 
-        h1 {
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
+        .main-wrap{max-width:860px;margin:0 auto;padding:24px 16px 60px;}
 
-        p.subtitle {
-            color: #7f8c8d;
-            margin-bottom: 30px;
-        }
+        /* Card */
+        .card{background:var(--card);border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:26px;margin-bottom:20px;border-top:4px solid transparent;}
+        .card h2{font-size:1.1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+        .card-desc{font-size:.88rem;color:var(--muted);background:#f8fafc;border:1px solid var(--border);padding:11px 14px;border-radius:8px;margin-bottom:16px;line-height:1.75;}
 
-        /* 格線背景設定 - 核心視覺 */
-        .grid-bg {
-            background-image: 
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 20px 20px; /* 每一格 20px */
-            background-position: -1px -1px;
-        }
+        /* Grid bg */
+        .grid-bg{background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:20px 20px;background-position:-1px -1px;}
 
-        /* 卡片容器 */
-        .container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            max-width: 800px;
-            width: 100%;
-        }
+        /* Progress */
+        .progress-wrap{background:#e5e7eb;border-radius:99px;height:8px;margin-bottom:14px;overflow:hidden;}
+        .progress-fill{height:100%;border-radius:99px;transition:width .4s ease;}
+        .pf-id{background:linear-gradient(90deg,#f97316,#ea580c);}
+        .pf-quiz{background:linear-gradient(90deg,#dc2626,#b91c1c);}
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            padding: 25px;
-            border-left: 5px solid transparent;
-        }
+        /* Badge */
+        .badge{font-size:.72rem;padding:3px 10px;border-radius:99px;font-weight:600;}
+        .badge-wait{background:#fef9c3;color:#a16207;}
+        .badge-done{background:#dcfce7;color:#15803d;}
 
-        .card h2 {
-            margin-top: 0;
-            font-size: 1.2rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
+        /* Buttons */
+        .btn{padding:9px 20px;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-family:inherit;font-size:.9rem;transition:all .15s;}
+        .btn:active{transform:translateY(1px);}
+        .btn:disabled{opacity:.4;cursor:not-allowed;}
 
-        .card-desc {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 15px;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 6px;
-        }
+        /* Intro page */
+        .intro-hero{text-align:center;padding:10px 0 24px;}
+        .big-title{font-size:1.9rem;font-weight:900;letter-spacing:.06em;margin-bottom:6px;}
+        .big-title span{color:var(--accent);}
+        .intro-hero>p{color:var(--muted);font-size:.92rem;margin-bottom:24px;}
 
-        /* ----------------------------------
-           區塊 1: 大小寫 (Case Study) 
-           ---------------------------------- */
-        .case-card { border-left-color: #9C27B0; }
-        
-        .case-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
+        .student-form{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+        @media(max-width:580px){.student-form{grid-template-columns:1fr;}}
+        .form-group label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;}
+        .form-group select,.form-group input{width:100%;padding:10px 12px;border:2px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit;outline:none;background:#fff;transition:border-color .15s;}
+        .form-group select:focus,.form-group input:focus{border-color:var(--accent);}
 
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
+        /* 題數設定 */
+        .quiz-settings{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:10px;padding:18px 22px;margin-bottom:20px;}
+        .quiz-settings h3{color:var(--accent);font-size:.95rem;font-weight:700;margin-bottom:14px;}
+        .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+        @media(max-width:500px){.settings-grid{grid-template-columns:1fr;}}
+        .setting-item label{display:block;font-size:.85rem;font-weight:700;margin-bottom:8px;color:var(--text);}
+        .slider-row{display:flex;align-items:center;gap:12px;}
+        .slider-row input[type=range]{flex:1;height:6px;accent-color:var(--accent);cursor:pointer;}
+        .slider-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--accent);min-width:28px;text-align:center;}
+        .score-preview{margin-top:14px;background:#fff;border:1px solid #ddd6fe;border-radius:8px;padding:12px 16px;font-size:.88rem;line-height:1.9;}
+        .score-preview .sp-total{font-size:1.05rem;font-weight:700;color:var(--accent);}
+        .guaranteed-note{margin-top:10px;font-size:.8rem;color:#7c3aed;background:#ede9fe;border-radius:6px;padding:8px 12px;line-height:1.7;}
 
-        .btn-case { background: #f3e5f5; color: #9C27B0; }
-        .btn-case:hover, .btn-case.active { background: #9C27B0; color: white; }
+        .rules-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:18px 22px;margin-bottom:22px;font-size:.9rem;line-height:2;}
+        .rules-box h3{color:#166534;margin-bottom:8px;font-size:1rem;}
 
-        /* ----------------------------------
-           區塊 2: 全形半形 (Width Lab) 
-           ---------------------------------- */
-        .width-card { border-left-color: var(--full-color); }
+        .btn-start{width:100%;padding:15px;background:var(--accent);color:#fff;font-size:1.05rem;border-radius:10px;border:none;cursor:pointer;font-weight:900;letter-spacing:.05em;font-family:inherit;transition:background .2s;}
+        .btn-start:hover{background:#6d28d9;}
 
-        .comparison-box {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        /* Learn page */
+        .case-controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+        .btn-case{background:#f3e5f5;color:#9C27B0;border:1px solid #ce93d8;}
+        .btn-case:hover,.btn-case.active{background:#9C27B0;color:#fff;}
+        .comparison-box{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+        @media(max-width:540px){.comparison-box{grid-template-columns:1fr;}}
+        .input-group label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;}
+        .label-half{color:var(--half-color);}
+        .label-full{color:var(--full-color);}
+        textarea{width:100%;height:120px;font-family:'JetBrains Mono','Courier New',monospace;font-size:20px;line-height:20px;padding:0;border:1px solid #ccc;resize:none;outline:none;letter-spacing:0;}
+        .textarea-wrapper{padding:10px;border:1px solid var(--border);border-radius:6px;}
+        #halfInput{background:rgba(219,234,254,.35);color:var(--half-color);}
+        #fullOutput{background:rgba(220,252,231,.35);color:var(--full-color);}
+        .switch-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:14px;flex-wrap:wrap;}
+        .tab{padding:10px 18px;cursor:pointer;opacity:.55;font-size:.9rem;}
+        .tab.active{opacity:1;border-bottom:3px solid #F57C00;font-weight:700;}
+        .keyboard-visual{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap;}
+        .key{border:2px solid #333;border-radius:6px;padding:10px 15px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 4px 0 #333;background:#fff;transition:.1s;font-size:.9rem;}
+        .key.active{transform:translateY(4px);box-shadow:none;background:#FFECB3;border-color:#FF9800;}
+        .btn-to-quiz{width:100%;padding:14px;background:var(--header-bg);color:#fff;font-size:1rem;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-family:inherit;transition:background .2s;margin-top:6px;}
+        .btn-to-quiz:hover{background:#374151;}
 
-        @media (max-width: 600px) {
-            .comparison-box { grid-template-columns: 1fr; }
-        }
+        /* Quiz page */
+        .identify-card{border-top-color:var(--identify-color);}
+        .quiz-input-card{border-top-color:var(--quiz-color);}
+        .q-progress{font-size:.85rem;color:var(--muted);text-align:center;margin-bottom:8px;}
 
-        .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
+        .id-sentence-box{background:#fff7ed;border:2px dashed #fb923c;border-radius:10px;padding:20px 18px;font-family:'JetBrains Mono','Courier New',monospace;font-size:1.2rem;line-height:2;margin-bottom:16px;min-height:80px;word-break:break-all;}
+        .id-sentence-box .mk{color:#dc2626;text-decoration:underline;text-underline-offset:5px;font-weight:700;background:#fee2e2;border-radius:4px;padding:0 4px;font-size:1.4rem;}
+        .id-q-label{font-size:.85rem;color:var(--muted);margin-bottom:10px;}
+        .id-btns{display:flex;gap:16px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
+        .btn-half{background:var(--half-bg);color:var(--half-color);border:2px solid var(--half-color);padding:12px 28px;border-radius:8px;}
+        .btn-half:hover:not(:disabled){background:var(--half-color);color:#fff;}
+        .btn-full{background:var(--full-bg);color:var(--full-color);border:2px solid var(--full-color);padding:12px 28px;border-radius:8px;}
+        .btn-full:hover:not(:disabled){background:var(--full-color);color:#fff;}
 
-        .label-half { color: var(--half-color); }
-        .label-full { color: var(--full-color); }
+        .quiz-q-box{background:#fff1f2;border:2px solid #fca5a5;border-radius:10px;padding:18px;font-size:1rem;line-height:1.85;margin-bottom:14px;}
+        .answer-preview{font-family:'JetBrains Mono','Courier New',monospace;font-size:1.4rem;color:#1a1f36;background:#f1f5f9;border-radius:6px;padding:8px 14px;margin-top:10px;display:inline-block;letter-spacing:.06em;}
+        .quiz-answer-row{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+        .quiz-input{font-family:'JetBrains Mono','Courier New',monospace;font-size:1.45rem;padding:8px 14px;border:2px solid var(--border);border-radius:8px;flex:1;min-width:200px;outline:none;transition:border-color .15s;letter-spacing:.05em;}
+        .quiz-input:focus{border-color:var(--quiz-color);}
+        .btn-submit-quiz{background:var(--quiz-color);color:#fff;padding:10px 22px;border-radius:8px;white-space:nowrap;}
+        .btn-submit-quiz:hover:not(:disabled){background:#991b1b;}
 
-        /* 輸入框核心樣式 */
-        textarea {
-            width: 100%;
-            height: 120px;
-            font-family: 'Courier New', Courier, monospace; /* 等寬字體是關鍵 */
-            font-size: 20px; /* 配合格線 */
-            line-height: 20px; /* 配合格線 */
-            padding: 0; /* 貼齊格線 */
-            border: 1px solid #ccc;
-            resize: none;
-            outline: none;
-            letter-spacing: 0;
-            box-sizing: border-box; /* 確保 padding 不影響寬度計算 */
-        }
+        .feedback-box{padding:12px 16px;border-radius:8px;font-size:.88rem;margin-bottom:10px;display:none;line-height:1.7;}
+        .feedback-box.correct{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;}
+        .feedback-box.wrong{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;}
 
-        /* 透過 padding 讓文字對齊格線中間 */
-        .textarea-wrapper {
-            padding: 10px; /* 留邊 */
-            border: 1px solid #ddd;
-            position: relative;
-        }
+        /* 逐字比對 */
+        .char-diff{font-family:'JetBrains Mono','Courier New',monospace;font-size:.88rem;margin-top:10px;background:#fef3c7;border-radius:6px;padding:10px 12px;line-height:2.2;display:none;}
+        .diff-row{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:2px;}
+        .diff-label{font-size:.78rem;color:var(--muted);width:72px;flex-shrink:0;font-family:inherit;}
+        .char-ok{color:#15803d;}
+        .char-err{color:#dc2626;font-weight:700;text-decoration:underline;}
+        .diff-hint{font-size:.82rem;color:#92400e;margin-top:6px;font-family:inherit;}
 
-        #halfInput {
-            background-color: rgba(227, 242, 253, 0.3); /* 淡藍透明 */
-            color: var(--half-color);
-        }
+        .section-done{display:none;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #86efac;border-radius:10px;padding:18px;text-align:center;font-size:1rem;font-weight:700;color:#166534;margin-top:10px;}
+        .section-done.show{display:block;}
 
-        #fullOutput {
-            background-color: rgba(232, 245, 233, 0.3); /* 淡綠透明 */
-            color: var(--full-color);
-        }
+        .btn-view-result{width:100%;padding:14px;background:#166534;color:#fff;font-size:1rem;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-family:inherit;transition:background .2s;margin-top:6px;}
+        .btn-view-result:hover{background:#14532d;}
 
-        /* ----------------------------------
-           區塊 3: 切換指南 (Switcher)
-           ---------------------------------- */
-        .key-card { border-left-color: #FF9800; }
-        
-        .keyboard-visual {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
+        /* Result page */
+        .result-hero{text-align:center;padding:24px 0 18px;}
+        .score-circle{width:140px;height:140px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 24px rgba(124,58,237,.3);}
+        .score-num{font-size:2.4rem;font-weight:900;color:#fff;line-height:1;font-family:'JetBrains Mono',monospace;}
+        .score-denom{font-size:.85rem;color:rgba(255,255,255,.75);}
+        .student-name{font-size:1.05rem;font-weight:700;margin-bottom:4px;}
+        .time-taken{font-size:.85rem;color:var(--muted);}
 
-        .key {
-            border: 2px solid #333;
-            border-radius: 6px;
-            padding: 10px 15px;
-            font-family: monospace;
-            font-weight: bold;
-            box-shadow: 0 4px 0 #333;
-            background: white;
-            transition: 0.1s;
-        }
+        .score-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+        @media(max-width:460px){.score-breakdown{grid-template-columns:1fr;}}
+        .score-part{text-align:center;padding:16px;border-radius:10px;}
+        .sp-id{background:#fff7ed;border:1px solid #fed7aa;}
+        .sp-quiz{background:#fff1f2;border:1px solid #fca5a5;}
+        .part-num{font-size:1.9rem;font-weight:900;font-family:'JetBrains Mono',monospace;}
+        .part-denom{font-size:.85rem;color:var(--muted);}
 
-        .key.active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #333;
-            background: #FFECB3;
-            border-color: #FF9800;
-        }
+        .cat-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:.87rem;}
+        .cat-label{width:90px;flex-shrink:0;}
+        .cat-bar-wrap{flex:1;background:#e5e7eb;border-radius:99px;height:10px;overflow:hidden;}
+        .cat-bar-fill{height:100%;border-radius:99px;transition:width .6s ease;}
+        .cat-score{width:44px;text-align:right;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:.82rem;}
+        .cat-icon{font-size:.95rem;}
 
-        .switch-tabs {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 15px;
-        }
-        
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            opacity: 0.6;
-        }
-        
-        .tab.active {
-            opacity: 1;
-            border-bottom: 3px solid #FF9800;
-            font-weight: bold;
-        }
+        .wrong-item{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:.87rem;line-height:1.75;}
+        .wi-q{color:var(--muted);margin-bottom:4px;font-size:.82rem;}
+        .wi-yours{color:#dc2626;}
+        .wi-correct{color:#16a34a;font-weight:700;}
+        .wi-diff{font-family:'JetBrains Mono','Courier New',monospace;font-size:.82rem;margin-top:6px;background:#fef9c3;border-radius:5px;padding:7px 10px;line-height:2;}
 
-        /* 標點符號提示 */
-        .highlight-mark {
-            background-color: yellow;
-            font-weight: bold;
-        }
+        .detail-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+        .detail-table th{background:#f1f5f9;padding:8px 10px;text-align:left;border-bottom:2px solid var(--border);font-weight:700;}
+        .detail-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;}
+        .detail-table .mono{font-family:'JetBrains Mono',monospace;}
+        .detail-table tr.c-row td{background:#f0fdf4;}
+        .detail-table tr.w-row td{background:#fff7ed;}
 
+        .divider{border:none;border-top:1px dashed var(--border);margin:20px 0;}
+        .sec-title{font-size:.95rem;font-weight:700;margin-bottom:12px;}
+
+        .btn-submit-gas{width:100%;padding:14px;background:var(--header-bg);color:#fff;font-size:1rem;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-family:inherit;transition:background .2s;margin-bottom:10px;}
+        .btn-submit-gas:hover{background:#374151;}
+        .btn-submit-gas:disabled{background:#9ca3af;cursor:not-allowed;}
+        .gas-notice{font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:10px;}
+        .submit-msg{display:none;text-align:center;padding:13px;border-radius:8px;font-weight:700;margin-top:8px;}
+        .submit-msg.ok{background:#dcfce7;color:#15803d;}
+        .submit-msg.err{background:#fee2e2;color:#991b1b;}
+        .btn-retry{width:100%;padding:12px;background:#fff;color:var(--text);font-size:.95rem;border-radius:10px;border:2px solid var(--border);cursor:pointer;font-weight:700;font-family:inherit;transition:border-color .2s;margin-top:8px;}
+        .btn-retry:hover{border-color:var(--accent);color:var(--accent);}
+
+        .c-case{border-top-color:#9C27B0;}
+        .c-width{border-top-color:var(--full-color);}
+        .c-key{border-top-color:#F57C00;}
+        .c-intro{border-top-color:var(--accent);}
+        .c-result{border-top-color:var(--accent);}
     </style>
 </head>
 <body>
 
-    <h1>字形實驗室 Type Lab</h1>
-    <p class="subtitle">互動式理解全形、半形與大小寫的奧秘</p>
+<header class="site-header">
+    <h1>字形實驗室 <span>Type Lab</span></h1>
+    <div id="timer-display">00:00</div>
+</header>
 
-    <div class="container">
+<div class="main-wrap">
 
-        <div class="card case-card">
-            <h2>1. 英文大小寫 (Case Sensitivity)</h2>
-            <div class="card-desc">
-                英文有大小寫之分，但<b>中文沒有</b>。點擊下方按鈕或輸入文字體驗差異。
-            </div>
-            <div class="case-controls">
-                <button class="btn btn-case" onclick="setCase('upper')">全部大寫 (UPPER)</button>
-                <button class="btn btn-case" onclick="setCase('lower')">全部小寫 (lower)</button>
-                <button class="btn btn-case active" onclick="setCase('original')">還原</button>
-            </div>
-            <div class="textarea-wrapper grid-bg">
-                <textarea id="caseInput" placeholder="Type English here... 試著輸入英文">Type English here...</textarea>
-            </div>
+<!-- ══════════════════════════
+     PAGE 0  說明頁
+══════════════════════════ -->
+<div id="page-intro">
+<div class="card c-intro">
+<div class="intro-hero">
+    <div class="big-title">字形實驗室 <span>Type Lab</span></div>
+    <p>互動式學習全形、半形與大小寫 ｜ 完成測驗後送出成績給老師</p>
+
+    <!-- 學生資料 -->
+    <div class="student-form">
+        <div class="form-group">
+            <label>班級 *</label>
+            <select id="sel-class">
+                <option value="">請選擇班級</option>
+                <optgroup label="七年級">
+                    <option>701</option><option>702</option><option>703</option><option>704</option><option>705</option>
+                    <option>706</option><option>707</option><option>708</option><option>709</option><option>710</option>
+                    <option>711</option><option>712</option><option>713</option><option>714</option><option>715</option>
+                </optgroup>
+                <optgroup label="八年級">
+                    <option>801</option><option>802</option><option>803</option><option>804</option><option>805</option>
+                    <option>806</option><option>807</option><option>808</option><option>809</option><option>810</option>
+                    <option>811</option><option>812</option><option>813</option><option>814</option><option>815</option>
+                </optgroup>
+                <optgroup label="九年級">
+                    <option>901</option><option>902</option><option>903</option><option>904</option><option>905</option>
+                    <option>906</option><option>907</option><option>908</option><option>909</option><option>910</option>
+                    <option>911</option><option>912</option><option>913</option><option>914</option><option>915</option>
+                </optgroup>
+            </select>
         </div>
-
-        <div class="card width-card">
-            <h2>2. 全形與半形 (Width Comparison)</h2>
-            <div class="card-desc">
-                觀察背景格線：<b>半形字</b>佔半格或一格空間，<b>全形字</b>強制佔用兩個半形空間（正方形）。
-                <br>試著輸入：123, abc, ( )
-            </div>
-            
-            <div class="comparison-box">
-                <div class="input-group">
-                    <label class="label-half">🔵 半形 (Half-width) / 原始輸入</label>
-                    <div class="textarea-wrapper grid-bg">
-                        <textarea id="halfInput" placeholder="在此輸入半形字元...">Hello,123</textarea>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label class="label-full">🟢 全形 (Full-width) / 自動轉換</label>
-                    <div class="textarea-wrapper grid-bg">
-                        <textarea id="fullOutput" readonly></textarea>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+            <label>座號 *</label>
+            <select id="sel-seat">
+                <option value="">請選擇座號</option>
+                <script>for(let i=1;i<=35;i++)document.write(`<option>${i}</option>`);</script>
+            </select>
         </div>
-
-        <div class="card key-card">
-            <h2>3. 鍵盤切換指南</h2>
-            <div class="switch-tabs">
-                <div class="tab active" onclick="showInstructionTab('win-half-full')">全形/半形</div>
-                <div class="tab" onclick="showInstructionTab('win-case')">大小寫</div>
-                <div class="tab" onclick="showInstructionTab('win-ime')">中英模式</div>
-            </div>
-            <div id="instruction-text" class="card-desc">
-                Windows 切換全形/半形：通常使用 <b>Shift + 空白鍵</b>
-            </div>
-            <div class="keyboard-visual" id="keyboard-visual">
-            </div>
+        <div class="form-group">
+            <label>姓名 *</label>
+            <input type="text" id="inp-name" placeholder="請輸入姓名" autocomplete="off"/>
         </div>
-
     </div>
 
-    <script>
-        // ==========================================
-        // 功能 1: 大小寫轉換
-        // ==========================================
-        const caseInput = document.getElementById('caseInput');
-        let originalText = caseInput.value;
+    <!-- 題數設定 -->
+    <div class="quiz-settings">
+        <h3>⚙️ 題目設定</h3>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <label>判斷測驗題數</label>
+                <div class="slider-row">
+                    <input type="range" id="slider-id" min="5" max="20" value="10"
+                           oninput="updateSettings()"/>
+                    <span class="slider-val" id="val-id">10</span> 題
+                </div>
+            </div>
+            <div class="setting-item">
+                <label>輸入測驗題數</label>
+                <div class="slider-row">
+                    <input type="range" id="slider-quiz" min="5" max="20" value="10"
+                           oninput="updateSettings()"/>
+                    <span class="slider-val" id="val-quiz">10</span> 題
+                </div>
+            </div>
+        </div>
+        <div class="score-preview" id="score-preview">
+            判斷測驗 <b>10</b> 題 × 1 分 = <b>10</b> 分<br>
+            輸入測驗 <b>10</b> 題 × 1 分 = <b>10</b> 分<br>
+            <span class="sp-total">預估總分：20 分</span>
+        </div>
+        <div class="guaranteed-note">
+            📌 無論題數設定為何，輸入測驗一定包含：<br>
+            ① Python 雙引號題（如 <code>"Hello"</code>）&nbsp;
+            ② Python 單引號題（如 <code>'Hello'</code>）&nbsp;
+            ③ Python 換行字串題（<code>"What is your name?\n"</code>）
+        </div>
+    </div>
 
-        // 監聽輸入以保存原始文字
-        caseInput.addEventListener('input', (e) => {
-            originalText = e.target.value;
+    <!-- 規則 -->
+    <div class="rules-box">
+        <h3>📋 測驗說明</h3>
+        <b>第一部分：判斷測驗</b> — 閱讀句子，判斷紅色標記字元是「全形」還是「半形」<br>
+        <b>第二部分：輸入測驗</b> — 依題目要求輸入正確字串（引號、符號、大小寫均須正確）<br><br>
+        ⚠️ 注意事項：<br>
+        　• 點擊「前往測驗」才開始計時<br>
+        　• 請自行切換全形 / 半形 / 輸入法<br>
+        　• 輸入框禁止貼上，需手動輸入<br>
+        　• 每題 1 分，題數由上方設定決定
+    </div>
+
+    <button class="btn-start" onclick="goToLearn()">▶ 開始學習</button>
+</div>
+</div>
+</div>
+
+<!-- ══════════════════════════
+     PAGE 1  學習區
+══════════════════════════ -->
+<div id="page-learn" style="display:none">
+
+    <div class="card c-case">
+        <h2>1. 英文大小寫 (Case Sensitivity)</h2>
+        <div class="card-desc">英文有大小寫之分，但<b>中文沒有</b>。點擊下方按鈕或輸入文字體驗差異。</div>
+        <div class="case-controls">
+            <button class="btn btn-case" onclick="setCase('upper')">全部大寫 (UPPER)</button>
+            <button class="btn btn-case" onclick="setCase('lower')">全部小寫 (lower)</button>
+            <button class="btn btn-case active" onclick="setCase('original')">還原</button>
+        </div>
+        <div class="textarea-wrapper grid-bg">
+            <textarea id="caseInput">Type English here...</textarea>
+        </div>
+    </div>
+
+    <div class="card c-width">
+        <h2>2. 全形與半形 (Width Comparison)</h2>
+        <div class="card-desc">觀察背景格線：<b>半形字</b>佔半格或一格，<b>全形字</b>佔兩格（正方形）。試著輸入：123, abc, ( )</div>
+        <div class="comparison-box">
+            <div class="input-group">
+                <label class="label-half">🔵 半形 / 原始輸入</label>
+                <div class="textarea-wrapper grid-bg"><textarea id="halfInput">Hello,123</textarea></div>
+            </div>
+            <div class="input-group">
+                <label class="label-full">🟢 全形 / 自動轉換</label>
+                <div class="textarea-wrapper grid-bg"><textarea id="fullOutput" readonly></textarea></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card c-key">
+        <h2>3. 鍵盤切換指南</h2>
+        <div class="switch-tabs">
+            <div class="tab active" onclick="showTab('win-half-full')">全形/半形</div>
+            <div class="tab" onclick="showTab('win-case')">大小寫</div>
+            <div class="tab" onclick="showTab('win-ime')">中英模式</div>
+        </div>
+        <div id="instruction-text" class="card-desc"></div>
+        <div class="keyboard-visual" id="keyboard-visual"></div>
+    </div>
+
+    <button class="btn-to-quiz" onclick="goToQuiz()">✏️ 前往測驗（開始計時）</button>
+</div>
+
+<!-- ══════════════════════════
+     PAGE 2  測驗區
+══════════════════════════ -->
+<div id="page-quiz" style="display:none">
+
+    <!-- 判斷測驗 -->
+    <div class="card identify-card">
+        <h2>判斷測驗 <span class="badge badge-wait" id="id-badge">未完成</span></h2>
+        <div class="card-desc">
+            閱讀下方句子，判斷 <span style="color:#dc2626;font-weight:700;text-decoration:underline;">紅色底線字元</span>
+            是「半形」還是「全形」。每題 1 分。
+        </div>
+        <div class="q-progress" id="id-progress">第 1 題 / 共 ? 題</div>
+        <div class="progress-wrap"><div class="progress-fill pf-id" id="id-bar" style="width:0%"></div></div>
+        <div class="id-q-label">請判斷句子中紅色底線字元的字形類型：</div>
+        <div class="id-sentence-box" id="id-sentence"></div>
+        <div class="id-btns">
+            <button class="btn btn-half" id="btn-id-half" onclick="answerIdentify('half')">🔵 半形 Half-width</button>
+            <button class="btn btn-full" id="btn-id-full" onclick="answerIdentify('full')">🟢 全形 Full-width</button>
+        </div>
+        <div class="feedback-box" id="id-feedback"></div>
+        <div class="section-done" id="id-done">
+            ✅ 判斷測驗完成！得分：<span id="id-score-text">0</span> / <span id="id-total-text">0</span><br>
+            <small style="color:#555;font-weight:400">請繼續完成下方輸入測驗</small>
+        </div>
+    </div>
+
+    <!-- 輸入測驗 -->
+    <div class="card quiz-input-card">
+        <h2>輸入測驗 <span class="badge badge-wait" id="quiz-badge">未完成</span></h2>
+        <div class="card-desc">
+            依題目要求，切換輸入法並輸入正確字串（含引號、符號、大小寫均須完全正確）。每題 1 分。<br>
+            ⚠️ 輸入框禁止貼上，需手動輸入。按 Enter 或點「確認」送出。
+        </div>
+        <div class="q-progress" id="quiz-progress">第 1 題 / 共 ? 題</div>
+        <div class="progress-wrap"><div class="progress-fill pf-quiz" id="quiz-bar" style="width:0%"></div></div>
+        <div class="quiz-q-box" id="quiz-question">載入中…</div>
+        <div class="quiz-answer-row">
+            <input type="text" class="quiz-input" id="quiz-input"
+                   placeholder="在此輸入" maxlength="30" autocomplete="off"
+                   autocorrect="off" autocapitalize="off" spellcheck="false"
+                   onkeydown="if(event.key==='Enter')submitQuizAnswer()"/>
+            <button class="btn btn-submit-quiz" onclick="submitQuizAnswer()">確認送出</button>
+        </div>
+        <div class="feedback-box" id="quiz-feedback">
+            <div id="quiz-fb-text"></div>
+            <div class="char-diff" id="char-diff"></div>
+        </div>
+        <div class="section-done" id="quiz-done">
+            ✅ 輸入測驗完成！得分：<span id="quiz-score-text">0</span> / <span id="quiz-total-text">0</span><br>
+            <small style="color:#555;font-weight:400">請點擊下方按鈕查看成績並送出</small>
+        </div>
+    </div>
+
+    <button class="btn-view-result" onclick="goToResult()">📊 查看成績與送出</button>
+</div>
+
+<!-- ══════════════════════════
+     PAGE 3  結果頁
+══════════════════════════ -->
+<div id="page-result" style="display:none">
+<div class="card c-result">
+
+    <div class="result-hero">
+        <div class="score-circle">
+            <div class="score-num" id="res-total">0</div>
+            <div class="score-denom" id="res-denom">/ 0</div>
+        </div>
+        <div class="student-name" id="res-name"></div>
+        <div class="time-taken" id="res-time"></div>
+    </div>
+
+    <div class="score-breakdown">
+        <div class="score-part sp-id">
+            <div class="part-num" id="res-id">0</div>
+            <div class="part-denom" id="res-id-denom">判斷測驗 / 0</div>
+        </div>
+        <div class="score-part sp-quiz">
+            <div class="part-num" id="res-quiz">0</div>
+            <div class="part-denom" id="res-quiz-denom">輸入測驗 / 0</div>
+        </div>
+    </div>
+
+    <hr class="divider">
+    <div class="sec-title">📊 答題分類分析</div>
+    <div id="cat-rows" style="margin-bottom:18px"></div>
+
+    <hr class="divider">
+    <div id="wrong-section">
+        <div class="sec-title">❌ 答錯題目複習</div>
+        <div id="wrong-items" style="margin-bottom:18px"></div>
+        <hr class="divider">
+    </div>
+
+    <div class="sec-title">📋 逐題明細</div>
+    <div style="overflow-x:auto;margin-bottom:20px">
+        <table class="detail-table">
+            <thead>
+                <tr><th>#</th><th>類型</th><th>題目摘要</th><th>你的答案</th><th>正確答案</th><th>結果</th></tr>
+            </thead>
+            <tbody id="detail-tbody"></tbody>
+        </table>
+    </div>
+
+    <hr class="divider">
+    <div class="card-desc">請確認資料後送出成績到老師的 Google 試算表。</div>
+    <button class="btn-submit-gas" id="btn-gas" onclick="submitToGAS()">📤 送出成績到 Google 試算表</button>
+    <p class="gas-notice">⚙️ 請老師將 GAS Web App URL 填入程式碼 <b>GAS_URL</b> 變數後即可啟用。</p>
+    <div class="submit-msg" id="submit-msg"></div>
+    <button class="btn-retry" onclick="location.reload()">🔄 重新作答</button>
+</div>
+</div>
+
+</div><!-- /main-wrap -->
+
+<script>
+// ══════════════════════════════════════
+// ⚙️ 老師請填入 GAS Web App URL
+// ══════════════════════════════════════
+const GAS_URL = ""; // 例："https://script.google.com/macros/s/AKfycbwUdXel8EFgb16LaDq1e5pe7HajQlbsx6t23sphyLOFgkImhQZHrf0PktMwXVwA_dSS/exec"
+
+// ══════════════════════════════════════
+// 防複製 / 防貼上
+// ══════════════════════════════════════
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{
+    const tag=e.target.tagName;
+    if(tag==='SELECT')return;
+    if(tag==='INPUT'||tag==='TEXTAREA'){
+        if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='v')e.preventDefault();
+        return;
+    }
+    if((e.ctrlKey||e.metaKey)&&['c','a','u','s','p'].includes(e.key.toLowerCase()))e.preventDefault();
+    if(e.key==='F12')e.preventDefault();
+});
+document.addEventListener('paste',e=>{
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')e.preventDefault();
+});
+
+// ══════════════════════════════════════
+// 計時器（前往測驗才啟動）
+// ══════════════════════════════════════
+let timerSec=0,timerInterval=null;
+function startTimer(){
+    timerSec=0;
+    document.getElementById('timer-display').classList.add('running');
+    timerInterval=setInterval(()=>{
+        timerSec++;
+        const m=String(Math.floor(timerSec/60)).padStart(2,'0');
+        const s=String(timerSec%60).padStart(2,'0');
+        document.getElementById('timer-display').textContent=`${m}:${s}`;
+    },1000);
+}
+function stopTimer(){clearInterval(timerInterval);}
+function fmtTime(sec){return`${Math.floor(sec/60)} 分 ${sec%60} 秒`;}
+
+// ══════════════════════════════════════
+// 題數設定
+// ══════════════════════════════════════
+let SET_ID=10,SET_QUIZ=10;
+
+function updateSettings(){
+    SET_ID=parseInt(document.getElementById('slider-id').value);
+    SET_QUIZ=parseInt(document.getElementById('slider-quiz').value);
+    document.getElementById('val-id').textContent=SET_ID;
+    document.getElementById('val-quiz').textContent=SET_QUIZ;
+    const total=SET_ID+SET_QUIZ;
+    document.getElementById('score-preview').innerHTML=
+        `判斷測驗 <b>${SET_ID}</b> 題 × 1 分 = <b>${SET_ID}</b> 分<br>`+
+        `輸入測驗 <b>${SET_QUIZ}</b> 題 × 1 分 = <b>${SET_QUIZ}</b> 分<br>`+
+        `<span class="sp-total">預估總分：${total} 分</span>`;
+}
+
+// ══════════════════════════════════════
+// 頁面切換
+// ══════════════════════════════════════
+const PAGES=['page-intro','page-learn','page-quiz','page-result'];
+function showPage(id){
+    PAGES.forEach(p=>document.getElementById(p).style.display='none');
+    document.getElementById(id).style.display='block';
+    window.scrollTo(0,0);
+}
+
+let studentInfo={};
+
+function goToLearn(){
+    const cls=document.getElementById('sel-class').value;
+    const seat=document.getElementById('sel-seat').value;
+    const name=document.getElementById('inp-name').value.trim();
+    if(!cls||!seat||!name){alert('請填寫班級、座號與姓名後再開始！');return;}
+    studentInfo={cls,seat,name};
+    initLearn();
+    showPage('page-learn');
+}
+
+function goToQuiz(){
+    startTimer(); // ← 前往測驗才開始計時
+    initIdentify();
+    initQuiz();
+    showPage('page-quiz');
+}
+
+function goToResult(){
+    if(!idDone||!quizDone){alert('請先完成兩個測驗！');return;}
+    stopTimer();
+    buildResult();
+    showPage('page-result');
+}
+
+// ══════════════════════════════════════
+// 學習區
+// ══════════════════════════════════════
+function initLearn(){
+    const ci=document.getElementById('caseInput');
+    let orig=ci.value;
+    ci.addEventListener('input',e=>orig=e.target.value);
+    window._setCase=type=>{
+        document.querySelectorAll('.btn-case').forEach(b=>b.classList.remove('active'));
+        event.target.classList.add('active');
+        ci.value=type==='upper'?orig.toUpperCase():type==='lower'?orig.toLowerCase():orig;
+    };
+    const hi=document.getElementById('halfInput');
+    const fo=document.getElementById('fullOutput');
+    function toFull(str){
+        return[...str].map(c=>{
+            const code=c.charCodeAt(0);
+            if(code>=33&&code<=126)return String.fromCharCode(code+65248);
+            if(code===32)return String.fromCharCode(12288);
+            return c;
+        }).join('');
+    }
+    hi.addEventListener('input',()=>fo.value=toFull(hi.value));
+    fo.value=toFull(hi.value);
+    showTab('win-half-full');
+}
+function setCase(t){if(window._setCase)window._setCase(t);}
+
+const TAB_MAP={
+    'win-half-full':{text:'Windows 切換全形/半形：通常使用 <b>Shift + 空白鍵</b>。',keys:['Shift','+','Space']},
+    'win-case':{text:'按 <b>Caps Lock</b> 切換大小寫（指示燈亮=大寫）。<br>小寫狀態下 <b>Shift + 字母</b> 輸入大寫；<b>Shift + 數字鍵</b> 輸入上方符號（Shift+1=!，Shift+;=:）。',keys:['Caps Lock']},
+    'win-ime':{text:'Windows 中英模式：使用 <b>Shift</b> 鍵在中文輸入法與英數之間切換。',keys:['Shift']}
+};
+function showTab(id){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    const el=document.querySelector(`[onclick="showTab('${id}')"]`);
+    if(el)el.classList.add('active');
+    const cur=TAB_MAP[id];if(!cur)return;
+    document.getElementById('instruction-text').innerHTML=cur.text;
+    const kv=document.getElementById('keyboard-visual');kv.innerHTML='';
+    cur.keys.forEach(k=>{const d=document.createElement('div');d.className='key';d.textContent=k;kv.appendChild(d);});
+    setTimeout(()=>{
+        kv.querySelectorAll('.key').forEach(k=>k.classList.add('active'));
+        setTimeout(()=>kv.querySelectorAll('.key').forEach(k=>k.classList.remove('active')),300);
+    },50);
+}
+
+// ══════════════════════════════════════
+// 分類顏色
+// ══════════════════════════════════════
+const CAT_COLOR={
+    '半形英文':'#3b82f6','抬頭大寫':'#8b5cf6','全形英文':'#0891b2',
+    '半形數字':'#f59e0b','全形數字':'#d97706','半形符號':'#10b981',
+    '全形符號':'#059669','中文標點':'#ef4444','Python符號':'#6366f1'
+};
+
+// ══════════════════════════════════════
+// 判斷題題庫（45 題）
+// ══════════════════════════════════════
+const ID_POOL=[
+    // 半形英文（5）
+    {s:'我的 email 是 {M}andy@gmail.com',           m:'a', t:'half',cat:'半形英文'},
+    {s:'請在 username 欄填入 {M}user123',            m:'u', t:'half',cat:'半形英文'},
+    {s:'The folder is named {M}documents',           m:'d', t:'half',cat:'半形英文'},
+    {s:'網址輸入 {M}www.school.edu.tw',              m:'w', t:'half',cat:'半形英文'},
+    {s:'Press {M}enter to confirm',                  m:'e', t:'half',cat:'半形英文'},
+    // 抬頭大寫（5）
+    {s:'{M}Taiwan is a beautiful island.',           m:'T', t:'half',cat:'抬頭大寫'},
+    {s:'My name is {M}Andy Chen.',                   m:'A', t:'half',cat:'抬頭大寫'},
+    {s:'Press {M}Ctrl + C to copy.',                 m:'C', t:'half',cat:'抬頭大寫'},
+    {s:'公司名稱是 {M}Best Tech Co.',                m:'B', t:'half',cat:'抬頭大寫'},
+    {s:'{M}Windows 是微軟作業系統。',                m:'W', t:'half',cat:'抬頭大寫'},
+    // 全形英文（5）
+    {s:'表單上寫的是 {M}Ａndy，應改為半形',          m:'Ａ',t:'full',cat:'全形英文'},
+    {s:'帳號不小心輸入了 {M}ｕser123',               m:'ｕ',t:'full',cat:'全形英文'},
+    {s:'密碼誤輸入為 {M}Ｐassword123',               m:'Ｐ',t:'full',cat:'全形英文'},
+    {s:'文件中出現了 {M}ｅmail 全形字',              m:'ｅ',t:'full',cat:'全形英文'},
+    {s:'報告標題寫成了 {M}Ｔype Lab',                m:'Ｔ',t:'full',cat:'全形英文'},
+    // 半形數字（5）
+    {s:'我的座號是 {M}12 號',                        m:'1', t:'half',cat:'半形數字'},
+    {s:'電話 0{M}912-345-678',                      m:'9', t:'half',cat:'半形數字'},
+    {s:'port 號為 :{M}8080',                        m:'8', t:'half',cat:'半形數字'},
+    {s:'今天氣溫是 {M}25 度',                        m:'2', t:'half',cat:'半形數字'},
+    {s:'教室在 {M}3 樓',                             m:'3', t:'half',cat:'半形數字'},
+    // 全形數字（5）
+    {s:'報名表填了 {M}１２ 號',                      m:'１',t:'full',cat:'全形數字'},
+    {s:'合約書是 {M}２０２４ 年',                    m:'２',t:'full',cat:'全形數字'},
+    {s:'表單金額 {M}５００ 元',                      m:'５',t:'full',cat:'全形數字'},
+    {s:'頁碼為 第 {M}３ 頁',                         m:'３',t:'full',cat:'全形數字'},
+    {s:'試卷編號 {M}００１',                         m:'０',t:'full',cat:'全形數字'},
+    // 半形符號（5）
+    {s:'Email: andy{M}@school.edu',                  m:'@', t:'half',cat:'半形符號'},
+    {s:'Hello{M}, how are you?',                     m:',', t:'half',cat:'半形符號'},
+    {s:'路徑用 {M}/ 分隔',                           m:'/', t:'half',cat:'半形符號'},
+    {s:'Shift{M}+1 輸入驚嘆號',                      m:'+', t:'half',cat:'半形符號'},
+    {s:'程式碼中 {M}( 開始函數',                     m:'(', t:'half',cat:'半形符號'},
+    // 全形符號（5）
+    {s:'你好{M}，我是新同學。',                      m:'，',t:'full',cat:'全形符號'},
+    {s:'請問你叫什麼名字{M}？',                      m:'？',t:'full',cat:'全形符號'},
+    {s:'路徑誤輸入 C{M}：\\Users',                  m:'：',t:'full',cat:'全形符號'},
+    {s:'表單括號輸入成 {M}（姓名）',                 m:'（',t:'full',cat:'全形符號'},
+    {s:'中文結尾加了 {M}！',                         m:'！',t:'full',cat:'全形符號'},
+    // 中文標點（5）
+    {s:'她說{M}：「等一下！」',                      m:'：',t:'full',cat:'中文標點'},
+    {s:'書名號應寫成 {M}《國語課本》',               m:'《',t:'full',cat:'中文標點'},
+    {s:'對話框裡有 {M}「你好」',                     m:'「',t:'full',cat:'中文標點'},
+    {s:'這句話結尾是句號{M}。',                      m:'。',t:'full',cat:'中文標點'},
+    {s:'清單用{M}、分隔項目',                        m:'、',t:'full',cat:'中文標點'},
+    // Python符號（5）
+    {s:'print{M}("Hello, World!")',                  m:'(', t:'half',cat:'Python符號'},
+    {s:'if x {M}== 10:',                             m:'=', t:'half',cat:'Python符號'},
+    {s:"name = {M}'Andy'",                           m:"'", t:'half',cat:'Python符號'},
+    {s:'x = x {M}＋ 1  # 誤用全形運算子',           m:'＋',t:'full',cat:'Python符號'},
+    {s:'if True{M}：  # 誤用全形冒號',               m:'：',t:'full',cat:'Python符號'},
+];
+
+// ══════════════════════════════════════
+// 輸入題題庫
+// ══════════════════════════════════════
+
+// 保底題：雙引號（從此池隨機抽1）
+const POOL_DQUOTE=[
+    {q:'請輸入 Python 字串（半形雙引號包住）',       preview:'"Hello"',          answer:'"Hello"',          hint:'雙引號 " 為半形（Shift+\'）',       cat:'Python符號'},
+    {q:'請輸入 Python print 函數呼叫',               preview:'print("Hi")',       answer:'print("Hi")',       hint:'括號與引號皆為半形',                cat:'Python符號'},
+    {q:'請輸入 Python 字串賦值（雙引號）',           preview:'x = "ok"',         answer:'x = "ok"',         hint:'= 引號 空白皆半形',                 cat:'Python符號'},
+    {q:'請輸入 Python 雙引號空字串',                 preview:'""',               answer:'""',               hint:'兩個半形雙引號',                    cat:'Python符號'},
+    {q:'請輸入 Python 雙引號 f-string',              preview:'f"Hi {name}"',     answer:'f"Hi {name}"',     hint:'f 小寫，引號大括號皆半形',          cat:'Python符號'},
+];
+
+// 保底題：單引號（從此池隨機抽1）
+const POOL_SQUOTE=[
+    {q:"請輸入 Python 字串（半形單引號包住）",       preview:"'Hello'",          answer:"'Hello'",          hint:"單引號 ' 為半形，直接輸入",         cat:'Python符號'},
+    {q:"請輸入 Python 單引號字串賦值",               preview:"s = 'ok'",         answer:"s = 'ok'",         hint:"= 和 ' 皆為半形",                  cat:'Python符號'},
+    {q:"請輸入 Python 單引號空字串",                 preview:"''",               answer:"''",               hint:"兩個半形單引號",                    cat:'Python符號'},
+    {q:"請輸入 Python 單引號 f-string",              preview:"f'Hi {x}'",        answer:"f'Hi {x}'",        hint:"f 小寫，單引號大括號皆半形",        cat:'Python符號'},
+    {q:"請輸入 Python 字典（單引號鍵值）",           preview:"{'a': 1}",         answer:"{'a': 1}",         hint:"大括號單引號冒號皆半形",            cat:'Python符號'},
+];
+
+// 保底題：\n 換行（固定這一題）
+const ITEM_NEWLINE={
+    q:'請輸入含換行符號的 Python 字串',
+    preview:'"What is your name?\\n"',
+    answer:'"What is your name?\\n"',
+    hint:'雙引號、?、\\ 和 n 皆為半形',
+    cat:'Python符號'
+};
+
+// 一般題庫（不含上方保底題）
+const POOL_GENERAL=[
+    // 半形英文句子（5）
+    {q:'請輸入英文問候語（含半形驚嘆號）',           preview:'Hello!',           answer:'Hello!',           hint:'H 大寫，! 為半形 Shift+1',          cat:'抬頭大寫'},
+    {q:'請輸入英文完整問候語（含半形逗號與驚嘆號）', preview:'Hello, World!',    answer:'Hello, World!',    hint:'逗號和驚嘆號皆為半形',              cat:'半形符號'},
+    {q:'請輸入 Email 地址格式',                      preview:'andy@mail.com',    answer:'andy@mail.com',    hint:'@ 和 . 皆為半形',                   cat:'半形符號'},
+    {q:'請輸入英文自我介紹句（含句號）',             preview:'My name is Andy.', answer:'My name is Andy.', hint:'M 和 A 大寫，. 為半形句號',          cat:'抬頭大寫'},
+    {q:'請輸入小寫英文單字',                         preview:'world',            answer:'world',            hint:'全部半形小寫',                       cat:'半形英文'},
+    // 全形符號情境（5）
+    {q:'請輸入含全形逗號的中文片段',                 preview:'你好，世界',        answer:'你好，世界',        hint:'，為全形逗號（中文輸入法）',          cat:'全形符號'},
+    {q:'請輸入含全形句號的中文短句',                 preview:'早安。',            answer:'早安。',            hint:'。為全形句號（中文輸入法）',          cat:'中文標點'},
+    {q:'請輸入含全形問號的句子',                     preview:'你好嗎？',          answer:'你好嗎？',          hint:'？為全形問號（中文輸入法）',          cat:'全形符號'},
+    {q:'請輸入含引號的中文句子',                     preview:'「你好」',          answer:'「你好」',          hint:'「」為中文引號（中文輸入法）',        cat:'中文標點'},
+    {q:'請輸入含頓號的列舉',                         preview:'貓、狗、鳥',        answer:'貓、狗、鳥',        hint:'、為頓號（中文輸入法）',              cat:'中文標點'},
+    // Python 運算子與語法（5）
+    {q:'請輸入 Python 布林值（真）',                 preview:'True',             answer:'True',             hint:'T 大寫，其餘小寫，全半形',           cat:'Python符號'},
+    {q:'請輸入 Python 布林值（假）',                 preview:'False',            answer:'False',            hint:'F 大寫，其餘小寫，全半形',           cat:'Python符號'},
+    {q:'請輸入 Python 比較運算式',                   preview:'x == 5',           answer:'x == 5',           hint:'== 和空白皆為半形',                 cat:'Python符號'},
+    {q:'請輸入 Python 不等於運算式',                 preview:'x != 0',           answer:'x != 0',           hint:'!= 和空白皆為半形',                 cat:'Python符號'},
+    {q:'請輸入 Python 清單',                         preview:'[1, 2, 3]',        answer:'[1, 2, 3]',        hint:'方括號逗號皆為半形',                cat:'Python符號'},
+    // 其他 Python（5）
+    {q:'請輸入 Python 條件句開頭',                   preview:'if x > 0:',        answer:'if x > 0:',        hint:'> 和 : 皆為半形',                  cat:'Python符號'},
+    {q:'請輸入 Python 加法運算式',                   preview:'a + b',            answer:'a + b',            hint:'+ 和空白皆為半形',                  cat:'Python符號'},
+    {q:'請輸入 Python 註解',                         preview:'# 這是註解',        answer:'# 這是註解',        hint:'# 為半形，空白為半形',              cat:'Python符號'},
+    {q:'請輸入 Python 索引取值',                     preview:'list[0]',          answer:'list[0]',          hint:'方括號數字皆半形',                  cat:'Python符號'},
+    {q:"請輸入 Python 換行字串（單引號）",           preview:"'\\n'",            answer:"'\\n'",            hint:"單引號與反斜線皆為半形",             cat:'Python符號'},
+    // 半形數字（5）
+    {q:'請輸入半形數字（座號格式）',                  preview:'12',               answer:'12',               hint:'直接輸入數字鍵',                    cat:'半形數字'},
+    {q:'請輸入半形電話號碼格式',                      preview:'0912',             answer:'0912',             hint:'數字鍵直接輸入',                    cat:'半形數字'},
+    {q:'請輸入半形數字 0 到 4',                       preview:'01234',            answer:'01234',            hint:'數字鍵依序輸入',                    cat:'半形數字'},
+    {q:'請輸入常見 port 號',                          preview:'8080',             answer:'8080',             hint:'數字鍵輸入',                        cat:'半形數字'},
+    {q:'請輸入半形年份',                              preview:'2024',             answer:'2024',             hint:'數字鍵輸入四位數',                  cat:'半形數字'},
+    // 全形數字（5）
+    {q:'請輸入全形數字一到五',                        preview:'１２３４５',        answer:'１２３４５',        hint:'全形模式後按 1-5',                  cat:'全形數字'},
+    {q:'請輸入全形座號',                              preview:'１２',             answer:'１２',             hint:'全形模式後按 1 和 2',              cat:'全形數字'},
+    {q:'請輸入全形數字 ０',                           preview:'０',               answer:'０',               hint:'全形模式後按 0',                    cat:'全形數字'},
+    {q:'請輸入全形金額',                              preview:'５００',            answer:'５００',            hint:'全形模式後按 5、0、0',              cat:'全形數字'},
+    {q:'請輸入全形年份',                              preview:'２０２４',          answer:'２０２４',          hint:'全形模式後輸入 2024',               cat:'全形數字'},
+    // 全形英文（5）
+    {q:'請輸入全形大寫英文字母 Ａ',                   preview:'Ａ',               answer:'Ａ',               hint:'全形模式 + Shift + a',              cat:'全形英文'},
+    {q:'請輸入全形小寫字母 ｓ',                       preview:'ｓ',               answer:'ｓ',               hint:'全形模式後按 s',                    cat:'全形英文'},
+    {q:'請輸入全形大寫 Ｗ',                           preview:'Ｗ',               answer:'Ｗ',               hint:'全形模式 + Shift + w',              cat:'全形英文'},
+    {q:'請輸入全形小寫 ｍ',                           preview:'ｍ',               answer:'ｍ',               hint:'全形模式後按 m',                    cat:'全形英文'},
+    {q:'請輸入全形大寫 Ｚ',                           preview:'Ｚ',               answer:'Ｚ',               hint:'全形模式 + Shift + z',              cat:'全形英文'},
+];
+
+// ══════════════════════════════════════
+// 工具
+// ══════════════════════════════════════
+function shuffle(arr){
+    const a=[...arr];
+    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    return a;
+}
+function escH(s){
+    return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/ /g,'·').replace(/\n/g,'↵');
+}
+
+// 逐字比對 HTML
+function charDiff(user,correct){
+    const maxLen=Math.max(user.length,correct.length);
+    let youHtml='',corHtml='',firstErr=-1;
+    for(let i=0;i<maxLen;i++){
+        const u=user[i]||'';const c=correct[i]||'';
+        if(u===c){
+            youHtml+=`<span class="char-ok">${escH(u)||'▢'}</span>`;
+            corHtml+=`<span class="char-ok">${escH(c)||'▢'}</span>`;
+        }else{
+            if(firstErr<0)firstErr=i;
+            youHtml+=`<span class="char-err">${escH(u)||'▢'}</span>`;
+            corHtml+=`<span class="char-ok">${escH(c)||'▢'}</span>`;
+        }
+    }
+    let hint='';
+    if(firstErr>=0){
+        const u=user[firstErr]||'（無）';
+        const c=correct[firstErr]||'（無）';
+        hint=`<div class="diff-hint">第 ${firstErr+1} 個字元：你輸入「${escH(u)}」，應為「${escH(c)}」</div>`;
+    }
+    return`<div class="diff-row"><span class="diff-label">你輸入：</span>${youHtml}</div>`+
+           `<div class="diff-row"><span class="diff-label">正確答案：</span>${corHtml}</div>${hint}`;
+}
+
+// ══════════════════════════════════════
+// 判斷測驗
+// ══════════════════════════════════════
+let idQs=[],idCur=0,idScore=0,idDone=false,idLog=[];
+
+function initIdentify(){
+    idQs=shuffle(ID_POOL).slice(0,SET_ID);
+    idCur=0;idScore=0;idDone=false;idLog=[];
+    document.getElementById('id-done').classList.remove('show');
+    document.getElementById('id-badge').textContent='未完成';
+    document.getElementById('id-badge').className='badge badge-wait';
+    document.getElementById('id-total-text').textContent=SET_ID;
+    renderIdentify();
+}
+function renderIdentify(){
+    const q=idQs[idCur];
+    document.getElementById('id-sentence').innerHTML=q.s.replace('{M}',`<span class="mk">${q.m}</span>`);
+    document.getElementById('id-progress').textContent=`第 ${idCur+1} 題 / 共 ${SET_ID} 題`;
+    document.getElementById('id-bar').style.width=`${(idCur/SET_ID)*100}%`;
+    document.getElementById('id-feedback').style.display='none';
+    document.getElementById('btn-id-half').disabled=false;
+    document.getElementById('btn-id-full').disabled=false;
+}
+function answerIdentify(ans){
+    if(idDone)return;
+    const q=idQs[idCur];
+    const ok=ans===q.t;
+    if(ok)idScore++;
+    idLog.push({qNum:idCur+1,type:'判斷題',
+        question:q.s.replace('{M}',`【${q.m}】`),
+        userAnswer:ans==='half'?'半形':'全形',
+        correctAnswer:q.t==='half'?'半形':'全形',
+        isCorrect:ok,cat:q.cat});
+    const fb=document.getElementById('id-feedback');
+    fb.style.display='block';
+    fb.className=`feedback-box ${ok?'correct':'wrong'}`;
+    fb.innerHTML=ok
+        ?`✅ 正確！「${q.m}」是 <b>${q.t==='half'?'半形':'全形'}</b>。`
+        :`❌ 答錯了！「${q.m}」其實是 <b>${q.t==='half'?'半形':'全形'}</b>。`;
+    document.getElementById('btn-id-half').disabled=true;
+    document.getElementById('btn-id-full').disabled=true;
+    setTimeout(()=>{idCur++;idCur>=SET_ID?finishIdentify():renderIdentify();},1200);
+}
+function finishIdentify(){
+    idDone=true;
+    document.getElementById('id-bar').style.width='100%';
+    document.getElementById('id-progress').textContent=`完成！得分 ${idScore} / ${SET_ID}`;
+    document.getElementById('id-score-text').textContent=idScore;
+    document.getElementById('id-done').classList.add('show');
+    document.getElementById('id-badge').textContent='已完成';
+    document.getElementById('id-badge').className='badge badge-done';
+    document.getElementById('id-feedback').style.display='none';
+}
+
+// ══════════════════════════════════════
+// 輸入測驗（含三類保底題）
+// ══════════════════════════════════════
+let quizQs=[],quizCur=0,quizScore=0,quizDone=false,quizLog=[];
+
+function buildQuizQuestions(n){
+    // 1. 保底：雙引號 1 題
+    const dq=shuffle(POOL_DQUOTE)[0];
+    // 2. 保底：單引號 1 題
+    const sq=shuffle(POOL_SQUOTE)[0];
+    // 3. 保底：\n 換行題
+    const nl=ITEM_NEWLINE;
+
+    // 4. 已使用的答案（避免重複）
+    const usedAnswers=new Set([dq.answer,sq.answer,nl.answer]);
+
+    // 5. 從一般題庫補足剩餘題數，避免與保底題重複
+    const remaining=n-3; // 剩餘題數（n最小5，所以remaining最小2）
+    const general=shuffle(POOL_GENERAL)
+        .filter(q=>!usedAnswers.has(q.answer))
+        .slice(0,remaining);
+
+    // 6. 合併並再次 shuffle，讓保底題位置隨機
+    return shuffle([dq,sq,nl,...general]);
+}
+
+function initQuiz(){
+    quizQs=buildQuizQuestions(SET_QUIZ);
+    quizCur=0;quizScore=0;quizDone=false;quizLog=[];
+    document.getElementById('quiz-done').classList.remove('show');
+    document.getElementById('quiz-badge').textContent='未完成';
+    document.getElementById('quiz-badge').className='badge badge-wait';
+    document.getElementById('quiz-total-text').textContent=SET_QUIZ;
+    renderQuiz();
+}
+function renderQuiz(){
+    const q=quizQs[quizCur];
+    document.getElementById('quiz-question').innerHTML=
+        `${q.q}<div class="answer-preview">${escH(q.preview)}</div>`;
+    document.getElementById('quiz-progress').textContent=`第 ${quizCur+1} 題 / 共 ${SET_QUIZ} 題`;
+    document.getElementById('quiz-bar').style.width=`${(quizCur/SET_QUIZ)*100}%`;
+    const inp=document.getElementById('quiz-input');
+    inp.value='';inp.disabled=false;
+    document.getElementById('quiz-feedback').style.display='none';
+    document.getElementById('char-diff').style.display='none';
+    inp.focus();
+}
+function submitQuizAnswer(){
+    if(quizDone)return;
+    const q=quizQs[quizCur];
+    const inp=document.getElementById('quiz-input');
+    const val=inp.value;
+    const ok=val===q.answer;
+    if(ok)quizScore++;
+    quizLog.push({qNum:quizCur+1,type:'輸入題',
+        question:q.q,
+        userAnswer:val===''?'（未輸入）':val,
+        correctAnswer:q.answer,
+        isCorrect:ok,cat:q.cat});
+    const fb=document.getElementById('quiz-feedback');
+    const ft=document.getElementById('quiz-fb-text');
+    const cd=document.getElementById('char-diff');
+    fb.style.display='block';
+    fb.className=`feedback-box ${ok?'correct':'wrong'}`;
+    if(ok){
+        ft.innerHTML='✅ 正確！';
+        cd.style.display='none';
+    }else{
+        ft.innerHTML=`❌ 答錯了！提示：${q.hint}`;
+        cd.innerHTML=charDiff(val===''?'':val,q.answer);
+        cd.style.display='block';
+    }
+    inp.disabled=true;
+    setTimeout(()=>{quizCur++;quizCur>=SET_QUIZ?finishQuiz():renderQuiz();},2000);
+}
+function finishQuiz(){
+    quizDone=true;
+    document.getElementById('quiz-bar').style.width='100%';
+    document.getElementById('quiz-progress').textContent=`完成！得分 ${quizScore} / ${SET_QUIZ}`;
+    document.getElementById('quiz-score-text').textContent=quizScore;
+    document.getElementById('quiz-done').classList.add('show');
+    document.getElementById('quiz-badge').textContent='已完成';
+    document.getElementById('quiz-badge').className='badge badge-done';
+    document.getElementById('quiz-feedback').style.display='none';
+    document.getElementById('quiz-input').disabled=true;
+}
+
+// ══════════════════════════════════════
+// 結果頁
+// ══════════════════════════════════════
+function buildResult(){
+    const {cls,seat,name}=studentInfo;
+    const total=idScore+quizScore;
+    const maxTotal=SET_ID+SET_QUIZ;
+    document.getElementById('res-total').textContent=total;
+    document.getElementById('res-denom').textContent=`/ ${maxTotal}`;
+    document.getElementById('res-name').textContent=`${cls} 班 ${seat} 號 ${name}`;
+    document.getElementById('res-time').textContent=`作答時間：${fmtTime(timerSec)}`;
+    document.getElementById('res-id').textContent=idScore;
+    document.getElementById('res-id-denom').textContent=`判斷測驗 / ${SET_ID}`;
+    document.getElementById('res-quiz').textContent=quizScore;
+    document.getElementById('res-quiz-denom').textContent=`輸入測驗 / ${SET_QUIZ}`;
+
+    // 分類統計
+    const allLogs=[...idLog,...quizLog];
+    const cats={};
+    allLogs.forEach(l=>{
+        if(!cats[l.cat])cats[l.cat]={correct:0,total:0};
+        cats[l.cat].total++;if(l.isCorrect)cats[l.cat].correct++;
+    });
+    const catDiv=document.getElementById('cat-rows');catDiv.innerHTML='';
+    Object.entries(cats).forEach(([cat,d])=>{
+        const pct=Math.round((d.correct/d.total)*100);
+        const color=CAT_COLOR[cat]||'#6b7280';
+        const icon=pct===100?'✅':pct>=60?'⚠️':'❌';
+        catDiv.innerHTML+=`<div class="cat-row">
+            <span class="cat-icon">${icon}</span>
+            <span class="cat-label">${cat}</span>
+            <div class="cat-bar-wrap"><div class="cat-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+            <span class="cat-score" style="color:${color}">${d.correct}/${d.total}</span>
+        </div>`;
+    });
+
+    // 錯題複習
+    const wrongs=allLogs.filter(l=>!l.isCorrect);
+    const ws=document.getElementById('wrong-section');
+    if(wrongs.length===0){ws.style.display='none';}
+    else{
+        const wd=document.getElementById('wrong-items');wd.innerHTML='';
+        wrongs.forEach(l=>{
+            const diffHtml=l.type==='輸入題'
+                ?`<div class="wi-diff">${charDiff(l.userAnswer==='（未輸入）'?'':l.userAnswer,l.correctAnswer)}</div>`:'';
+            wd.innerHTML+=`<div class="wrong-item">
+                <div class="wi-q">【${l.type}】${l.question}</div>
+                <div class="wi-yours">你的答案：${escH(l.userAnswer)}</div>
+                <div class="wi-correct">正確答案：${escH(l.correctAnswer)}</div>
+                ${diffHtml}
+            </div>`;
         });
+    }
 
-        function setCase(type) {
-            // 更新按鈕狀態
-            document.querySelectorAll('.btn-case').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+    // 逐題明細
+    const tbody=document.getElementById('detail-tbody');tbody.innerHTML='';
+    allLogs.forEach(l=>{
+        const tr=document.createElement('tr');tr.className=l.isCorrect?'c-row':'w-row';
+        tr.innerHTML=`<td>${l.qNum}</td><td>${l.type}</td>
+            <td>${l.question.substring(0,28)}${l.question.length>28?'…':''}</td>
+            <td class="mono">${escH(l.userAnswer)}</td>
+            <td class="mono">${escH(l.correctAnswer)}</td>
+            <td>${l.isCorrect?'✅':'❌'}</td>`;
+        tbody.appendChild(tr);
+    });
+}
 
-            if (type === 'upper') {
-                caseInput.value = originalText.toUpperCase();
-            } else if (type === 'lower') {
-                caseInput.value = originalText.toLowerCase();
-            } else {
-                caseInput.value = originalText;
-            }
-        }
+// ══════════════════════════════════════
+// 送出 GAS
+// ══════════════════════════════════════
+async function submitToGAS(){
+    const btn=document.getElementById('btn-gas');
+    const msg=document.getElementById('submit-msg');
+    const {cls,seat,name}=studentInfo;
+    if(!GAS_URL){
+        msg.className='submit-msg err';msg.style.display='block';
+        msg.textContent='⚙️ GAS URL 尚未設定，請老師填入後再使用。';return;
+    }
+    btn.disabled=true;btn.textContent='送出中…';
+    const allLogs=[...idLog,...quizLog];
+    const cats={};
+    allLogs.forEach(l=>{
+        if(!cats[l.cat])cats[l.cat]={correct:0,total:0};
+        cats[l.cat].total++;if(l.isCorrect)cats[l.cat].correct++;
+    });
+    const payload={
+        timestamp:new Date().toLocaleString('zh-TW'),
+        cls,seat,name,
+        idCount:SET_ID,quizCount:SET_QUIZ,maxScore:SET_ID+SET_QUIZ,
+        identifyScore:idScore,quizScore,totalScore:idScore+quizScore,
+        timeTaken:fmtTime(timerSec),timeSeconds:timerSec,
+        categoryStats:cats,
+        details:allLogs.map(l=>({
+            qNum:l.qNum,type:l.type,question:l.question,
+            userAnswer:l.userAnswer,correctAnswer:l.correctAnswer,
+            isCorrect:l.isCorrect?'正確':'錯誤',category:l.cat
+        }))
+    };
+    try{
+        await fetch(GAS_URL,{method:'POST',mode:'no-cors',
+            headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+        msg.className='submit-msg ok';msg.style.display='block';
+        msg.textContent=`✅ 成績已送出！${name} 同學，總分 ${idScore+quizScore} / ${SET_ID+SET_QUIZ}，作答時間 ${fmtTime(timerSec)}。`;
+        btn.textContent='✅ 已送出';
+    }catch(err){
+        msg.className='submit-msg err';msg.style.display='block';
+        msg.textContent=`❌ 送出失敗（${err.message}），請告知老師。`;
+        btn.disabled=false;btn.textContent='📤 送出成績到 Google 試算表';
+    }
+}
 
-        // ==========================================
-        // 功能 2: 全形半形轉換 (核心邏輯)
-        // ==========================================
-        const halfInput = document.getElementById('halfInput');
-        const fullOutput = document.getElementById('fullOutput');
+// ══════════════════════════════════════
+// 初始化
+// ══════════════════════════════════════
+showPage('page-intro');
+updateSettings();
+</script>
 
-        function toFullWidth(str) {
-            let result = "";
-            for (let i = 0; i < str.length; i++) {
-                let code = str.charCodeAt(i);
-                // ASCII 範圍 33-126 (標準半形符號與英數)
-                if (code >= 33 && code <= 126) {
-                    result += String.fromCharCode(code + 65248);
-                } 
-                // 空白鍵例外處理 (32 -> 12288)
-                else if (code === 32) {
-                    result += String.fromCharCode(12288);
-                } 
-                // 其他字元 (如中文字) 保持不變
-                else {
-                    result += str.charAt(i);
-                }
-            }
-            return result;
-        }
+<!--
+═══════════════════════════════════════════════════════
+📋 GAS 程式碼範本（貼入 Google Apps Script）
+部署為 Web App → 執行身分：我 → 存取權：任何人
+將部署 URL 貼入上方 JS 的 GAS_URL 變數即可啟用
+═══════════════════════════════════════════════════════
 
-        function updateConversion() {
-            const val = halfInput.value;
-            const converted = toFullWidth(val);
-            fullOutput.value = converted;
-        }
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-        // 綁定事件：打字時即時轉換
-        halfInput.addEventListener('input', updateConversion);
-        
-        // 初始化執行一次
-        updateConversion();
+    // 工作表1：成績摘要
+    let s1 = ss.getSheetByName("成績摘要");
+    if (!s1) {
+      s1 = ss.insertSheet("成績摘要");
+      s1.appendRow(["時間","班級","座號","姓名",
+        "判斷題數","判斷分","輸入題數","輸入分","總分","滿分","作答時間"]);
+    }
+    s1.appendRow([data.timestamp,data.cls,data.seat,data.name,
+      data.idCount,data.identifyScore,
+      data.quizCount,data.quizScore,
+      data.totalScore,data.maxScore,data.timeTaken]);
 
+    // 工作表2：逐題明細
+    let s2 = ss.getSheetByName("逐題明細");
+    if (!s2) {
+      s2 = ss.insertSheet("逐題明細");
+      s2.appendRow(["時間","班級","座號","姓名","題號","類型","題目","學生答","正解","結果","分類"]);
+    }
+    data.details.forEach(function(r) {
+      s2.appendRow([data.timestamp,data.cls,data.seat,data.name,
+        r.qNum,r.type,r.question,r.userAnswer,r.correctAnswer,r.isCorrect,r.category]);
+    });
 
-        // ==========================================
-        // 功能 3: 切換教學互動
-        // ==========================================
-        const instructionText = document.getElementById('instruction-text');
-        const keyboardVisual = document.getElementById('keyboard-visual');
+    // 工作表3：分類統計
+    let s3 = ss.getSheetByName("分類統計");
+    if (!s3) {
+      s3 = ss.insertSheet("分類統計");
+      s3.appendRow(["時間","班級","座號","姓名",
+        "半形英文","抬頭大寫","全形英文","半形數字","全形數字",
+        "半形符號","全形符號","中文標點","Python符號"]);
+    }
+    const c = data.categoryStats || {};
+    function cs(k){ return c[k] ? c[k].correct+"/"+c[k].total : "-"; }
+    s3.appendRow([data.timestamp,data.cls,data.seat,data.name,
+      cs("半形英文"),cs("抬頭大寫"),cs("全形英文"),cs("半形數字"),cs("全形數字"),
+      cs("半形符號"),cs("全形符號"),cs("中文標點"),cs("Python符號")]);
 
-        function showInstructionTab(tabId) {
-            // 切換 Tab 樣式
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`[onclick="showInstructionTab('${tabId}')"]`).classList.add('active');
+    return ContentService.createTextOutput(JSON.stringify({status:"ok"}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({status:"error",message:err.message}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
 
-            // 模擬按鍵動畫效果
-            animateKeys();
-            
-            const instructionMap = {
-                'win-half-full': {
-                    text: "Windows 切換全形/半形：通常使用 <b>Shift + 空白鍵</b> 。",
-                    keys: [{ id: 'key-shift', text: 'Shift' }, { id: 'key-plus', text: '+' }, { id: 'key-space', text: 'Space' }]
-                },
-                'win-case': {
-                    text: "Windows 大小寫切換：按 <b>Caps Lock</b> 鍵即可切換英文大小寫，指示燈亮表示大寫模式。<br>此外，在<b>小寫輸入狀態</b>下，按 <b>Shift 鍵 + 任意英文字元鍵</b> 可以打出該字元的大寫形式；對於數字和符號鍵，Shift 鍵則是用來輸入鍵盤上方的<b>第二個符號</b>（例如 Shift + 1 = !，Shift + ; = :）。",
-                    keys: [{ id: 'key-caps', text: 'Caps Lock' }]            
-                },
-                'win-ime': {
-                    text: "Windows 中英模式切換：使用 <b>Shift</b> 鍵可在中文輸入法和英數輸入法之間切換。",
-                    keys: [{ id: 'key-shift', text: 'Shift' }]
-                }
-            };
-
-            const currentInstruction = instructionMap[tabId];
-            if (currentInstruction) {
-                instructionText.innerHTML = currentInstruction.text;
-                
-                // Clear existing keys and re-render
-                keyboardVisual.innerHTML = ''; 
-                currentInstruction.keys.forEach(keyData => {
-                    const keyElement = document.createElement('div');
-                    keyElement.classList.add('key');
-                    keyElement.id = keyData.id;
-                    keyElement.innerText = keyData.text;
-                    keyboardVisual.appendChild(keyElement);
-                });
-            }
-        }
-        showInstructionTab('win-half-full'); // Default to Windows Half/Full instruction on load
-
-        function animateKeys() {
-            const keys = keyboardVisual.querySelectorAll('.key'); // Select keys within keyboardVisual
-            keys.forEach(k => k.classList.add('active'));
-            setTimeout(() => {
-                keys.forEach(k => k.classList.remove('active'));
-            }, 300);
-        }
-
-    </script>
+═══════════════════════════════════════════════════════
+-->
 </body>
 </html>

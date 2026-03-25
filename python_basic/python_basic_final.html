@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python 全方位互動教學：從基礎到函式與除錯 (優化版 v5)</title>
+    <title>Python 全方位互動教學：從基礎到函式與除錯</title>
     <!-- 載入 Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons for visual elements -->
@@ -83,56 +83,63 @@
             </div>
         </section>
 
-        <!-- SYNTAX COLOR DICTIONARY (New) -->
+        <!-- SYNTAX COLOR DICTIONARY (Updated: Tomorrow Night Eighties Theme) -->
         <section id="syntax-colors" class="relative overflow-hidden rounded-xl border border-slate-700 bg-slate-800 shadow-lg">
             <div class="flex items-center gap-2 border-b border-slate-700 bg-slate-900/50 p-4">
                 <i data-lucide="palette" class="w-5 h-5 text-pink-400"></i>
                 <h2 class="text-lg font-bold text-slate-100">顏色小字典：編輯器的「色彩密碼」</h2>
-                <span class="ml-auto text-[10px] text-slate-500 bg-slate-950 px-2 py-1 rounded">點擊下方色塊查看詳細說明</span>
+                <span class="ml-auto text-[10px] text-slate-500 bg-slate-950 px-2 py-1 rounded">Tomorrow Night Eighties 配色方案</span>
             </div>
             <div class="p-6">
+                <!-- Theme Introduction -->
+                <div class="mb-6 p-4 rounded-lg bg-slate-900/50 border border-slate-700">
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        <span class="text-pink-400 font-bold">Tomorrow Night Eighties</span> 是一個經典的深色主題。背景採用深灰色，搭配帶有<span class="text-indigo-300 font-bold">「復古霓虹感」</span>的粉彩色系，能讓長時間編寫程式時眼睛較不容易疲勞。
+                    </p>
+                </div>
+
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                     
-                    <!-- Variable -->
-                    <button onclick="showColorDetail('variable')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-400 transition-all text-center">
-                        <div class="w-full h-2 rounded-full bg-slate-200 mb-3 shadow-[0_0_10px_rgba(226,232,240,0.3)]"></div>
-                        <div class="text-xs font-bold text-slate-200 mb-1">白色／淺藍</div>
-                        <div class="text-[10px] text-slate-500">變數 (Variable)</div>
-                    </button>
-
-                    <!-- Custom Function -->
-                    <button onclick="showColorDetail('func-custom')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-sky-400 transition-all text-center">
-                        <div class="w-full h-2 rounded-full bg-sky-400 mb-3 shadow-[0_0_10px_rgba(56,189,248,0.3)]"></div>
-                        <div class="text-xs font-bold text-sky-400 mb-1">藍色</div>
-                        <div class="text-[10px] text-slate-500">函式 (自訂)</div>
-                    </button>
-
-                    <!-- Built-in Function -->
-                    <button onclick="showColorDetail('func-builtin')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-blue-500 transition-all text-center">
-                        <div class="w-full h-2 rounded-full bg-blue-500 mb-3 shadow-[0_0_10px_rgba(59,130,246,0.3)]"></div>
-                        <div class="text-xs font-bold text-blue-500 mb-1">藍色</div>
-                        <div class="text-[10px] text-slate-500">函式 (內建)</div>
-                    </button>
-
                     <!-- Keyword -->
-                    <button onclick="showColorDetail('keyword')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-violet-400 transition-all text-center">
-                        <div class="w-full h-2 rounded-full bg-violet-400 mb-3 shadow-[0_0_10px_rgba(167,139,250,0.3)]"></div>
-                        <div class="text-xs font-bold text-violet-400 mb-1">紫色</div>
-                        <div class="text-[10px] text-slate-500">關鍵字</div>
+                    <button onclick="showColorDetail('keyword')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-violet-300 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-[#c397d8] mb-3 shadow-[0_0_10px_rgba(195,151,216,0.3)]"></div>
+                        <div class="text-xs font-bold text-[#c397d8] mb-1">淡紫色</div>
+                        <div class="text-[10px] text-slate-500">關鍵字 (Keywords)</div>
                     </button>
 
-                    <!-- Number -->
-                    <button onclick="showColorDetail('number')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-orange-400 transition-all text-center">
-                        <div class="w-full h-2 rounded-full bg-orange-400 mb-3 shadow-[0_0_10px_rgba(251,146,60,0.3)]"></div>
-                        <div class="text-xs font-bold text-orange-400 mb-1">橘色</div>
-                        <div class="text-[10px] text-slate-500">數字</div>
+                    <!-- Functions -->
+                    <button onclick="showColorDetail('func-builtin')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-[#70c0b1] mb-3 shadow-[0_0_10px_rgba(112,192,177,0.3)]"></div>
+                        <div class="text-xs font-bold text-[#70c0b1] mb-1">淡藍色</div>
+                        <div class="text-[10px] text-slate-500">函數與類別</div>
                     </button>
 
-                    <!-- String -->
+                    <!-- Strings -->
                     <button onclick="showColorDetail('string')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-400 transition-all text-center">
-                        <div class="w-full h-2 rounded-full bg-emerald-400 mb-3 shadow-[0_0_10px_rgba(52,211,153,0.3)]"></div>
-                        <div class="text-xs font-bold text-emerald-400 mb-1">綠色</div>
-                        <div class="text-[10px] text-slate-500">字串</div>
+                        <div class="w-full h-2 rounded-full bg-[#b9ca4a] mb-3 shadow-[0_0_10px_rgba(185,202,74,0.3)]"></div>
+                        <div class="text-xs font-bold text-[#b9ca4a] mb-1">淺綠色</div>
+                        <div class="text-[10px] text-slate-500">字串 (Strings)</div>
+                    </button>
+
+                    <!-- Variables/Numbers -->
+                    <button onclick="showColorDetail('variable')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-orange-400 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-[#e78c45] mb-3 shadow-[0_0_10px_rgba(231,140,69,0.3)]"></div>
+                        <div class="text-xs font-bold text-[#e78c45] mb-1">淡紅 / 橘色</div>
+                        <div class="text-[10px] text-slate-500">變數與數字</div>
+                    </button>
+
+                    <!-- Comments -->
+                    <button onclick="showColorDetail('comment')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-500 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-[#969896] mb-3 shadow-[0_0_10px_rgba(150,152,150,0.3)]"></div>
+                        <div class="text-xs font-bold text-[#969896] mb-1">中灰色</div>
+                        <div class="text-[10px] text-slate-500">註解 (Comments)</div>
+                    </button>
+
+                    <!-- Operators -->
+                    <button onclick="showColorDetail('operator')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-300 transition-all text-center">
+                        <div class="w-full h-2 rounded-full bg-[#dedede] mb-3 shadow-[0_0_10px_rgba(222,222,222,0.3)]"></div>
+                        <div class="text-xs font-bold text-[#dedede] mb-1">白 / 淺灰色</div>
+                        <div class="text-[10px] text-slate-500">運算子與標點</div>
                     </button>
 
                 </div>
@@ -210,10 +217,10 @@
                             </div>
                             <div class="flex items-center justify-between text-xs bg-black/40 p-2 rounded">
                                 <span class="text-slate-500">編輯器顏色</span>
-                                <span class="text-white border-b border-white">通常是白色或淺藍色</span>
+                                <span class="text-[#e78c45] font-bold border-b border-[#e78c45]">通常是橘色或淡紅色</span>
                             </div>
-                            <div class="bg-slate-950 p-3 rounded font-mono text-sm border-l-4 border-blue-500">
-                                <span class="text-white">eggs</span> = <span class="text-amber-400">3</span>
+                            <div class="bg-slate-950 p-3 rounded font-mono text-sm border-l-4 border-[#e78c45]">
+                                <span class="text-[#e78c45]">eggs</span> = <span class="text-[#e78c45]">3</span>
                             </div>
                         </div>
                     </div>
@@ -232,10 +239,10 @@
                             </div>
                             <div class="flex items-center justify-between text-xs bg-black/40 p-2 rounded">
                                 <span class="text-slate-500">編輯器顏色</span>
-                                <span class="text-yellow-400 font-bold">通常是黃色或藍色</span>
+                                <span class="text-[#70c0b1] font-bold">通常是淡藍色 (Aqua)</span>
                             </div>
-                            <div class="bg-slate-950 p-3 rounded font-mono text-sm border-l-4 border-yellow-500">
-                                <span class="text-yellow-400">print</span>(<span class="text-green-400">"Hello"</span>)
+                            <div class="bg-slate-950 p-3 rounded font-mono text-sm border-l-4 border-[#70c0b1]">
+                                <span class="text-[#70c0b1]">print</span>(<span class="text-[#b9ca4a]">"Hello"</span>)
                             </div>
                         </div>
                     </div>
@@ -561,7 +568,7 @@
                 <div class="flex flex-wrap rounded-lg bg-slate-900 p-1 gap-1">
                     <button onclick="switchLoopTab('list_index')" id="loop-btn-list_index" class="rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-white transition-all bg-cyan-600 shadow">串列操作</button>
                     <button onclick="switchLoopTab('list_methods')" id="loop-btn-list_methods" class="rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-all">常用方法</button>
-                    <button onclick="switchLoopTab('range')" id="loop-btn-range" class="rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-all">Range 序列</button>
+                    <button onclick="switchLoopTab('range')" id="loop-btn-range" class="rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-all">range 序列</button>
                     <button onclick="switchLoopTab('iteration')" id="loop-btn-iteration" class="rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-all">迭代模式</button>
                 </div>
             </div>
@@ -671,6 +678,7 @@
                     <div class="flex flex-wrap gap-2">
                         <button onclick="updateLoopState('iterationType', 'direct')" id="iter-btn-direct" class="px-3 py-1 text-xs font-medium rounded bg-cyan-600 text-white shadow">串列迭代</button>
                         <button onclick="updateLoopState('iterationType', 'range_len')" id="iter-btn-range_len" class="px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white">索引迭代</button>
+                        <button onclick="updateLoopState('iterationType', 'range')" id="iter-btn-range" class="px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white">range 迭代</button>
                         <button onclick="updateLoopState('iterationType', 'string')" id="iter-btn-string" class="px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white">字串迭代</button>
                     </div>
                     <div class="grid gap-6 md:grid-cols-2">
@@ -989,12 +997,42 @@
         };
 
         const colorData = {
-            'variable': { title: '白色／淺藍 — 變數', desc: '這是用來儲存資料的「箱子」。你可以給它一個名字，然後把數字或文字放進去。', code: 'score = 100  # score 就是變數', icon: 'package', color: 'bg-slate-700', text: 'text-slate-200' },
-            'func-custom': { title: '藍色 — 函式 (自訂)', desc: '你自己寫的「指令群」。可以把一連串動作包起來，重複使用。', code: 'def say_hello():  # say_hello 是自訂函式\n    print("Hi!")', icon: 'chef-hat', color: 'bg-sky-500/20', text: 'text-sky-400' },
-            'func-builtin': { title: '藍色 — 函式 (內建)', desc: 'Python 原本就幫你寫好的功能，直接呼叫就能用！', code: 'print("Hello")  # print 是內建函式\nlen([1, 2, 3])  # len 也是內建的', icon: 'wrench', color: 'bg-blue-500/20', text: 'text-blue-500' },
-            'keyword': { title: '紫色 — 關鍵字', desc: 'Python 規定好的特殊單字，有特定功能，不能拿來當變數名稱喔！', code: 'if score > 60:  # if 是關鍵字\n    break       # break 也是關鍵字', icon: 'key', color: 'bg-violet-500/20', text: 'text-violet-400' },
-            'number': { title: '橘色 — 數字', desc: '代表數值資料，可以用來做加減乘除。', code: 'age = 18  # 18 是整數\npi = 3.14 # 3.14 是浮點數', icon: 'binary', color: 'bg-orange-500/20', text: 'text-orange-400' },
-            'string': { title: '綠色 — 字串', desc: '被成對引號包住的文字。電腦會把它當成純文字處理。', code: 'name = "小明"  # "小明" 是字串\nmsg = \'你好\'  # \'你好\' 也是字串', icon: 'type', color: 'bg-emerald-500/20', text: 'text-emerald-400' }
+            'variable': { 
+                title: '淡紅 / 橘色 — 變數與數字', 
+                desc: '這是自定義的變數名稱、常數或數值資料。', 
+                htmlCode: '<span class="text-[#e78c45]">x</span> <span class="text-[#dedede]">=</span> <span class="text-[#e78c45]">100</span>\n<span class="text-[#e78c45]">total</span> <span class="text-[#dedede]">=</span> <span class="text-[#e78c45]">0</span>\n<span class="text-[#e78c45]">True</span>, <span class="text-[#e78c45]">False</span>', 
+                icon: 'package', color: 'bg-[#e78c45]/20', text: 'text-[#e78c45]' 
+            },
+            'func-builtin': { 
+                title: '淡藍色 — 函數與類別 (Aqua/Blue)', 
+                desc: '呼叫內建的功能、定義好的函數或類別名稱。', 
+                htmlCode: '<span class="text-[#70c0b1]">print</span>(<span class="text-[#b9ca4a]">"Hi!"</span>)\n<span class="text-[#70c0b1]">input</span>(<span class="text-[#b9ca4a]">"Name?"</span>)\n<span class="text-[#70c0b1]">len</span>([<span class="text-[#e78c45]">1</span>, <span class="text-[#e78c45]">2</span>, <span class="text-[#e78c45]">3</span>])', 
+                icon: 'wrench', color: 'bg-[#70c0b1]/20', text: 'text-[#70c0b1]' 
+            },
+            'keyword': { 
+                title: '淡紫色 — 關鍵字 (Keywords)', 
+                desc: '控制程式流程的指令標籤，是 Python 內建的核心語法。', 
+                htmlCode: '<span class="text-[#c397d8]">if</span> score <span class="text-[#dedede]">&gt;</span> <span class="text-[#e78c45]">60</span><span class="text-[#dedede]">:</span>\n    <span class="text-[#c397d8]">else</span><span class="text-[#dedede]">:</span>\n<span class="text-[#c397d8]">for</span> i <span class="text-[#c397d8]">in</span> <span class="text-[#c397d8]">range</span>(<span class="text-[#e78c45]">5</span>)<span class="text-[#dedede]">:</span>\n<span class="text-[#c397d8]">def</span> <span class="text-[#70c0b1]">my_func</span>()<span class="text-[#dedede]">:</span>', 
+                icon: 'key', color: 'bg-[#c397d8]/20', text: 'text-[#c397d8]' 
+            },
+            'comment': { 
+                title: '中灰色 — 註解 (Comments)', 
+                desc: '以 # 開頭的說明文字，電腦會完全忽略它們。', 
+                htmlCode: '<span class="text-[#969896]"># 這是註解，用來解釋程式碼</span>\n<span class="text-[#969896]"># 計算學生的總分</span>', 
+                icon: 'message-square', color: 'bg-[#969896]/20', text: 'text-[#969896]' 
+            },
+            'operator': { 
+                title: '白 / 淺灰色 — 運算子與符號', 
+                desc: '程式的結構符號，如數學運算、括號或冒號。', 
+                htmlCode: '<span class="text-[#e78c45]">a</span> <span class="text-[#dedede]">+</span> <span class="text-[#e78c45]">b</span> <span class="text-[#dedede]">-</span> <span class="text-[#e78c45]">c</span> <span class="text-[#dedede]">*</span> <span class="text-[#e78c45]">d</span>\n<span class="text-[#c397d8]">if</span> <span class="text-[#e78c45]">x</span> <span class="text-[#dedede]">==</span> <span class="text-[#e78c45]">y</span><span class="text-[#dedede]">:</span>\n<span class="text-[#dedede]">( )</span>, <span class="text-[#dedede]">[ ]</span>, <span class="text-[#dedede]">{ }</span>', 
+                icon: 'divide', color: 'bg-[#dedede]/20', text: 'text-[#dedede]' 
+            },
+            'string': { 
+                title: '淺綠色 — 字串 (Strings)', 
+                desc: '被引號包住的內容，代表一段純文字。', 
+                htmlCode: '<span class="text-[#b9ca4a]">"Hello Students!"</span>\n<span class="text-[#b9ca4a]">\'Python is Amazing!\'</span>', 
+                icon: 'type', color: 'bg-[#b9ca4a]/20', text: 'text-[#b9ca4a]' 
+            }
         };
 
         function showColorDetail(type) {
@@ -1009,7 +1047,7 @@
             title.innerText = data.title;
             title.className = `text-lg font-bold mb-1 ${data.text}`;
             desc.innerText = data.desc;
-            code.innerText = data.code;
+            code.innerHTML = data.htmlCode;
             iconBg.className = `p-3 rounded-lg ${data.color}`;
             icon.setAttribute('data-lucide', data.icon);
             icon.className = `w-6 h-6 ${data.text}`;
@@ -1555,6 +1593,16 @@
             document.getElementById('err-explanation').innerText = data.desc;
             document.getElementById('fix-panel').classList.add('opacity-50', 'filter', 'blur-sm', 'pointer-events-none');
             ['syntax','name','type','index','logic'].forEach(t => {
+                const btn = document.getElementById(`err-btn-${t}`);
+                if(t === type) btn.className = "p-2 rounded bg-red-900/30 border border-red-500/30 text-red-200 text-xs font-bold transition-all ring-1 ring-red-500";
+                else btn.className = "p-2 rounded bg-slate-800 border border-slate-700 text-slate-400 text-xs font-bold hover:text-white transition-all";
+            });
+        }
+        function revealFix() { document.getElementById('fix-panel').classList.remove('opacity-50', 'filter', 'blur-sm', 'pointer-events-none'); }
+
+    </script>
+</body>
+</html>','index','logic'].forEach(t => {
                 const btn = document.getElementById(`err-btn-${t}`);
                 if(t === type) btn.className = "p-2 rounded bg-red-900/30 border border-red-500/30 text-red-200 text-xs font-bold transition-all ring-1 ring-red-500";
                 else btn.className = "p-2 rounded bg-slate-800 border border-slate-700 text-slate-400 text-xs font-bold hover:text-white transition-all";

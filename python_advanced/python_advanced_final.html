@@ -38,7 +38,21 @@
 </head>
 <body class="bg-gray-900 text-gray-200 min-h-screen">
 
-    <main class="container mx-auto px-4 py-8 space-y-12 max-w-5xl">
+    <!-- ===== 固定導覽列 ===== -->
+    <nav id="topNav" class="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur border-b border-gray-700 shadow-lg">
+        <div class="container mx-auto px-4 max-w-5xl flex items-center gap-1 py-2 overflow-x-auto scrollbar-hide">
+            <span class="text-xs text-gray-500 mr-2 whitespace-nowrap flex-shrink-0">跳至：</span>
+            <button onclick="scrollToSection('sec1')" class="nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-blue-900/50 hover:bg-blue-700 border border-blue-700 text-blue-300 transition-colors whitespace-nowrap">1 輸入輸出</button>
+            <button onclick="scrollToSection('sec2')" class="nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 transition-colors whitespace-nowrap">2 運算子</button>
+            <button onclick="scrollToSection('sec3')" class="nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 transition-colors whitespace-nowrap">3 條件判斷</button>
+            <button onclick="scrollToSection('sec4')" class="nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 transition-colors whitespace-nowrap">4 for 迴圈</button>
+            <button onclick="scrollToSection('sec5')" class="nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 transition-colors whitespace-nowrap">5 while 迴圈</button>
+            <button onclick="scrollToSection('sec6')" class="nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 transition-colors whitespace-nowrap">6 串列</button>
+            <button onclick="scrollToSection('sec7')" class="nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 transition-colors whitespace-nowrap">7 字串</button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8 space-y-12 max-w-5xl" style="padding-top: 4rem;">
 
         <!-- Header Section -->
         <header class="text-center py-8">
@@ -47,16 +61,17 @@
         </header>
 
         <!-- ================= 第 1 大項：輸入與輸出 ================= -->
-        <div class="border-b-2 border-gray-700 pb-2 mb-8">
+        <div id="sec1" class="border-b-2 border-gray-700 pb-2 mb-8">
             <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">1</span>輸入與輸出 - 進階</h2>
         </div>
 
         <!-- 1. Split Input -->
         <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-blue-500">
             <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                <h3 class="text-xl font-bold text-gray-100 mb-1 flex items-center">
                     <i class="fas fa-keyboard text-blue-500 mr-2"></i>1.1 同行輸入 (split & map)
                 </h3>
+                <p class="text-xs text-blue-300/70 mb-4">🎯 學完這節，你會知道怎麼在一行輸入多個數字，並分別存到不同變數。</p>
                 <!-- 步驟分解 -->
                 <div class="bg-blue-900/30 border border-blue-700 rounded-lg p-4 mb-4">
                     <div class="text-xs font-bold text-blue-300 mb-3">📋 程式執行步驟（以輸入 "10 20 30" 為例）</div>
@@ -105,28 +120,48 @@
         <!-- 2. Advanced Print -->
         <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-green-500">
             <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                <h3 class="text-xl font-bold text-gray-100 mb-1 flex items-center">
                     <i class="fas fa-print text-green-500 mr-2"></i>1.2 同行輸出 (end & sep)
                 </h3>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font">
-                        <span class="python-comment"># 使用 for 迴圈搭配 end</span><br>
-                        <span class="python-keyword">for</span> i <span class="python-keyword">in</span> <span class="python-func">range</span>(3):<br>
-                        &nbsp;&nbsp;<span class="python-func">print</span>(i, end="-")<br>
-                        <span class="python-comment"># 輸出: 0-1-2-</span>
-                    </div>
-                    <div>
-                        <div class="flex gap-4 mb-2">
-                            <div class="flex-1">
-                                <label class="text-xs font-bold text-gray-400">sep <span class="text-gray-500 font-normal">— 每個值之間的分隔符號（預設是空格）</span></label>
-                                <input id="sepInput" value=" | " class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200" oninput="updatePrint()">
-                            </div>
-                            <div class="flex-1">
-                                <label class="text-xs font-bold text-gray-400">end <span class="text-gray-500 font-normal">— 整行印完後結尾加什麼（預設是換行）</span></label>
-                                <input id="endInput" value="..." class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200" oninput="updatePrint()">
-                            </div>
+                <p class="text-xs text-green-300/70 mb-4">🎯 學完這節，你會知道怎麼讓 print 不換行（end），或自訂多個值之間的分隔符號（sep）。</p>
+
+                <!-- end 區塊 -->
+                <div class="mb-6">
+                    <div class="text-sm font-bold text-green-300 mb-2">📌 end 參數 — 控制每次 print 結束後加什麼</div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <!-- 程式碼區（隨 end 動態更新） -->
+                        <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font">
+                            <span class="python-comment"># end 預設是換行，改成其他字符</span><br>
+                            <span class="python-keyword">for</span> i <span class="python-keyword">in</span> <span class="python-func">range</span>(3):<br>
+                            &nbsp;&nbsp;<span class="python-func">print</span>(i, end=<span id="endCodeDisplay" class="text-yellow-300">"-"</span>)<br>
+                            <span class="python-comment"># 輸出每個數字後面都加 end 的內容</span>
                         </div>
-                        <div id="printOutput" class="bg-black text-green-400 p-2 rounded code-font text-sm"></div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-400">end <span class="text-gray-500 font-normal">— 整行 print 結束後加什麼（預設是換行 \n）</span></label>
+                            <input id="endInput" value="-" class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200 mt-1" oninput="updateEndDemo()">
+                            <div class="mt-2 text-xs text-gray-500">模擬輸出：</div>
+                            <div id="endOutput" class="bg-black text-green-400 p-2 rounded code-font text-sm mt-1 min-h-[36px]"></div>
+                            <div id="endAnimation" class="mt-2 flex gap-1 items-center flex-wrap"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- sep 區塊 -->
+                <div>
+                    <div class="text-sm font-bold text-green-300 mb-2">📌 sep 參數 — 控制多個值之間用什麼分隔</div>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <!-- 程式碼區（隨 sep 動態更新） -->
+                        <div class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font">
+                            <span class="python-comment"># sep 預設是空格，可改成任何字符</span><br>
+                            <span class="python-func">print</span>(<span class="python-string">"Apple"</span>, <span class="python-string">"Banana"</span>, <span class="python-string">"Cherry"</span>, sep=<span id="sepCodeDisplay" class="text-yellow-300">" | "</span>)<br>
+                            <span class="python-comment"># 輸出三個值，中間用 sep 隔開</span>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-gray-400">sep <span class="text-gray-500 font-normal">— 每個值之間的分隔符號（預設是空格）</span></label>
+                            <input id="sepInput" value=" | " class="w-full border border-gray-600 rounded p-1 code-font text-center bg-gray-900 text-gray-200 mt-1" oninput="updateSepDemo()">
+                            <div class="mt-2 text-xs text-gray-500">模擬輸出：</div>
+                            <div id="sepOutput" class="bg-black text-green-400 p-2 rounded code-font text-sm mt-1 min-h-[36px]"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,9 +170,10 @@
         <!-- 3. Formatting -->
         <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-purple-500">
             <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center">
+                <h3 class="text-xl font-bold text-gray-100 mb-1 flex items-center">
                     <i class="fas fa-percentage text-purple-500 mr-2"></i>1.3 格式化輸出 (f-string)
                 </h3>
+                <p class="text-xs text-purple-300/70 mb-4">🎯 學完這節，你會用 f-string 控制數字小數位數、補零、對齊，輸出更專業的格式。</p>
                 <p class="text-sm text-gray-400 mb-4">
                     在字串引號前加上 <code class="code-font bg-gray-700 px-1 rounded">f</code> 或 <code class="code-font bg-gray-700 px-1 rounded">F</code>，即可在字串中使用 <code class="code-font bg-gray-700 px-1 rounded">{}</code> 嵌入變數或運算式。冒號 <code class="code-font bg-gray-700 px-1 rounded">:</code> 後面接的是<strong class="text-purple-300">格式規則</strong>，讓你控制數字或文字的顯示方式。
                 </p>
@@ -296,7 +332,7 @@
 
 
         <!-- ================= 第 2 大項：運算子 - 進階 ================= -->
-        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+        <div id="sec2" class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
             <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">2</span>運算子 - 進階</h2>
         </div>
 
@@ -399,7 +435,8 @@
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-red-500 p-6 lg:col-span-2">
                 <h3 class="font-bold text-lg text-gray-100 mb-2">2.4 短路求值 (Short-circuit Evaluation)</h3>
                 <p class="text-sm text-gray-400 mb-4">
-                    Python 在計算 <code class="code-font bg-gray-700 px-1 rounded">and</code> / <code class="code-font bg-gray-700 px-1 rounded">or</code> 時，只要已經能確定結果，就<span class="text-white font-bold">不會繼續往後算</span>。這就像電路短路一樣，電流不再繼續流下去。
+                    Python 在計算 <code class="code-font bg-gray-700 px-1 rounded">and</code> / <code class="code-font bg-gray-700 px-1 rounded">or</code> 時，只要已經能確定結果，就<span class="text-white font-bold">不會繼續往後算</span>。這就像電路短路一樣，電流不再繼續流下去。<br>
+                    <span class="text-gray-500 text-xs">💬 白話說：Python 會偷懶，確定答案後就不繼續算了——and 遇到 False 直接停、or 遇到 True 直接停。</span>
                 </p>
 
                 <div class="grid md:grid-cols-2 gap-8">
@@ -434,7 +471,7 @@
         </div>
 
         <!-- ================= 第 3 大項：條件判斷 - 進階 ================= -->
-        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+        <div id="sec3" class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
             <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">3</span>條件判斷 - 進階</h2>
         </div>
 
@@ -496,7 +533,8 @@
                         <button onclick="toggleNested()" class="text-xs bg-cyan-600 text-white px-2 py-1 rounded hover:bg-cyan-700">切換寫法</button>
                     </div>
                     <p class="text-xs text-gray-400 mb-3">
-                        <span class="text-cyan-300 font-bold">Guard Clause（守衛條件）</span>：先把不符合的情況擋掉，讓主要邏輯不用縮那麼深，程式更好讀。
+                        <span class="text-cyan-300 font-bold">Guard Clause（守衛條件）</span>：先把不符合的情況擋掉，讓主要邏輯不用縮那麼深，程式更好讀。<br>
+                        <span class="text-gray-500">💬 白話說：就像進教室前先查「有沒有帶卡」，沒帶直接回去，不用進去再說。</span>
                     </p>
                     <div id="nestedCodeBlock" class="bg-gray-700 p-4 rounded border border-gray-600 text-sm code-font relative min-h-[140px]">
                         <!-- Dynamic Content -->
@@ -531,7 +569,7 @@
         </div>
 
         <!-- ================= 第 4 大項：for 迴圈 - 進階 ================= -->
-        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+        <div id="sec4" class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
             <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">4</span>for 迴圈 - 進階</h2>
         </div>
 
@@ -539,9 +577,11 @@
 
             <!-- 4.1 enumerate & zip -->
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-emerald-500 p-6">
-                <h3 class="font-bold text-lg text-gray-100 mb-4">4.1 Enumerate & Zip</h3>
+                <h3 class="font-bold text-lg text-gray-100 mb-1">4.1 Enumerate & Zip</h3>
+                <p class="text-xs text-emerald-300/70 mb-2">🎯 學完這節，你會同時取得索引與值（enumerate），或同時跑兩個串列（zip）。</p>
                 <p class="text-sm text-gray-400 mb-3">
-                    <code class="code-font text-emerald-400">enumerate</code> 同時取得索引與值，<code class="code-font text-emerald-400">zip</code> 同時遍歷多個串列。
+                    <code class="code-font text-emerald-400">enumerate</code> 同時取得索引與值，<code class="code-font text-emerald-400">zip</code> 同時遍歷多個串列。<br>
+                    <span class="text-gray-500 text-xs">💬 白話說：enumerate 就像點名時同時說「第幾個」和「誰」；zip 像把兩份名單一一配對。</span>
                 </p>
                 
                 <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
@@ -576,9 +616,11 @@
 
             <!-- 4.2 List Comprehension & Reversed -->
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-l-4 border-violet-500 p-6">
-                <h3 class="font-bold text-lg text-gray-100 mb-4">4.2 串列生成式 & Reversed</h3>
+                <h3 class="font-bold text-lg text-gray-100 mb-1">4.2 串列生成式 & Reversed</h3>
+                <p class="text-xs text-violet-300/70 mb-1">🎯 學完這節，你會用一行程式碼快速建立串列。</p>
                 <p class="text-sm text-gray-400 mb-3">
-                    用一行程式碼建立串列，並可搭配 <code class="code-font text-violet-400">reversed()</code> 反向遍歷。
+                    用一行程式碼建立串列，並可搭配 <code class="code-font text-violet-400">reversed()</code> 反向遍歷。<br>
+                    <span class="text-gray-500 text-xs">💬 白話說：串列生成式就像在說「把 0 到 4 每個數字都平方，全部放進一個串列」，一行搞定！</span>
                 </p>
                 
                 <div id="compCode" class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
@@ -642,7 +684,7 @@
         </div>
 
         <!-- ================= 第 5 大項：while 迴圈 - 進階 ================= -->
-        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+        <div id="sec5" class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
             <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">5</span>while 迴圈 - 進階</h2>
         </div>
 
@@ -650,18 +692,19 @@
             
             <!-- 5.1 Flag & While -->
             <section class="bg-gray-800 rounded-xl shadow-md overflow-hidden card border-t-4 border-amber-500 p-6">
-                <h3 class="font-bold text-lg text-gray-100 mb-2">5.1 旗標 (Flag) 與 while True</h3>
+                <h3 class="font-bold text-lg text-gray-100 mb-1">5.1 旗標 (Flag) 與 while True</h3>
+                <p class="text-xs text-amber-300/70 mb-2">🎯 學完這節，你會知道用旗標控制迴圈何時停止，以及 while True + break 的寫法。</p>
                 <p class="text-sm text-gray-400 mb-4">使用變數控制迴圈狀態，或使用無窮迴圈配合 break。</p>
 
-                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4">
-                    <span class="python-comment"># while True 寫法</span><br>
-                    hp = 100<br>
-                    <span class="python-keyword">while</span> <span class="python-keyword">True</span>:<br>
-                    &nbsp;&nbsp;<span class="python-comment"># 假設每次攻擊都扣 20 HP</span><br>
-                    &nbsp;&nbsp;hp -= 20<br>
-                    &nbsp;&nbsp;<span class="python-keyword">if</span> hp <= 0:<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"魔物已被擊敗!"</span>)<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-keyword">break</span>
+                <!-- 程式碼區塊（有行號 id，供高亮用）-->
+                <div class="bg-gray-700 p-3 rounded border border-gray-600 text-sm code-font mb-4 space-y-0.5">
+                    <div id="wl0" class="px-1 rounded transition-colors duration-300"><span class="python-comment"># while True 寫法</span></div>
+                    <div id="wl1" class="px-1 rounded transition-colors duration-300">hp = 100</div>
+                    <div id="wl2" class="px-1 rounded transition-colors duration-300"><span class="python-keyword">while</span> <span class="python-keyword">True</span>:</div>
+                    <div id="wl3" class="px-1 rounded transition-colors duration-300">&nbsp;&nbsp;hp -= 20</div>
+                    <div id="wl4" class="px-1 rounded transition-colors duration-300">&nbsp;&nbsp;<span class="python-keyword">if</span> hp &lt;= 0:</div>
+                    <div id="wl5" class="px-1 rounded transition-colors duration-300">&nbsp;&nbsp;&nbsp;&nbsp;<span class="python-func">print</span>(<span class="python-string">"魔物已被擊敗!"</span>)</div>
+                    <div id="wl6" class="px-1 rounded transition-colors duration-300">&nbsp;&nbsp;&nbsp;&nbsp;<span class="python-keyword">break</span></div>
                 </div>
                 
                 <div class="bg-gray-900/50 p-4 rounded border border-amber-900/50 flex items-center justify-between mb-4">
@@ -676,9 +719,9 @@
                 </div>
                 
                 <button onclick="hitMonster()" id="hitBtn" class="w-full bg-gray-700 hover:bg-gray-600 border border-gray-500 text-gray-200 py-2 rounded font-bold transition-colors">
-                    Hit Monster (Damage 20)
+                    ⚔ 攻擊魔物（每次扣 20 HP）
                 </button>
-                <button onclick="resetMonster()" class="w-full mt-2 text-xs text-gray-500 hover:text-gray-300">Reset</button>
+                <button onclick="resetMonster()" class="w-full mt-2 text-xs text-gray-500 hover:text-gray-300">重置</button>
             </section>
 
             <!-- 5.2 Do-While Simulation -->
@@ -743,7 +786,7 @@
 
 
         <!-- ================= 第 6 大項：串列 - 進階 ================= -->
-        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+        <div id="sec6" class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
             <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">6</span>串列 - 進階</h2>
         </div>
 
@@ -859,7 +902,7 @@
         </div>
 
         <!-- ================= 第 7 大項：字串 - 進階 ================= -->
-        <div class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
+        <div id="sec7" class="border-b-2 border-gray-700 pb-2 mt-12 mb-8">
             <h2 class="text-2xl font-bold text-gray-300"><span class="bg-blue-600 text-white px-3 py-1 rounded mr-2">7</span>字串 - 進階</h2>
         </div>
 
@@ -979,8 +1022,8 @@
                     const b = parseInt(parts[1]);
                     const c = parseInt(parts[2]);
                     if (isNaN(a) || isNaN(b) || isNaN(c)) {
-                         outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
-                         outputHTML += `<div><span class=\"text-red-400\">Error: 賦值需要 3 個數字，且輸入必須為數字</span></div>`;
+                         outputHTML += `<div class="mb-2 text-gray-400">a, b, c = map(int, input().split()):</div>`;
+                         outputHTML += `<div><span class="text-red-400">⚠ 錯誤：輸入的值必須都是數字，不能有文字或符號</span></div>`;
                     } else {
                         outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
                         outputHTML += `<div>a = ${a}</div>`;
@@ -988,12 +1031,12 @@
                         outputHTML += `<div>c = ${c}</div>`;
                     }
                 } catch (e) {
-                    outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
-                    outputHTML += `<div><span class=\"text-red-400\">Error: 賦值需要 3 個數字，且輸入必須為數字</span></div>`;
+                    outputHTML += `<div class="mb-2 text-gray-400">a, b, c = map(int, input().split()):</div>`;
+                    outputHTML += `<div><span class="text-red-400">⚠ 錯誤：需要恰好 3 個數字，且必須都是整數</span></div>`;
                 }
             } else {
-                outputHTML += `<div class=\"mb-2\">a, b, c = map(int, input().split()):</div>`;
-                outputHTML += `<div><span class=\"text-red-400\">Error: 需要恰好 3 個數字進行賦值</span></div>`;
+                outputHTML += `<div class="mb-2 text-gray-400">a, b, c = map(int, input().split()):</div>`;
+                outputHTML += `<div><span class="text-red-400">⚠ 錯誤：需要恰好 3 個數字，你輸入了 ${parts.length} 個</span></div>`;
             }
 
             outputHTML += `<hr class=\"border-gray-700 my-2\">`; // Separator
@@ -1013,25 +1056,56 @@
             }
 
             if (listCompError) {
-                outputHTML += `<div class=\"mb-2\">x = [int(i) for i in input().split()]:</div>`;
-                outputHTML += `<div><span class=\"text-red-400\">Error: 串列生成式中的輸入必須為數字</span></div>`;
+                outputHTML += `<div class="mb-2 text-gray-400">x = [int(i) for i in input().split()]:</div>`;
+                outputHTML += `<div><span class="text-red-400">⚠ 錯誤：串列中每個值都必須是數字，不能有文字</span></div>`;
             } else {
-                outputHTML += `<div class=\"mb-2\">x = [int(i) for i in input().split()]:</div>`;
+                outputHTML += `<div class="mb-2 text-gray-400">x = [int(i) for i in input().split()]:</div>`;
                 outputHTML += `<div>x = [${listCompValues.join(', ')}]</div>`;
             }
             
             document.getElementById('splitResult').innerHTML = outputHTML;
         }
 
-        // --- 1. Print Logic ---
+        // --- 1.2 end 參數示範（正確邏輯：end 是每次 print 結束後加的字符）---
+        let endAnimTimer = null;
+        function updateEndDemo() {
+            const endVal = document.getElementById('endInput').value;
+            // 更新程式碼區顯示
+            document.getElementById('endCodeDisplay').innerText = `"${endVal}"`;
+            // 模擬輸出：0[end]1[end]2[end]
+            const output = `0${endVal}1${endVal}2${endVal}`;
+            document.getElementById('endOutput').innerText = output;
+            // 動畫：逐步顯示每次 print 輸出
+            const animEl = document.getElementById('endAnimation');
+            animEl.innerHTML = '';
+            const steps = [
+                { code: `print(0, end="${endVal}")`, out: `0${endVal}` },
+                { code: `print(1, end="${endVal}")`, out: `1${endVal}` },
+                { code: `print(2, end="${endVal}")`, out: `2${endVal}` },
+            ];
+            steps.forEach((step, i) => {
+                const chip = document.createElement('div');
+                chip.className = 'text-xs bg-gray-900 border border-gray-700 rounded px-2 py-1 opacity-0 transition-opacity duration-300';
+                chip.innerHTML = `<span class="text-gray-500">${step.code}</span> <span class="text-green-400 font-bold">→ ${step.out}</span>`;
+                animEl.appendChild(chip);
+                setTimeout(() => chip.classList.remove('opacity-0'), i * 300);
+            });
+        }
+
+        // --- 1.2 sep 參數示範（正確邏輯：sep 是多個值之間的分隔符號）---
+        function updateSepDemo() {
+            const sepVal = document.getElementById('sepInput').value;
+            // 更新程式碼區顯示
+            document.getElementById('sepCodeDisplay').innerText = `"${sepVal}"`;
+            // 模擬 print("Apple", "Banana", "Cherry", sep=sepVal)
+            const output = `Apple${sepVal}Banana${sepVal}Cherry`;
+            document.getElementById('sepOutput').innerText = output;
+        }
+
+        // 舊版 updatePrint 保留為空（防止其他地方呼叫出錯）
         function updatePrint() {
-            const sep = document.getElementById('sepInput').value;
-            const end = document.getElementById('endInput').value;
-            let res = "";
-            for(let i=0; i<3; i++) res += i + end;
-            let sepRes = ["Apple", "Banana", "Cherry"].join(sep);
-            document.getElementById('printOutput').innerHTML = 
-                `<div>Loop output: ${res}</div><div class="mt-1 text-gray-400">Sep output:  ${sepRes}</div>`;
+            updateEndDemo();
+            updateSepDemo();
         }
 
         // --- 1.3 Formatting Logic ---
@@ -1321,14 +1395,31 @@
             const statusEl = document.getElementById('loopStatus');
             
             hpEl.innerText = hp;
+
+            // 清除所有程式碼行高亮
+            for (let i = 0; i <= 6; i++) {
+                const el = document.getElementById(`wl${i}`);
+                if (el) el.className = 'px-1 rounded transition-colors duration-300';
+            }
+
             if (hp > 0) {
-                statusEl.innerText = "While Loop Running...";
+                statusEl.innerText = "迴圈執行中...";
                 statusEl.className = "text-sm font-bold text-green-400";
                 hpEl.className = "text-2xl font-bold text-amber-400 code-font";
+                // 高亮 while True 與 hp -= 20 行
+                const hl = (id) => { const e = document.getElementById(id); if(e) e.className = 'px-1 rounded transition-colors duration-300 bg-yellow-500/20 border-l-2 border-yellow-400'; };
+                hl('wl2'); // while True:
+                setTimeout(() => hl('wl3'), 200); // hp -= 20
+                setTimeout(() => hl('wl4'), 400); // if hp <= 0
             } else {
-                statusEl.innerText = "Loop Terminated (Flag=False)";
+                statusEl.innerText = "迴圈結束（break 執行）";
                 statusEl.className = "text-sm font-bold text-red-400";
                 hpEl.className = "text-2xl font-bold text-gray-600 code-font";
+                // 高亮 break 行
+                const hl = (id) => { const e = document.getElementById(id); if(e) e.className = 'px-1 rounded transition-colors duration-300 bg-red-500/20 border-l-2 border-red-400'; };
+                hl('wl4'); // if hp <= 0
+                setTimeout(() => hl('wl5'), 200);
+                setTimeout(() => hl('wl6'), 400); // break
             }
         }
 
@@ -1341,10 +1432,10 @@
             msg.innerText = "Checking...";
             setTimeout(() => {
                 if (input.value === '1234') {
-                    msg.innerText = "Correct! Break executed.";
+                    msg.innerText = "✅ 密碼正確！執行 break，跳出迴圈。";
                     msg.className = "mt-2 text-sm text-green-400 font-bold";
                 } else {
-                    msg.innerText = "Wrong! Loop continues...";
+                    msg.innerText = "❌ 密碼錯誤！迴圈繼續，請再試一次…";
                     msg.className = "mt-2 text-sm text-red-400 font-bold";
                     input.value = "";
                     input.focus();
@@ -1592,9 +1683,39 @@
                 `<div>靠右 &gt;${width}: |${right}|</div>`;
         }
 
+        // --- 導覽列：平滑捲動到指定區塊 ---
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const offset = 56; // 導覽列高度
+                const top = el.getBoundingClientRect().top + window.scrollY - offset;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+        }
+
+        // --- 導覽列：捲動時高亮目前區塊 ---
+        function updateNavHighlight() {
+            const sections = ['sec1','sec2','sec3','sec4','sec5','sec6','sec7'];
+            const btns = document.querySelectorAll('.nav-btn');
+            let activeIdx = 0;
+            sections.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if (el && el.getBoundingClientRect().top <= 80) activeIdx = i;
+            });
+            btns.forEach((btn, i) => {
+                if (i === activeIdx) {
+                    btn.className = 'nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-blue-700 border border-blue-500 text-white transition-colors whitespace-nowrap font-bold';
+                } else {
+                    btn.className = 'nav-btn flex-shrink-0 text-xs px-3 py-1.5 rounded-full bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 transition-colors whitespace-nowrap';
+                }
+            });
+        }
+        window.addEventListener('scroll', updateNavHighlight);
+
         // Init
         document.addEventListener('DOMContentLoaded', () => {
-            updatePrint();
+            updateEndDemo();
+            updateSepDemo();
             updateBitwise();
             checkTernary();
             checkRole();
@@ -1620,6 +1741,8 @@
             document.getElementById('inv1').innerText = invData[1];
             document.getElementById('inv2').innerText = invData[2];
             document.getElementById('inv3').innerText = invData[3];
+
+            updateNavHighlight();
         });
     </script>
 </body>

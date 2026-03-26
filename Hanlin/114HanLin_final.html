@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 概念互動練習網頁</title>
+    <!-- 使用 Tailwind CSS 進行快速排版 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 簡單的自定義樣式 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            
+            /* 禁止選取文字 (防止複製) */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+        }
+        
+        /* 允許輸入框與程式碼區塊內的文字被選取，方便操作與學習 */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .tab-btn.active {
+            background-color: #3b82f6; /* 藍色 */
+            color: white;
+            border-bottom: 2px solid #2563eb;
+        }
+        .tab-btn:not(.active) {
+            color: #94a3b8;
+        }
+        .code-block {
+            background-color: #000000;
+            color: #d4d4d4;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            border: 1px solid #334155;
+            line-height: 1.6;
+        }
+        .code-line {
+            display: block;
+            padding: 0 4px;
+            border-radius: 2px;
+            transition: background-color 0.2s;
+            min-height: 1.6em;
+        }
+        .code-line.highlight {
+            background-color: rgba(59, 130, 246, 0.4);
+            color: #fff;
+            box-shadow: inset 2px 0 0 #3b82f6;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #cbd5e1;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #334155;
+            border-radius: 0.25rem;
+            background-color: #1e293b;
+            color: white;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        hr.divider {
+            border: 0;
+            height: 1px;
+            background: #334155;
+            margin: 2rem 0;
+        }
+        /* 數值變動動畫 */
+        @keyframes bump {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); color: #facc15; }
+            100% { transform: scale(1); }
+        }
+        .value-bump {
+            animation: bump 0.3s ease-out;
+        }
+        .var-card {
+            background-color: #1e293b;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            text-align: center;
+        }
+        .var-label {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .var-value {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #facc15;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8" oncontextmenu="return false;"> 
+
+    <!-- 主容器 -->
+    <div class="max-w-7xl mx-auto bg-slate-800 shadow-2xl rounded-lg overflow-hidden border border-slate-700">
+        <div class="bg-slate-900 p-6 text-white border-b border-slate-700">
+            <h1 class="text-2xl font-bold">Python 程式設計概念互動網頁 (翰林版)</h1>
+            <p class="text-slate-400 mt-2">對應章節：2-2 變數、運算、判斷與迴圈</p>
+        </div>
+
+        <!-- 導航分頁 -->
+        <div class="flex border-b border-slate-700 bg-slate-800">
+            <button onclick="switchTab('greeting')" id="tab-greeting" class="tab-btn active flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+                1. 變數與輸入輸出
+            </button>
+            <button onclick="switchTab('average')" id="tab-average" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+                2. 變數與運算
+            </button>
+            <button onclick="switchTab('grade')" id="tab-grade" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+                3. 條件判斷
+            </button>
+            <button onclick="switchTab('loop')" id="tab-loop" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+                4. 計次式迴圈
+            </button>
+            <button onclick="switchTab('password')" id="tab-password" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+                5. 條件式迴圈
+            </button>
+        </div>
+
+        <!-- 內容區域 -->
+        <div class="p-6">
+
+            <!-- 1. 打招呼區塊 -->
+            <div id="content-greeting" class="tab-content block">
+                <h2 class="text-xl font-bold mb-4 text-blue-400">哈囉(input/print)</h2>
+                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入名字後，電腦會將名字呈現在畫面上與使用者打招呼。</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="input-group mb-4">
+                            <label>請問您的名字是？ (name)</label>
+                            <input type="text" id="inputName" placeholder="例如：阿顯" oninput="resetAnim('greeting')">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="nextStep('greeting')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
+                            <button onclick="startAnim('greeting')" id="btnGreetingAuto" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold shadow-lg">自動播放 (Play)</button>
+                        </div>
+                        
+                        <div class="var-card max-w-xs mx-auto mb-4">
+                            <div class="var-label">目前變數 name</div>
+                            <div id="visName" class="var-value">?</div>
+                        </div>
+
+                        <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultGreeting" class="text-xl mt-2 text-green-300 font-mono" style="white-space: pre-wrap;">等待輸入...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-300 mb-2">對應程式碼邏輯：</h3>
+                        <div id="codeGreetingContainer" class="code-block"></div>
+                        <div class="mt-4 p-3 bg-slate-900/50 rounded text-sm text-slate-400 border-l-4 border-blue-600 space-y-2">
+                            <p class="font-bold text-slate-200">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>變數型態</strong>：<code>name</code> 是 <strong>字串 (str)</strong>。</li>
+                                <li><strong>input()</strong>：讀取的使用者輸入永遠是 <strong>字串</strong>。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 求平均數區塊 -->
+            <div id="content-average" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4 text-blue-400">求平均數 (變數與運算)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="input-group"><label>輸入數字 x</label><input type="number" id="numX" value="17" oninput="resetAnim('average')"></div>
+                            <div class="input-group"><label>輸入數字 y</label><input type="number" id="numY" value="5" oninput="resetAnim('average')"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="nextStep('average')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
+                            <button onclick="startAnim('average')" id="btnAverageAuto" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold shadow-lg">自動播放 (Play)</button>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="var-card"><div class="var-label">x</div><div id="visAveX" class="var-value text-lg">?</div></div>
+                            <div class="var-card"><div class="var-label">y</div><div id="visAveY" class="var-value text-lg">?</div></div>
+                            <div class="var-card border-blue-500"><div class="var-label">結果 z</div><div id="visAveZ" class="var-value text-lg">?</div></div>
+                        </div>
+
+                        <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
+                            <h3 class="font-bold text-green-400">執行結果:</h3>
+                            <p id="resultAverage" class="text-xl mt-2 text-green-300 font-mono" style="white-space: pre-wrap;">等待計算...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-300 mb-2">對應程式碼邏輯：</h3>
+                        <div id="codeAverageContainer" class="code-block"></div>
+                        <div class="mt-4 p-3 bg-slate-900/50 rounded text-sm text-slate-400 border-l-4 border-blue-600 space-y-2">
+                            <p class="font-bold text-slate-200">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>拆解 int(input())</strong>：這一行包含了兩個動作：先 <code>input</code> 讀取文字，再由 <code>int()</code> 轉成整數。</li>
+                                <li><strong>括號優先權</strong>：<code>(x + y) / 2</code> 的括號不能省！先加再除是基本數學規則。</li>
+                                <li><strong>浮點數結果</strong>：Python 3 的 <code>/</code> 運算結果永遠帶有小數點。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 學期成績區塊 -->
+            <div id="content-grade" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4 text-blue-400">計算學期成績 (if/else)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="input-group"><label class="text-xs">作業</label><input type="number" id="scoreWork" value="80" oninput="resetAnim('grade')"></div>
+                            <div class="input-group"><label class="text-xs">測驗</label><input type="number" id="scoreExam" value="70" oninput="resetAnim('grade')"></div>
+                            <div class="input-group"><label class="text-xs">平時</label><input type="number" id="scoreRoutine" value="90" oninput="resetAnim('grade')"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="nextStep('grade')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
+                            <button onclick="startAnim('grade')" id="btnGradeAuto" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold shadow-lg">自動播放 (Play)</button>
+                        </div>
+                        <div class="grid grid-cols-4 gap-2 mb-4">
+                            <div class="var-card"><div class="var-label">x</div><div id="visGrdX" class="var-value text-base">?</div></div>
+                            <div class="var-card"><div class="var-label">y</div><div id="visGrdY" class="var-value text-base">?</div></div>
+                            <div class="var-card"><div class="var-label">z</div><div id="visGrdZ" class="var-value text-base">?</div></div>
+                            <div class="var-card border-emerald-500"><div class="var-label">grade</div><div id="visGrdTotal" class="var-value text-base">?</div></div>
+                        </div>
+                        <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
+                            <p id="resultGrade" class="text-lg text-green-300 font-mono" style="white-space: pre-wrap;">等待執行...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-300 mb-2">對應程式碼邏輯：</h3>
+                        <div id="codeGradeContainer" class="code-block"></div>
+                        <div class="mt-4 p-3 bg-slate-900/50 rounded text-sm text-slate-400 border-l-4 border-blue-600">
+                            <p class="font-bold mb-1 text-slate-200">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>if 與 else</strong>：結尾都要有冒號 <code>:</code></li>
+                                <li><strong>縮排 (Indentation)</strong>：Python 使用縮排來區分程式區塊。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <h2 class="text-xl font-bold mb-4 text-purple-400">個人平均成績比較(if/elif/else)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="input-group"><label class="text-xs">國文</label><input type="number" id="a051_chinese" value="85" oninput="resetAnim('a051')"></div>
+                            <div class="input-group"><label class="text-xs">英文</label><input type="number" id="a051_english" value="75" oninput="resetAnim('a051')"></div>
+                            <div class="input-group"><label class="text-xs">數學</label><input type="number" id="a051_math" value="60" oninput="resetAnim('a051')"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="nextStep('a051')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
+                            <button onclick="startAnim('a051')" id="btnA051Auto" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold shadow-lg">自動播放 (Play)</button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="var-card"><div class="var-label">a (平均)</div><div id="visA051A" class="var-value text-base">?</div></div>
+                            <div class="var-card"><div class="var-label">b (班平)</div><div class="var-value text-base text-slate-400">70</div></div>
+                            <div class="var-card border-purple-500"><div class="var-label">比較結果</div><div id="visA051Res" class="var-value text-sm">?</div></div>
+                        </div>
+                        <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
+                            <p id="resultA051" class="text-lg text-green-300 font-mono">等待執行...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-300 mb-2">對應程式碼邏輯：</h3>
+                        <div id="codeA051Container" class="code-block"></div>
+                        <div class="mt-4 p-3 bg-slate-900/50 rounded text-sm text-slate-400 border-l-4 border-purple-600 space-y-2">
+                            <p class="font-bold text-slate-200">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>elif (多重分支)</strong>：當你有三個或更多可能的情況時使用。</li>
+                                <li><strong>優先錄取特性</strong>：只要遇到第一個成立的條件，執行完後就會直接跳出。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 累加計算區塊 -->
+            <div id="content-loop" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4 text-blue-400">累加計算 (for迴圈)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="input-group mb-4"><label>輸入數字 n</label><input type="number" id="numN" value="10" oninput="resetAnim('loop')"></div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="nextStep('loop')" class="bg-indigo-600 text-white px-4 py-2 rounded font-bold shadow-lg">單步執行 (Step)</button>
+                            <button onclick="startAnim('loop')" id="btnLoopAuto" class="bg-blue-600 text-white px-4 py-2 rounded font-bold shadow-lg">自動播放 (Play)</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="var-card"><div class="var-label">i</div><div id="visLoopI" class="var-value text-yellow-400">0</div></div>
+                            <div class="var-card"><div class="var-label">total</div><div id="visLoopTotal" class="var-value text-emerald-400">0</div></div>
+                        </div>
+                        <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
+                            <p id="resultLoop" class="text-xl text-green-300 font-mono">等待執行...</p>
+                            <div id="loopSteps" class="text-sm text-slate-500 mt-2 max-h-48 overflow-y-auto border-t border-slate-700 pt-2"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-300 mb-2">對應程式碼邏輯：</h3>
+                        <div id="codeLoopContainer" class="code-block"></div>
+                        <div class="mt-4 p-3 bg-slate-900/50 rounded text-sm text-slate-400 border-l-4 border-blue-600">
+                            <p class="font-bold mb-1 text-slate-200">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>range(1, n+1)</strong>：這代表從 1 開始，到 n 結束。</li>
+                                <li><strong>累加過程</strong>：觀察左側數值，<code>total</code> 把 <code>i</code> 給「吸進去」。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 密碼檢查區塊 -->
+            <div id="content-password" class="tab-content hidden">
+                <h2 class="text-xl font-bold mb-4 text-indigo-400">密碼檢查程式 (while 迴圈)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="space-y-2 mb-4">
+                            <div class="input-group"><label class="text-xs">第 1 次輸入</label><input type="text" id="pwd_1" value="123" oninput="resetAnim('password')"></div>
+                            <div class="input-group"><label class="text-xs">第 2 次輸入</label><input type="text" id="pwd_2" value="456" oninput="resetAnim('password')"></div>
+                            <div class="input-group"><label class="text-xs">第 3 次輸入</label><input type="text" id="pwd_3" value="137" oninput="resetAnim('password')"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="nextStep('password')" class="bg-indigo-600 text-white px-4 py-2 rounded font-bold shadow-lg">單步執行 (Step)</button>
+                            <button onclick="startAnim('password')" id="btnPasswordAuto" class="bg-blue-600 text-white px-4 py-2 rounded font-bold shadow-lg">自動播放 (Play)</button>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="var-card"><div class="var-label">times (次數)</div><div id="visPwdTimes" class="var-value">0</div></div>
+                            <div class="var-card"><div class="var-label">password2</div><div id="visPwdCurr" class="var-value text-base">?</div></div>
+                        </div>
+
+                        <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
+                            <p id="resultPassword" class="text-lg text-green-300 font-mono" style="white-space: pre-wrap;">等待執行...</p>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-300 mb-2">對應程式碼邏輯：</h3>
+                        <div id="codePasswordContainer" class="code-block"></div>
+                        <div class="mt-4 p-3 bg-slate-900/50 rounded text-sm text-slate-400 border-l-4 border-indigo-600 space-y-2">
+                            <p class="font-bold text-slate-200">💡 觀念提示：</p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>while 迴圈</strong>：只要「密碼錯」且「次數還沒到」，就會重複執行。</li>
+                                <li><strong>複合條件 (and)</strong>：兩個小條件都成立時，整句話才算成立。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let animStates = {
+            greeting: { step: 0, timer: null, isAuto: false },
+            average: { step: 0, timer: null, isAuto: false, z: 0 },
+            grade: { step: 0, timer: null, isAuto: false, g: 0 },
+            a051: { step: 0, timer: null, isAuto: false, a: 0 },
+            loop: { step: 0, timer: null, isAuto: false, i: 0, total: 0 },
+            password: { step: 0, timer: null, isAuto: false, times: 0, curr: "" }
+        };
+
+        function updateGreetingCode() {
+            document.getElementById('codeGreetingContainer').innerHTML = `
+                <span id="line-greeting-1" class="code-line text-slate-500"># input() 讀取輸入，回傳的是「字串 (str)」型態</span>
+                <span id="line-greeting-2" class="code-line text-slate-500"># 變數 name 儲存了輸入值，所以 name 的型態也是字串</span>
+                <span id="line-greeting-3" class="code-line">name = input('What is your name?\\n')</span>
+                <span id="line-greeting-4" class="code-line"></span>
+                <span id="line-greeting-5" class="code-line text-slate-500"># print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格</span>
+                <span id="line-greeting-6" class="code-line">print('Hello', name, '!')</span>
+            `;
+            resetAnim('greeting');
+        }
+
+        function updateAverageCode() {
+            document.getElementById('codeAverageContainer').innerHTML = `
+                <span id="line-average-1" class="code-line text-slate-500"># input() 讀取的是字串，無法直接做數學運算</span>
+                <span id="line-average-2" class="code-line text-slate-500"># 必須使用 int() 函式，將字串轉換成「整數 (int)」</span>
+                <span id="line-average-3" class="code-line">x = int(input('Please enter number x:\\n'))</span>
+                <span id="line-average-4" class="code-line">y = int(input('Please enter number y:\\n'))</span>
+                <span id="line-average-5" class="code-line"></span>
+                <span id="line-average-6" class="code-line text-slate-500"># 計算平均，結果會是小數 (float)</span>
+                <span id="line-average-7" class="code-line">z = (x + y) / 2</span>
+                <span id="line-average-8" class="code-line"></span>
+                <span id="line-average-9" class="code-line text-slate-500"># print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格</span>
+                <span id="line-average-10" class="code-line">print('Average is',z)</span>
+                <span id="line-average-11" class="code-line text-slate-500"># print 輸出時，若用 + 號連接，兩邊必須都是字串</span>
+                <span id="line-average-12" class="code-line text-slate-500"># 使用 str() 函式將數字 z 轉換成字串，才能與 'Average is ' 組合</span>
+                <span id="line-average-13" class="code-line text-slate-500">#print('Average is ' + str(z))</span>
+            `;
+            resetAnim('average');
+        }
+
+        function updateGradeCode() {
+            document.getElementById('codeGradeContainer').innerHTML = `
+                <span id="line-grade-1" class="code-line text-slate-500"># 使用 int() 將輸入的字串轉換成整數</span>
+                <span id="line-grade-2" class="code-line">x = int(input('Please enter homework grades:\\n'))</span>
+                <span id="line-grade-3" class="code-line">y = int(input('Please enter quiz score:\\n'))</span>
+                <span id="line-grade-4" class="code-line">z = int(input('Please enter your usual grades:\\n'))</span>
+                <span id="line-grade-5" class="code-line"></span>
+                <span id="line-grade-6" class="code-line text-slate-500"># 計算加權分數，結果為浮點數 (float)</span>
+                <span id="line-grade-7" class="code-line">grade = x * 0.4 + y * 0.4 + z * 0.2</span>
+                <span id="line-grade-8" class="code-line"></span>
+                <span id="line-grade-9" class="code-line text-slate-500"># print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格</span>
+                <span id="line-grade-10" class="code-line text-slate-500"># 所以這裡不需要用 str() 轉換 grade</span>
+                <span id="line-grade-11" class="code-line">print('Semester grades are', grade ,'points.')</span>
+                <span id="line-grade-12" class="code-line"></span>
+                <span id="line-grade-13" class="code-line text-slate-500"># 判斷及格與否 (注意縮排及冒號)</span>
+                <span id="line-grade-14" class="code-line">if grade < 60:</span>
+                <span id="line-grade-15" class="code-line ml-4 text-slate-500"># 條件成立時執行 (縮排)</span>
+                <span id="line-grade-16" class="code-line ml-4">print('Failed!')</span>
+                <span id="line-grade-17" class="code-line">else:</span>
+                <span id="line-grade-18" class="code-line ml-4 text-slate-500"># 條件不成立時執行 (縮排)</span>
+                <span id="line-grade-19" class="code-line ml-4">print('Pass!')</span>
+            `;
+            document.getElementById('codeA051Container').innerHTML = `
+                <span id="line-a051-1" class="code-line text-slate-500"># 讀取國、英、數成績，記得用 int() 轉成整數</span>
+                <span id="line-a051-2" class="code-line">x = int(input())</span>
+                <span id="line-a051-3" class="code-line">y = int(input())</span>
+                <span id="line-a051-4" class="code-line">z = int(input())</span>
+                <span id="line-a051-5" class="code-line"></span>
+                <span id="line-a051-6" class="code-line text-slate-500"># 計算個人平均 (a)</span>
+                <span id="line-a051-7" class="code-line">a = (x + y + z) / 3</span>
+                <span id="line-a051-8" class="code-line">b = 70</span>
+                <span id="line-a051-9" class="code-line"></span>
+                <span id="line-a051-10" class="code-line text-slate-500"># 進行比較 (if-elif-else)</span>
+                <span id="line-a051-11" class="code-line">if a > b:</span>
+                <span id="line-a051-12" class="code-line ml-4">print('You are great')</span>
+                <span id="line-a051-13" class="code-line">elif a < b:</span>
+                <span id="line-a051-14" class="code-line ml-4">print('Keep on')</span>
+                <span id="line-a051-15" class="code-line">else:</span>
+                <span id="line-a051-16" class="code-line ml-4 text-slate-500"># 兩者相等</span>
+                <span id="line-a051-17" class="code-line ml-4">print('Come on')</span>
+            `;
+            resetAnim('grade');
+            resetAnim('a051');
+        }
+
+        function updateLoopCode() {
+            document.getElementById('codeLoopContainer').innerHTML = `
+                <span id="line-loop-1" class="code-line text-slate-500"># 輸入必須用 int() 轉換成整數</span>
+                <span id="line-loop-2" class="code-line">n = int(input('Please enter the number n:'))</span>
+                <span id="line-loop-3" class="code-line text-slate-500"># 計算總和，要先歸零</span>
+                <span id="line-loop-4" class="code-line">total = 0</span>
+                <span id="line-loop-5" class="code-line"></span>
+                <span id="line-loop-6" class="code-line text-slate-500"># 迴圈：從 1 執行到 n</span>
+                <span id="line-loop-7" class="code-line text-slate-500"># i 的型態是整數 (int)，range() 產生從 1 到 n 的數字序列</span>
+                <span id="line-loop-8" class="code-line">for i in range(1, n + 1):</span>
+                <span id="line-loop-9" class="code-line ml-4">total = total + i   # 縮排，重複執行</span>
+                <span id="line-loop-10" class="code-line ml-4 text-slate-500"># 另一種寫法： total += i </span>
+                <span id="line-loop-11" class="code-line"></span>
+                <span id="line-loop-12" class="code-line text-slate-500"># print 輸出時，若用 + 號連接，兩邊必須都是字串</span>
+                <span id="line-loop-13" class="code-line text-slate-500"># 使用 str() 函式將數字 n 及 total 轉換成字串，</span>
+                <span id="line-loop-14" class="code-line">print('1+2+...+' + str(n) + '=' + str(total))</span>
+            `;
+            resetAnim('loop');
+        }
+
+        function updatePasswordCode() {
+            document.getElementById('codePasswordContainer').innerHTML = `
+                <span id="line-password-1" class="code-line">password = "137"</span>
+                <span id="line-password-2" class="code-line">times = 1     <span class="text-slate-500"># 將輸入次數設為 1 存到變數 times。</span></span>
+                <span id="line-password-3" class="code-line">password2 = input('Please enter password:\\n')</span>
+                <span id="line-password-4" class="code-line"></span>
+                <span id="line-password-5" class="code-line text-slate-500"># 使用 while 迴圈，當密碼不正確且次數小於 3 時執行</span>
+                <span id="line-password-6" class="code-line">while (password != password2) and (times < 3):</span>
+                <span id="line-password-7" class="code-line ml-4">print('Wrong password!')</span>
+                <span id="line-password-8" class="code-line ml-4">times = times + 1   <span class="text-slate-500"># 錯誤次數加 1</span></span>
+                <span id="line-password-9" class="code-line ml-4 text-slate-500"># 再次輸入密碼</span>
+                <span id="line-password-10" class="code-line ml-4">password2 = input('Please enter password:\\n')</span>
+                <span id="line-password-11" class="code-line"></span>
+                <span id="line-password-12" class="code-line text-slate-500"># 跳出迴圈表示密碼正確或已達 3 次錯誤</span>
+                <span id="line-password-13" class="code-line"></span>
+                <span id="line-password-14" class="code-line text-slate-500"># 使用雙向選擇結構判斷結果</span>
+                <span id="line-password-15" class="code-line">if password2 == password:</span>
+                <span id="line-password-16" class="code-line ml-4 text-slate-500"># 當密碼相符，呈現歡迎使用本系統</span>
+                <span id="line-password-17" class="code-line ml-4">print('Welcome to this system.')</span>
+                <span id="line-password-18" class="code-line">else:</span>
+                <span id="line-password-19" class="code-line ml-4 text-slate-500"># 當密碼不符，呈現帳號鎖定</span>
+                <span id="line-password-20" class="code-line ml-4">print('Enter wrong password 3 times, locked.')</span>
+            `;
+            resetAnim('password');
+        }
+
+        function resetAnim(key) {
+            const st = animStates[key];
+            if (st.timer) clearInterval(st.timer);
+            st.step = 0; st.isAuto = false;
+            const btn = document.getElementById(`btn${key.charAt(0).toUpperCase() + key.slice(1)}Auto`);
+            if (btn) btn.innerText = "自動播放 (Play)";
+            document.querySelectorAll(`[id^='line-${key}']`).forEach(el => el.classList.remove('highlight'));
+            const resEl = document.getElementById(`result${key.charAt(0).toUpperCase() + key.slice(1)}`);
+            if (resEl) resEl.innerText = "等待執行...";
+            
+            if (key === 'greeting') document.getElementById('visName').innerText = "?";
+            else if (key === 'average') { ['visAveX', 'visAveY', 'visAveZ'].forEach(id => document.getElementById(id).innerText = "?"); }
+            else if (key === 'grade') { ['visGrdX', 'visGrdY', 'visGrdZ', 'visGrdTotal'].forEach(id => document.getElementById(id).innerText = "?"); }
+            else if (key === 'a051') { document.getElementById('visA051A').innerText = "?"; }
+            else if (key === 'loop') { st.i = 0; st.total = 0; document.getElementById('visLoopI').innerText = "0"; document.getElementById('visLoopTotal').innerText = "0"; document.getElementById('loopSteps').innerHTML = ""; }
+            else if (key === 'password') { st.times = 0; st.curr = ""; document.getElementById('visPwdTimes').innerText = "0"; document.getElementById('visPwdCurr').innerText = "?"; }
+        }
+
+        function hlite(key, line) {
+            document.querySelectorAll(`[id^='line-${key}']`).forEach(el => el.classList.remove('highlight'));
+            const el = document.getElementById(`line-${key}-${line}`);
+            if (el) el.classList.add('highlight');
+        }
+
+        function bump(id, val) {
+            const el = document.getElementById(id);
+            el.innerText = val;
+            el.classList.remove('value-bump');
+            void el.offsetWidth;
+            el.classList.add('value-bump');
+        }
+
+        function nextStep(key) {
+            const st = animStates[key];
+            const resEl = document.getElementById(`result${key.charAt(0).toUpperCase() + key.slice(1)}`);
+            
+            if (key === 'greeting') {
+                const name = document.getElementById('inputName').value || "阿顯";
+                const p = "What is your name?\n";
+                if (st.step === 0) { hlite(key, 3); bump('visName', name); resEl.innerText = p + name; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 6); resEl.innerText = p + name + "\nHello " + name + " !"; st.step = 2; }
+                else resetAnim(key);
+            } 
+            else if (key === 'average') {
+                const vx = document.getElementById('numX').value || "0", vy = document.getElementById('numY').value || "0";
+                const px = "Please enter number x:\n", py = "Please enter number y:\n";
+                if (st.step === 0) { hlite(key, 3); bump('visAveX', vx); resEl.innerText = px + vx; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 4); bump('visAveY', vy); resEl.innerText = px + vx + "\n" + py + vy; st.step = 2; }
+                else if (st.step === 2) { hlite(key, 7); st.z = ((parseFloat(vx) + parseFloat(vy)) / 2).toFixed(1); bump('visAveZ', st.z); st.step = 3; }
+                else if (st.step === 3) { hlite(key, 10); resEl.innerText = px + vx + "\n" + py + vy + "\nAverage is " + st.z; st.step = 4; }
+                else resetAnim(key);
+            }
+            else if (key === 'grade') {
+                const vx = document.getElementById('scoreWork').value || "0", vy = document.getElementById('scoreExam').value || "0", vz = document.getElementById('scoreRoutine').value || "0";
+                const px = "Please enter homework grades:\n", py = "Please enter quiz score:\n", pz = "Please enter your usual grades:\n";
+                if (st.step === 0) { hlite(key, 2); bump('visGrdX', vx); resEl.innerText = px + vx; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 3); bump('visGrdY', vy); resEl.innerText = px + vx + "\n" + py + vy; st.step = 2; }
+                else if (st.step === 2) { hlite(key, 4); bump('visGrdZ', vz); resEl.innerText = px + vx + "\n" + py + vy + "\n" + pz + vz; st.step = 3; }
+                else if (st.step === 3) { hlite(key, 7); st.g = (vx*0.4 + vy*0.4 + vz*0.2).toFixed(1); bump('visGrdTotal', st.g); st.step = 4; }
+                else if (st.step === 4) { hlite(key, 11); resEl.innerText = px + vx + "\n" + py + vy + "\n" + pz + vz + "\nSemester grades are " + st.g + " points."; st.step = 5; }
+                else if (st.step === 5) { hlite(key, 14); st.step = 6; }
+                else if (st.step === 6) {
+                    if (st.g < 60) { hlite(key, 16); resEl.innerText += "\nFailed!"; st.step = 8; }
+                    else { hlite(key, 17); st.step = 7; }
+                }
+                else if (st.step === 7) { hlite(key, 19); resEl.innerText += "\nPass!"; st.step = 8; }
+                else resetAnim(key);
+            }
+            else if (key === 'a051') {
+                const vx = document.getElementById('a051_chinese').value || "0", vy = document.getElementById('a051_english').value || "0", vz = document.getElementById('a051_math').value || "0";
+                if (st.step === 0) { hlite(key, 2); resEl.innerText = vx; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 3); resEl.innerText = vx + "\n" + vy; st.step = 2; }
+                else if (st.step === 2) { hlite(key, 4); resEl.innerText = vx + "\n" + vy + "\n" + vz; st.step = 3; }
+                else if (st.step === 3) { hlite(key, 7); st.a = ((parseFloat(vx)+parseFloat(vy)+parseFloat(vz))/3).toFixed(1); bump('visA051A', st.a); st.step = 4; }
+                else if (st.step === 4) { hlite(key, 8); st.step = 5; }
+                else if (st.step === 5) { hlite(key, 11); st.step = 6; }
+                else if (st.step === 6) {
+                    if (st.a > 70) { hlite(key, 12); resEl.innerText += "\nYou are great"; st.step = 10; }
+                    else { hlite(key, 13); st.step = 7; }
+                }
+                else if (st.step === 7) {
+                    if (st.a < 70) { hlite(key, 14); resEl.innerText += "\nKeep on"; st.step = 10; }
+                    else { hlite(key, 15); st.step = 8; }
+                }
+                else if (st.step === 8) { hlite(key, 17); resEl.innerText += "\nCome on"; st.step = 10; }
+                else resetAnim(key);
+            }
+            else if (key === 'loop') {
+                nextLoopStep();
+            }
+            else if (key === 'password') {
+                nextPasswordStep();
+            }
+        }
+
+        function nextPasswordStep() {
+            const st = animStates.password;
+            const resEl = document.getElementById('resultPassword');
+            const pwds = [document.getElementById('pwd_1').value, document.getElementById('pwd_2').value, document.getElementById('pwd_3').value];
+            const correct = "137";
+            const prompt = "Please enter password:\n";
+
+            if (st.step === 0) { hlite('password', 1); st.step = 1; }
+            else if (st.step === 1) { hlite('password', 2); st.times = 1; bump('visPwdTimes', 1); st.step = 2; }
+            else if (st.step === 2) { 
+                hlite('password', 3); st.curr = pwds[0]; bump('visPwdCurr', st.curr); 
+                resEl.innerText = prompt + st.curr; st.step = 3; 
+            }
+            else if (st.step === 3) { hlite('password', 6); st.step = 4; } // While check
+            else if (st.step === 4) { // While body
+                if (st.curr !== correct && st.times < 3) {
+                    hlite('password', 7); resEl.innerText += "\nWrong password!"; st.step = 5;
+                } else {
+                    hlite('password', 15); st.step = 8; // 跳到判斷
+                }
+            }
+            else if (st.step === 5) { hlite('password', 8); st.times++; bump('visPwdTimes', st.times); st.step = 6; }
+            else if (st.step === 6) { 
+                hlite('password', 10); st.curr = pwds[st.times-1]; bump('visPwdCurr', st.curr);
+                resEl.innerText += "\n" + prompt + st.curr; st.step = 3; // 回去 while 檢查
+            }
+            else if (st.step === 8) {
+                if (st.curr === correct) { hlite('password', 17); resEl.innerText += "\nWelcome to this system."; st.step = 10; }
+                else { hlite('password', 18); st.step = 9; }
+            }
+            else if (st.step === 9) { hlite('password', 20); resEl.innerText += "\nEnter wrong password 3 times, locked."; st.step = 10; }
+            else resetAnim('password');
+        }
+
+        function startAnim(key) {
+            const st = animStates[key];
+            const btn = document.getElementById(`btn${key.charAt(0).toUpperCase() + key.slice(1)}Auto`);
+            if (st.isAuto) { clearInterval(st.timer); st.isAuto = false; btn.innerText = "自動播放 (Play)"; }
+            else {
+                st.isAuto = true; btn.innerText = "暫停 (Pause)";
+                st.timer = setInterval(() => {
+                    nextStep(key);
+                    let endSteps = { greeting: 2, average: 4, grade: 8, a051: 10, loop: 3, password: 10 };
+                    if (st.step === endSteps[key]) { clearInterval(st.timer); st.isAuto = false; btn.innerText = "播放完畢"; }
+                }, 750);
+            }
+        }
+
+        function nextLoopStep() {
+            const st = animStates.loop;
+            const n = parseInt(document.getElementById('numN').value) || 0;
+            const resEl = document.getElementById('resultLoop');
+            if (st.step === 0) { hlite('loop', 4); st.total = 0; bump('visLoopTotal', 0); st.step = 1; }
+            else if (st.step === 1) {
+                if (st.i < n) { st.i++; hlite('loop', 8); bump('visLoopI', st.i); st.step = 2; }
+                else { hlite('loop', 14); resEl.innerText = `1+2+...+${n}=${st.total}`; st.step = 3; }
+            }
+            else if (st.step === 2) {
+                hlite('loop', 9); let old = st.total; st.total += st.i; bump('visLoopTotal', st.total);
+                const log = document.createElement('div');
+                log.className = "border-b border-slate-700/50 py-1 text-sm";
+                log.innerHTML = `<span class="text-yellow-400 font-bold">i = ${st.i}</span> &nbsp;&nbsp; <span class="text-slate-400">${old} + </span><span class="text-yellow-400">${st.i}</span><span class="text-slate-400"> = </span><span class="text-emerald-400 font-bold">${st.total}</span>`;
+                document.getElementById('loopSteps').prepend(log); st.step = 1;
+            } else resetAnim('loop');
+        }
+
+        function runLoop() {
+            resetAnim('loop');
+            const n = parseInt(document.getElementById('numN').value) || 0;
+            if (isNaN(n) || n <= 0) { alert("請輸入大於 0 的整數"); return; }
+            let sum = 0;
+            let stepsHTML = ""; 
+            for (let i = 1; i <= n; i++) {
+                let oldSum = sum; sum += i;
+                if (n <= 100) stepsHTML = `<div class="border-b border-slate-700/50 py-1 text-sm"><span class="text-yellow-400 font-bold">i = ${i}</span> &nbsp;&nbsp; <span class="text-slate-400">${oldSum} + </span><span class="text-yellow-400">${i}</span><span class="text-slate-400"> = </span><span class="text-emerald-400 font-bold">${sum}</span></div>` + stepsHTML;
+            }
+            bump('visLoopI', n); bump('visLoopTotal', sum);
+            document.getElementById('loopSteps').innerHTML = stepsHTML;
+            document.getElementById('resultLoop').innerText = `1+2+...+${n}=${sum}`;
+            hlite('loop', 14); animStates.loop.step = 3;
+        }
+
+        function runA051() { resetAnim('a051'); while(animStates.a051.step < 10) nextStep('a051'); }
+        function runPassword() { resetAnim('password'); while(animStates.password.step < 10) nextStep('password'); }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+            document.getElementById('tab-' + tabName).classList.add('active');
+            Object.keys(animStates).forEach(k => resetAnim(k));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateGreetingCode(); updateAverageCode(); updateGradeCode(); updateLoopCode(); updatePasswordCode();
+        });
+    </script>
+</body>
+</html>

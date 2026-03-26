@@ -847,6 +847,7 @@ else:
 
             let code = `# 輸入必須用 int() 轉換成整數\n`;
             code += `n = int(input('Please enter the number n:${newlineStr}'))\n`;
+            code += `# 計算總和，要先歸零\n`;
             code += `total = 0\n\n`;
             code += `# 迴圈：從 1 執行到 n\n`;
             code += `# i 的型態是整數 (int)i 的型態是整數 (int)，range() 產生從 1 到 n 的數字序列\n`;
@@ -858,7 +859,7 @@ else:
             code += `print('1+2+...+' + str(n) + '=' + str(total))\n`;
             code += `# f-string 格式化輸出，較簡潔且易讀，會自動將 {} 內的變數 (不論是 int 或 float) 轉換為字串顯示\n`;
             code += `# print請選一個輸出方式使用\n`;
-            code += `#print(f'1+2+...+{n}={total}')`;
+            code += `# print(f'1+2+...+{n}={total}')`;
             
             codeElem.innerText = code;
         }

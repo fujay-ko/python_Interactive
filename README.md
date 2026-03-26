@@ -1,5 +1,88 @@
 # 🐍 Python Interactive 互動教學專案
 
+<<<<<<< HEAD
+[![Python](https://img.shields.io/badge/Python-Interactive-blue.svg)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+> **一套專為教學設計的 Python 互動網頁集合**  
+> 基於純 HTML5, Tailwind CSS 與 Vanilla JavaScript 實作，無需安裝任何環境或伺服器，直接在瀏覽器中即可體驗 Python 語法邏輯。
+
+---
+
+## 🌟 核心特色
+
+- **零環境建置**：下載即用，適合電腦教室、平板或離線環境。
+- **即時模擬執行**：由 JavaScript 精準模擬 Python Console 輸出，反應迅速。
+- **視覺化教學**：結合逐行程式碼高亮與動態邏輯圖解（如數線圖、流程圖）。
+- **響應式設計**：支援跨裝置瀏覽，確保在各類螢幕上皆有良好的閱讀體驗。
+
+---
+
+## 📁 專案架構
+
+```mermaid
+graph TD
+    A[index.html 首頁] --> B[python_basic/ 基礎課程]
+    A --> C[python_advanced/ 進階課程]
+    A --> D[Hanlin/ 翰林教材]
+    A --> E[font_type/ 字型工具]
+```
+
+- **`index.html`**：專案入口，提供直觀的導覽介面。
+- **`python_basic/`**：初學者導向，涵蓋變數、判斷式與基本迴圈。
+- **`python_advanced/`**：進階專題，探討串列生成式、格式化輸出及複雜邏輯。
+- **`Hanlin/`**：專門對應翰林版高中資訊科技教材的練習模組。
+- **`font_type/`**：協助初學者辨識全半形與易混淆字元的工具。
+
+---
+
+## 🗂️ 模組詳細說明
+
+### 🎓 翰林教材版 (`Hanlin/`)
+*   **目標檔案**：`114HanLin_final.html`
+*   **對應章節**：2-2 變數、運算、判斷與迴圈。
+*   **特殊設計**：
+    *   **Tab 化介面**：依主題切換練習。
+    *   **教學鎖定**：禁用右鍵與文字複製，引導學生自行思考輸入。
+    *   **終端機模擬**：高品質的 Console 介面與 `\n` 換行示範。
+
+### 🐍 Python 基礎課程 (`python_basic/`)
+*   **目標檔案**：`python_basic_final.html`
+*   **特色**：14 個核心章節，包含運算思維、輸入輸出與除錯擂台。
+
+### 🚀 Python 進階課程 (`python_advanced/`)
+*   **目標檔案**：`python_advanced_final.html`
+*   **特色**：深入探討 Python 3.10+ 新特性（如 `match-case`）與進階資料處理。
+
+---
+
+## 🚀 快速上手
+
+### 本機開啟
+直接點擊 `index.html` 即可進入導覽頁。
+
+### 開發者模式
+若需進行二次開發或避免某些瀏覽器的安全性限制，建議使用本地伺服器：
+```bash
+python -m http.server 8000
+```
+
+---
+
+## 🛠️ 技術棧
+
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Logic**: Vanilla JavaScript (ES6+)
+- **Icons**: [Lucide](https://lucide.dev/)
+- **Visualization**: SVG & CSS Animations
+
+---
+
+## 📌 聲明與貢獻
+本專案為教學輔助用途，旨在提升程式設計學習者的興趣與直觀理解。歡迎各界教師與開發者共同完善內容。
+
+&copy; 2026 Python Interactive Project.
+=======
 > 一套以純 HTML + JavaScript 實作的 Python 互動式教學網頁集合，
 > 無需安裝任何環境，直接在瀏覽器中開啟即可使用。
 
@@ -156,3 +239,4 @@ python -m http.server 8000
 - 翰林版網頁有**禁用右鍵與文字選取**的設計，為教學用途，`input` / `textarea` 欄位不受影響。
 - 各 HTML 檔案體積約 57KB ～ 135KB，所有邏輯內嵌於單一檔案中，方便分享與離線使用。
 - 進階課程的互動 Demo 以 JavaScript 模擬輸出，行為與真實 Python 一致，但不支援任意程式碼輸入執行。
+>>>>>>> 7c4c3b8885b5e188aab7d13f702b35343e2bdb66

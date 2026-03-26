@@ -9,62 +9,68 @@
             font-family: "Microsoft JhengHei", Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #121212; /* 深色背景 */
+            color: #e0e0e0; /* 淺色文字 */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
         .container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #1e1e1e; /* 容器背景 */
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
             text-align: center;
-            max-width: 600px;
-            width: 100%;
+            max-width: 650px;
+            width: 90%;
+            border: 1px solid #333;
         }
         h1 {
-            color: #333;
-            margin-bottom: 2rem;
+            color: #ffffff;
+            margin-bottom: 2.5rem;
+            letter-spacing: 1px;
         }
         .link-list {
             list-style: none;
             padding: 0;
         }
         .link-list li {
-            margin: 1rem 0;
+            margin: 1.2rem 0;
         }
         .link-btn {
             display: block;
             text-decoration: none;
-            background-color: #007bff;
+            background-color: #2563eb;
             color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            font-size: 1.1rem;
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1.15rem;
+            font-weight: 500;
         }
         .link-btn:hover {
-            background-color: #0056b3;
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
         .footer {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #666;
+            margin-top: 2.5rem;
+            font-size: 0.85rem;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Python Interactive 專案列表</h1>
+    <h1>🐍 Python Interactive 專案列表</h1>
     <ul class="link-list">
         <li>
             <a href="font_type/font_type_final.html" class="link-btn">字型樣式測試 (Font Type)</a>
         </li>
         <li>
-            <a href="Hanlin/114HanLin_final_v2_20260110.html" class="link-btn">翰林教材 (Hanlin)</a>
+            <a href="Hanlin/114HanLin_final.html" class="link-btn">翰林教材 (Hanlin)</a>
         </li>
         <li>
             <a href="python_basic/python_basic_final.html" class="link-btn">Python 基礎課程 (Basic)</a>
@@ -74,7 +80,7 @@
         </li>
     </ul>
     <div class="footer">
-        &copy; 2026 Python Interactive Project
+        &copy; 2026 Python Interactive Project | Created for Education
     </div>
 </div>
 

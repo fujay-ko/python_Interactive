@@ -14,6 +14,8 @@
             --color-violet-accent: #8b5cf6; --color-red-accent: #ef4444;
         }
         body { background-color: var(--color-bg-dark); color: #f8fafc; font-family: 'Inter', 'Noto Sans TC', sans-serif; min-height: 100vh; }
+        html { scroll-behavior: smooth; }
+        section { scroll-margin-top: 5rem; } /* 增加偏移量，避開導覽列 */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-thumb { background-color: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-track { background-color: #1e293b; }
@@ -1355,18 +1357,48 @@
         function setAdditionScenario(s){
             state.currentAddScenario = s;
             let code = '', result = '', type = '', isError = false;
-            if (s === 'num_num') { code = `print(age + 10)`; result = state.age + 10; type = "<class 'int'>"; }
-            else if (s === 'str_str') { code = `print("${state.name}" + "你好")`; result = state.name + "你好"; type = "<class 'str'>"; }
-            else { code = `print(age + "歲")`; result = "TypeError"; type = "ERROR"; isError = true; }
+            if (s === 'num_num') { 
+                code = `print(age + 10)`; 
+                result = state.age + 10; 
+                type = "<class 'int'>"; 
+            }
+            else if (s === 'str_str') { 
+                code = `print("${state.name}" + "你好")`; 
+                result = state.name + "你好"; 
+                type = "<class 'str'>"; 
+            }
+            else if (s === 'fixed_str') {
+                code = `print(str(age) + "歲")`;
+                result = state.age + "歲";
+                type = "<class 'str'>";
+                isError = false;
+            }
+            else { 
+                code = `print(age + "歲")`; 
+                result = "TypeError"; 
+                type = "ERROR"; 
+                isError = true; 
+            }
+            
             document.getElementById('add-code-display').innerText = code;
             const resultDisplay = document.getElementById('add-result-display');
             resultDisplay.innerText = result;
-            resultDisplay.className = `min-h-[2rem] text-2xl font-bold font-mono ${isError ? "text-red-400" : "text-white"}`;
+            resultDisplay.className = `min-h-[2rem] text-2xl font-bold font-mono ${isError ? "text-red-400" : "text-green-400"}`;
             document.getElementById('add-type-display').innerText = `Result Type: ${type}`;
+            
             const fixContainer = document.getElementById('fix-error-container');
-            if (fixContainer) fixContainer.classList.toggle('hidden', !isError);
+            if (fixContainer) {
+                // 只有在真正的錯誤情境 (error_case) 下才顯示修復按鈕
+                fixContainer.classList.toggle('hidden', s !== 'error_case');
+            }
         }
-        function fixError(){ setAdditionScenario('num_num'); } 
+        function fixError(type){ 
+            if (type === 'str') {
+                setAdditionScenario('fixed_str');
+            } else {
+                setAdditionScenario('num_num'); 
+            }
+        } 
         function calcArithmetic() {
             state.arithA = parseFloat(document.getElementById('arith-a').value) || 0;
             state.arithB = parseFloat(document.getElementById('arith-b').value) || 0;
@@ -1383,9 +1415,13 @@
                 else if(op === '%') result = a % b;
                 else if(op === '**') result = Math.pow(a, b);
             } catch (e) { result = e.message; }
+            
             document.getElementById('operator-grid').innerHTML = Object.keys(arithmeticDescriptions).map(op => `<button onclick="state.currentOperator='${op}';calcArithmetic()" class="${state.currentOperator === op ? 'bg-purple-600 text-white' : 'bg-slate-700 text-slate-400'} p-2 rounded font-bold">${op}</button>`).join('');
             document.getElementById('arith-code').innerText = `print(${state.arithA} ${state.currentOperator} ${state.arithB})`;
-            document.getElementById('arith-result').innerText = Number.isFinite(result) ? (result % 1 === 0 ? result : result.toFixed(2)) : result;
+            
+            // 修正：不強行使用 toFixed(2)，改用 Number() 轉換以過濾不必要的 0，並處理精度問題
+            document.getElementById('arith-result').innerText = Number.isFinite(result) ? 
+                (result % 1 === 0 ? result : parseFloat(result.toFixed(10))) : result;
             
             const info = arithmeticDescriptions[state.currentOperator];
             document.getElementById('arith-desc').innerText = info.desc;

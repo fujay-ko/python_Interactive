@@ -182,7 +182,7 @@
                 </div>
             </div>
 
-            <!-- 2. 求平均數區塊 -->
+            <!-- 2-1. 求平均數區塊 -->
             <div id="content-average" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4 text-blue-400">求平均數 (變數與運算)</h2>
                 <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入兩個數字後，再呈現兩個數字的平均值。</p>
@@ -222,6 +222,45 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 2-2. 三角形面積區塊 -->
+<div id="content-triangle" class="tab-content hidden">
+    <h2 class="text-xl font-bold mb-4 text-blue-400">求三角形面積 (變數與運算)</h2>
+    <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入三角形的底、高後，再呈現出此三角形的面積。</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="input-group"><label>輸入底 base</label><input type="number" id="triBase" value="8" oninput="resetAnim('triangle')"></div>
+                <div class="input-group"><label>輸入高 height</label><input type="number" id="triHeight" value="4" oninput="resetAnim('triangle')"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mb-4">
+                <button onclick="nextStep('triangle')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
+                <button onclick="startAnim('triangle')" id="btnTriangleAuto" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold shadow-lg">自動播放 (Play)</button>
+            </div>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="var-card"><div class="var-label">base</div><div id="visTriBase" class="var-value text-lg">?</div></div>
+                <div class="var-card"><div class="var-label">height</div><div id="visTriHeight" class="var-value text-lg">?</div></div>
+                <div class="var-card border-blue-500"><div class="var-label">結果 area</div><div id="visTriArea" class="var-value text-lg">?</div></div>
+            </div>
+            <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
+                <h3 class="font-bold text-green-400">執行結果:</h3>
+                <p id="resultTriangle" class="text-xl mt-2 text-green-300 font-mono" style="white-space: pre-wrap;">等待計算...</p>
+            </div>
+        </div>
+        <div>
+            <h3 class="font-bold text-slate-300 mb-2">對應程式碼邏輯：</h3>
+            <div id="codeTriangleContainer" class="code-block"></div>
+            <div class="mt-4 p-3 bg-slate-900/50 rounded text-sm text-slate-400 border-l-4 border-blue-600 space-y-2">
+                <p class="font-bold text-slate-200">💡 觀念提示：</p>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li><strong>公式推導</strong>：三角形面積 = 底 × 高 ÷ 2，程式寫成 <code>base * height / 2</code>。</li>
+                    <li><strong>運算優先權</strong>：<code>*</code> 和 <code>/</code> 優先權相同，Python 由左而右計算，結果正確，不需加括號。</li>
+                    <li><strong>浮點數結果</strong>：Python 3 的 <code>/</code> 永遠產生 <code>float</code>，所以底=6、高=3 時結果會顯示 <code>9.0</code> 而非 <code>9</code>。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
             <!-- 3. 學期成績區塊 -->
             <div id="content-grade" class="tab-content hidden">
@@ -416,6 +455,22 @@
             resetAnim('average');
         }
 
+        function updateTriangleCode() {
+    document.getElementById('codeTriangleContainer').innerHTML = `
+        <span id="line-triangle-1" class="code-line text-slate-500"># input() 讀取的是字串，float() 將字串轉成「浮點數 (float)」</span>
+        <span id="line-triangle-2" class="code-line text-slate-500"># 若輸入底和高可能是小數，用 float() 比 int() 更安全</span>
+        <span id="line-triangle-3" class="code-line">base = float(input('Please enter the base of the triangle:\\n'))</span>
+        <span id="line-triangle-4" class="code-line">height = float(input('Please enter the height of the triangle:\\n'))</span>
+        <span id="line-triangle-5" class="code-line"></span>
+        <span id="line-triangle-6" class="code-line text-slate-500"># 三角形面積公式：底 × 高 ÷ 2</span>
+        <span id="line-triangle-7" class="code-line">area = base * height / 2</span>
+        <span id="line-triangle-8" class="code-line"></span>
+        <span id="line-triangle-9" class="code-line text-slate-500"># 使用逗號分隔，Python 自動加空格並處理型態轉換</span>
+        <span id="line-triangle-10" class="code-line">print('The area of the triangle is', area)</span>
+    `;
+    resetAnim('triangle');
+}
+        
         function updateGradeCode() {
             document.getElementById('codeGradeContainer').innerHTML = `
                 <span id="line-grade-1" class="code-line text-slate-500"># 使用 int() 將輸入的字串轉換成整數</span>
@@ -464,7 +519,7 @@
         function updateLoopCode() {
             document.getElementById('codeLoopContainer').innerHTML = `
                 <span id="line-loop-1" class="code-line text-slate-500"># 輸入必須用 int() 轉換成整數</span>
-                <span id="line-loop-2" class="code-line">n = int(input('Please enter the number n:\n'))</span>
+                <span id="line-loop-2" class="code-line">n = int(input('Please enter the number n:\\n'))</span>
                 <span id="line-loop-3" class="code-line text-slate-500"># 計算總和，要先歸零</span>
                 <span id="line-loop-4" class="code-line">total = 0</span>
                 <span id="line-loop-5" class="code-line"></span>

@@ -185,6 +185,7 @@
             <!-- 2. 求平均數區塊 -->
             <div id="content-average" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4 text-blue-400">求平均數 (變數與運算)</h2>
+                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入兩個數字後，再呈現兩個數字的平均值。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -225,6 +226,7 @@
             <!-- 3. 學期成績區塊 -->
             <div id="content-grade" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4 text-blue-400">計算學期成績 (if/else)</h2>
+                 <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入各項成績後，再將各項成績轉換為學期成績，並判斷學期成績是否及格？（其中，作業成績占 40％，測驗成績占 40％，平時成績占120％，學期成績 60 分為及格分數。）</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div>
                         <div class="grid grid-cols-3 gap-2 mb-4">
@@ -262,6 +264,7 @@
                 <hr class="divider">
 
                 <h2 class="text-xl font-bold mb-4 text-purple-400">個人平均成績比較(if/elif/else)</h2>
+                 <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入自己的國文、英文及數學段考成績後，計算個人平均成績，再與班級總平均成績相比，並判斷個人平均成績是否高於、低於或等於班級總平均成績。（其中，國文的班級平均成績為 70 分，英文的班級平均成績為 75 分，數學的班級平均成績為 65 分。）</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="grid grid-cols-3 gap-2 mb-4">
@@ -299,6 +302,7 @@
             <!-- 4. 累加計算區塊 -->
             <div id="content-loop" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4 text-blue-400">累加計算 (for迴圈)</h2>
+                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入數字 n 後，再計算 1 ＋ 2 ＋ 3 ＋…＋ n 的值。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="input-group mb-4"><label>輸入數字 n</label><input type="number" id="numN" value="10" oninput="resetAnim('loop')"></div>
@@ -332,6 +336,7 @@
             <!-- 5. 密碼檢查區塊 -->
             <div id="content-password" class="tab-content hidden">
                 <h2 class="text-xl font-bold mb-4 text-indigo-400">密碼檢查程式 (while 迴圈)</h2>
+                <p class="text-slate-400 mb-4 text-sm">請設計一個電腦系統的密碼驗證機制,條件如下:1若第一次輸入密碼錯誤後,可再重複嘗試輸入兩次。2.若三次密碼都錯誤,跳出使用者帳號被鎖定的訊息。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="space-y-2 mb-4">
@@ -459,7 +464,7 @@
         function updateLoopCode() {
             document.getElementById('codeLoopContainer').innerHTML = `
                 <span id="line-loop-1" class="code-line text-slate-500"># 輸入必須用 int() 轉換成整數</span>
-                <span id="line-loop-2" class="code-line">n = int(input('Please enter the number n:'))</span>
+                <span id="line-loop-2" class="code-line">n = int(input('Please enter the number n:\n'))</span>
                 <span id="line-loop-3" class="code-line text-slate-500"># 計算總和，要先歸零</span>
                 <span id="line-loop-4" class="code-line">total = 0</span>
                 <span id="line-loop-5" class="code-line"></span>

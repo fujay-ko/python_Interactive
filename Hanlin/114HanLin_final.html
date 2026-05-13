@@ -675,7 +675,7 @@
                 const pb = "Please enter the base of the triangle:\n", ph = "Please enter the height of the triangle:\n";
                 if (st.step === 0) { hlite(key, 3); bump('visTriBase', vb); resEl.innerText = pb + vb; st.step = 1; }
                 else if (st.step === 1) { hlite(key, 4); bump('visTriHeight', vh); resEl.innerText = pb + vb + "\n" + ph + vh; st.step = 2; }
-                else if (st.step === 2) { hlite(key, 7); st.area = (parseFloat(vb) * parseFloat(vh) / 2); bump('visTriArea', st.area); st.step = 3; }
+                else if (st.step === 2) { hlite(key, 7); st.area = (parseFloat(vb) * parseFloat(vh) / 2).toFixed(1); bump('visTriArea', st.area); st.step = 3; }
                 else if (st.step === 3) { hlite(key, 10); resEl.innerText = pb + vb + "\n" + ph + vh + "\nThe area of the triangle is " + st.area; st.step = 4; }
                 else resetAnim(key);
             }

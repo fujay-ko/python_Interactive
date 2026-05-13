@@ -506,10 +506,9 @@
 
         function updateTriangleCode() {
     document.getElementById('codeTriangleContainer').innerHTML = `
-        <span id="line-triangle-1" class="code-line text-slate-500"># input() 讀取的是字串，float() 將字串轉成「浮點數 (float)」</span>
-        <span id="line-triangle-2" class="code-line text-slate-500"># 若輸入底和高可能是小數，用 float() 比 int() 更安全</span>
-        <span id="line-triangle-3" class="code-line">base = float(input('Please enter the base of the triangle:\\n'))</span>
-        <span id="line-triangle-4" class="code-line">height = float(input('Please enter the height of the triangle:\\n'))</span>
+        <span id="line-triangle-1" class="code-line text-slate-500"># input() 讀取的是字串，int() 將字串轉成「整數 (int)」</span>
+        <span id="line-triangle-3" class="code-line">base = int(input('Please enter the base of the triangle:\\n'))</span>
+        <span id="line-triangle-4" class="code-line">height = int(input('Please enter the height of the triangle:\\n'))</span>
         <span id="line-triangle-5" class="code-line"></span>
         <span id="line-triangle-6" class="code-line text-slate-500"># 三角形面積公式：底 × 高 ÷ 2</span>
         <span id="line-triangle-7" class="code-line">area = base * height / 2</span>

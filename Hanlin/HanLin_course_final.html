@@ -13,18 +13,10 @@
             background-color: #0f172a;
             color: #e2e8f0;
             
-            /* 禁止選取文字 (防止複製) */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
+            user-select: none;
         }
         
-        /* 允許輸入框與程式碼區塊內的文字被選取，方便操作與學習 */
-        input, textarea {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
+        input, textarea, code, .code-block, .var-value {
             user-select: text;
         }
 
@@ -40,6 +32,7 @@
             background-color: #000000;
             color: #d4d4d4;
             font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
             padding: 1rem;
             border-radius: 0.5rem;
             overflow-x: auto;
@@ -99,20 +92,23 @@
             text-align: center;
         }
         .var-label {
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             color: #94a3b8;
             text-transform: uppercase;
             font-weight: bold;
         }
         .var-value {
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 1.2rem;
+            font-size: 1.35rem;
             font-weight: bold;
             color: #facc15;
         }
+        .result-text {
+            white-space: pre-wrap;
+        }
     </style>
 </head>
-<body class="p-4 md:p-8" oncontextmenu="return false;"> 
+<body class="p-4 md:p-8"> 
 
     <!-- 主容器 -->
     <div class="max-w-7xl mx-auto bg-slate-800 shadow-2xl rounded-lg overflow-hidden border border-slate-700">
@@ -123,22 +119,22 @@
 
         <!-- 導航分頁 -->
         <div class="flex border-b border-slate-700 bg-slate-800">
-            <button onclick="switchTab('greeting')" id="tab-greeting" class="tab-btn active flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+            <button onclick="switchTab('greeting')" id="tab-greeting" class="tab-btn active flex-1 py-4 px-2 text-center text-sm md:text-base lg:text-lg font-medium hover:bg-slate-700 transition">
                 1. 變數與輸入輸出
             </button>
-            <button onclick="switchTab('average')" id="tab-average" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+            <button onclick="switchTab('average')" id="tab-average" class="tab-btn flex-1 py-4 px-2 text-center text-sm md:text-base lg:text-lg font-medium hover:bg-slate-700 transition">
                 2. 變數與運算
             </button>
-            <button onclick="switchTab('grade')" id="tab-grade" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+            <button onclick="switchTab('grade')" id="tab-grade" class="tab-btn flex-1 py-4 px-2 text-center text-sm md:text-base lg:text-lg font-medium hover:bg-slate-700 transition">
                 3. 條件判斷
             </button>
-            <button onclick="switchTab('loop')" id="tab-loop" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+            <button onclick="switchTab('loop')" id="tab-loop" class="tab-btn flex-1 py-4 px-2 text-center text-sm md:text-base lg:text-lg font-medium hover:bg-slate-700 transition">
                 4. 計次式迴圈
             </button>
-            <button onclick="switchTab('password')" id="tab-password" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+            <button onclick="switchTab('password')" id="tab-password" class="tab-btn flex-1 py-4 px-2 text-center text-sm md:text-base lg:text-lg font-medium hover:bg-slate-700 transition">
                 5. 條件式迴圈
             </button>
-            <button onclick="switchTab('list')" id="tab-list" class="tab-btn flex-1 py-4 px-2 text-center text-xs md:text-sm lg:text-base font-medium hover:bg-slate-700 transition">
+            <button onclick="switchTab('list')" id="tab-list" class="tab-btn flex-1 py-4 px-2 text-center text-sm md:text-base lg:text-lg font-medium hover:bg-slate-700 transition">
                 6. 串列
             </button>
         </div>
@@ -148,8 +144,8 @@
 
             <!-- 1. 打招呼區塊 -->
             <div id="content-greeting" class="tab-content block">
-                <h2 class="text-xl font-bold mb-4 text-blue-400">哈囉(input/print)</h2>
-                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入名字後，電腦會將名字呈現在畫面上與使用者打招呼。</p>
+                <h2 class="text-2xl font-bold mb-4 text-blue-400">哈囉(input/print)</h2>
+                <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入名字後，電腦會將名字呈現在畫面上與使用者打招呼。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="input-group mb-4">
@@ -168,7 +164,7 @@
 
                         <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
                             <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
-                            <p id="resultGreeting" class="text-xl mt-2 text-green-300 font-mono" style="white-space: pre-wrap;">等待輸入...</p>
+                            <p id="resultGreeting" class="result-text text-2xl mt-2 text-green-300 font-mono" aria-live="polite">等待輸入...</p>
                         </div>
                     </div>
                     <div>
@@ -187,8 +183,8 @@
 
             <!-- 2-1. 求平均數區塊 -->
             <div id="content-average" class="tab-content hidden">
-                <h2 class="text-xl font-bold mb-4 text-blue-400">求平均數 (變數與運算)</h2>
-                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入兩個數字後，再呈現兩個數字的平均值。</p>
+                <h2 class="text-2xl font-bold mb-4 text-blue-400">求平均數 (變數與運算)</h2>
+                <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入兩個數字後，再呈現兩個數字的平均值。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -207,8 +203,8 @@
                         </div>
 
                         <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
-                            <h3 class="font-bold text-green-400">執行結果:</h3>
-                            <p id="resultAverage" class="text-xl mt-2 text-green-300 font-mono" style="white-space: pre-wrap;">等待計算...</p>
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultAverage" class="result-text text-2xl mt-2 text-green-300 font-mono" aria-live="polite">等待計算...</p>
                         </div>
                     </div>
                     <div>
@@ -228,8 +224,8 @@
                 <hr class="divider">
 
                 <!-- 2-2. 三角形面積區塊 -->
-                <h2 class="text-xl font-bold mb-4 text-blue-400">求三角形面積 (變數與運算)</h2>
-                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入三角形的底、高後，再呈現出此三角形的面積。</p>
+                <h2 class="text-2xl font-bold mb-4 text-blue-400">求三角形面積 (變數與運算)</h2>
+                <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入三角形的底、高後，再呈現出此三角形的面積。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -246,8 +242,8 @@
                             <div class="var-card border-blue-500"><div class="var-label">結果 area</div><div id="visTriArea" class="var-value text-lg">?</div></div>
                         </div>
                         <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
-                            <h3 class="font-bold text-green-400">執行結果:</h3>
-                            <p id="resultTriangle" class="text-xl mt-2 text-green-300 font-mono" style="white-space: pre-wrap;">等待計算...</p>
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultTriangle" class="result-text text-2xl mt-2 text-green-300 font-mono" aria-live="polite">等待計算...</p>
                         </div>
                     </div>
                     <div>
@@ -267,8 +263,8 @@
 
             <!-- 3. 學期成績區塊 -->
             <div id="content-grade" class="tab-content hidden">
-                <h2 class="text-xl font-bold mb-4 text-blue-400">計算學期成績 (if/else)</h2>
-                 <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入各項成績後，再將各項成績轉換為學期成績，並判斷學期成績是否及格？（其中，作業成績占 40％，測驗成績占 40％，平時成績占120％，學期成績 60 分為及格分數。）</p>
+                <h2 class="text-2xl font-bold mb-4 text-blue-400">計算學期成績 (if/else)</h2>
+                 <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入各項成績後，再將各項成績轉換為學期成績，並判斷學期成績是否及格？（其中，作業成績占 40％，測驗成績占 40％，平時成績占120％，學期成績 60 分為及格分數。）</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div>
                         <div class="grid grid-cols-3 gap-2 mb-4">
@@ -287,7 +283,8 @@
                             <div class="var-card border-emerald-500"><div class="var-label">grade</div><div id="visGrdTotal" class="var-value text-base">?</div></div>
                         </div>
                         <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
-                            <p id="resultGrade" class="text-lg text-green-300 font-mono" style="white-space: pre-wrap;">等待執行...</p>
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultGrade" class="result-text text-xl text-green-300 font-mono" aria-live="polite">等待執行...</p>
                         </div>
                     </div>
                     <div>
@@ -305,8 +302,8 @@
 
                 <hr class="divider">
 
-                <h2 class="text-xl font-bold mb-4 text-purple-400">個人平均成績比較(if/elif/else)</h2>
-                 <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入自己的國文、英文及數學段考成績後，計算個人平均成績，再與班級總平均成績相比，並判斷個人平均成績是否高於、低於或等於班級總平均成績。（其中，國文的班級平均成績為 70 分，英文的班級平均成績為 75 分，數學的班級平均成績為 65 分。）</p>
+                <h2 class="text-2xl font-bold mb-4 text-purple-400">個人平均成績比較(if/elif/else)</h2>
+                 <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入自己的國文、英文及數學段考成績後，計算個人平均成績，再與班級總平均成績相比，並判斷個人平均成績是否高於、低於或等於班級總平均成績。（其中，國文的班級平均成績為 70 分，英文的班級平均成績為 75 分，數學的班級平均成績為 65 分。）</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="grid grid-cols-3 gap-2 mb-4">
@@ -324,7 +321,8 @@
                             <div class="var-card border-purple-500"><div class="var-label">比較結果</div><div id="visA051Res" class="var-value text-sm">?</div></div>
                         </div>
                         <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
-                            <p id="resultA051" class="text-lg text-green-300 font-mono">等待執行...</p>
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultA051" class="result-text text-xl text-green-300 font-mono" aria-live="polite">等待執行...</p>
                         </div>
                     </div>
                     <div>
@@ -343,8 +341,8 @@
 
             <!-- 4. 累加計算區塊 -->
             <div id="content-loop" class="tab-content hidden">
-                <h2 class="text-xl font-bold mb-4 text-blue-400">累加計算 (for迴圈)</h2>
-                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入數字 n 後，再計算 1 ＋ 2 ＋ 3 ＋…＋ n 的值。</p>
+                <h2 class="text-2xl font-bold mb-4 text-blue-400">累加計算 (for迴圈)</h2>
+                <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入數字 n 後，再計算 1 ＋ 2 ＋ 3 ＋…＋ n 的值。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="input-group mb-4"><label>輸入數字 n</label><input type="number" id="numN" value="10" oninput="resetAnim('loop')"></div>
@@ -357,7 +355,8 @@
                             <div class="var-card"><div class="var-label">total</div><div id="visLoopTotal" class="var-value text-emerald-400">0</div></div>
                         </div>
                         <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
-                            <p id="resultLoop" class="text-xl text-green-300 font-mono">等待執行...</p>
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultLoop" class="result-text text-2xl text-green-300 font-mono" aria-live="polite">等待執行...</p>
                             <div id="loopSteps" class="text-sm text-slate-500 mt-2 max-h-48 overflow-y-auto border-t border-slate-700 pt-2"></div>
                         </div>
                     </div>
@@ -377,8 +376,8 @@
 
             <!-- 5. 密碼檢查區塊 -->
             <div id="content-password" class="tab-content hidden">
-                <h2 class="text-xl font-bold mb-4 text-indigo-400">密碼檢查程式 (while 迴圈)</h2>
-                <p class="text-slate-400 mb-4 text-sm">請設計一個電腦系統的密碼驗證機制,條件如下:1若第一次輸入密碼錯誤後,可再重複嘗試輸入兩次。2.若三次密碼都錯誤,跳出使用者帳號被鎖定的訊息。</p>
+                <h2 class="text-2xl font-bold mb-4 text-indigo-400">密碼檢查程式 (while 迴圈)</h2>
+                <p class="text-slate-400 mb-4 text-base">請設計一個電腦系統的密碼驗證機制,條件如下:1若第一次輸入密碼錯誤後,可再重複嘗試輸入兩次。2.若三次密碼都錯誤,跳出使用者帳號被鎖定的訊息。</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="space-y-2 mb-4">
@@ -397,7 +396,8 @@
                         </div>
 
                         <div class="mt-4 p-4 bg-green-900/20 border border-green-800/50 rounded">
-                            <p id="resultPassword" class="text-lg text-green-300 font-mono" style="white-space: pre-wrap;">等待執行...</p>
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultPassword" class="result-text text-xl text-green-300 font-mono" aria-live="polite">等待執行...</p>
                         </div>
                     </div>
                     <div>
@@ -416,8 +416,8 @@
 
             <!-- 6. 串列區塊 -->
             <div id="content-list" class="tab-content hidden">
-                <h2 class="text-xl font-bold mb-1 text-blue-400">串列 (List)</h2>
-                <p class="text-slate-400 mb-4 text-sm">請設計一個程式，讓使用者輸入一個數字後，再找出該數字的所有因數。</p>
+                <h2 class="text-2xl font-bold mb-1 text-blue-400">串列 (List)</h2>
+                <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入一個數字後，再找出該數字的所有因數。</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- 左側：輸入控制 -->
@@ -436,8 +436,8 @@
                             <div class="var-card border-emerald-500"><div class="var-label">factors</div><div id="visListFactors" class="var-value text-sm" style="word-break:break-all;">[]</div></div>
                         </div>
                         <div class="mt-2 p-4 bg-green-900/20 border border-green-800/50 rounded">
-                            <h3 class="font-bold text-green-400">執行結果:</h3>
-                            <p id="resultList" class="text-xl mt-2 text-green-300 font-mono" style="white-space: pre-wrap;">等待計算...</p>
+                            <h3 class="font-bold text-green-400">執行結果 (模擬 Console):</h3>
+                            <p id="resultList" class="result-text text-2xl mt-2 text-green-300 font-mono" aria-live="polite">等待計算...</p>
                         </div>
                     </div>
 
@@ -505,19 +505,19 @@
         }
 
         function updateTriangleCode() {
-    document.getElementById('codeTriangleContainer').innerHTML = `
-        <span id="line-triangle-1" class="code-line text-slate-500"># input() 讀取的是字串，int() 將字串轉成「整數 (int)」</span>
-        <span id="line-triangle-3" class="code-line">base = int(input('Please enter the base of the triangle:\\n'))</span>
-        <span id="line-triangle-4" class="code-line">height = int(input('Please enter the height of the triangle:\\n'))</span>
-        <span id="line-triangle-5" class="code-line"></span>
-        <span id="line-triangle-6" class="code-line text-slate-500"># 三角形面積公式：底 × 高 ÷ 2</span>
-        <span id="line-triangle-7" class="code-line">area = base * height / 2</span>
-        <span id="line-triangle-8" class="code-line"></span>
-        <span id="line-triangle-9" class="code-line text-slate-500"># 使用逗號分隔，Python 自動加空格並處理型態轉換</span>
-        <span id="line-triangle-10" class="code-line">print('The area of the triangle is', area)</span>
-    `;
-    resetAnim('triangle');
-}
+            document.getElementById('codeTriangleContainer').innerHTML = `
+                <span id="line-triangle-1" class="code-line text-slate-500"># input() 讀取的是字串，int() 將字串轉成「整數 (int)」</span>
+                <span id="line-triangle-3" class="code-line">base = int(input('Please enter the base of the triangle:\\n'))</span>
+                <span id="line-triangle-4" class="code-line">height = int(input('Please enter the height of the triangle:\\n'))</span>
+                <span id="line-triangle-5" class="code-line"></span>
+                <span id="line-triangle-6" class="code-line text-slate-500"># 三角形面積公式：底 × 高 ÷ 2</span>
+                <span id="line-triangle-7" class="code-line">area = base * height / 2</span>
+                <span id="line-triangle-8" class="code-line"></span>
+                <span id="line-triangle-9" class="code-line text-slate-500"># 使用逗號分隔，Python 自動加空格並處理型態轉換</span>
+                <span id="line-triangle-10" class="code-line">print('The area of the triangle is', area)</span>
+            `;
+            resetAnim('triangle');
+        }
         
         function updateGradeCode() {
             document.getElementById('codeGradeContainer').innerHTML = `
@@ -610,29 +610,31 @@
             resetAnim('password');
         }
 
+        function ucFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
         function resetAnim(key) {
             const st = animStates[key];
             if (st.timer) clearInterval(st.timer);
             st.step = 0; st.isAuto = false;
-            const btn = document.getElementById(`btn${key.charAt(0).toUpperCase() + key.slice(1)}Auto`);
-            if (btn) btn.innerText = "自動播放 (Play)";
+            const btn = document.getElementById(`btn${ucFirst(key)}Auto`);
+            if (btn) btn.textContent = "自動播放 (Play)";
             document.querySelectorAll(`[id^='line-${key}']`).forEach(el => el.classList.remove('highlight'));
-            const resEl = document.getElementById(`result${key.charAt(0).toUpperCase() + key.slice(1)}`);
-            if (resEl) resEl.innerText = "等待執行...";
+            const resEl = document.getElementById(`result${ucFirst(key)}`);
+            if (resEl) resEl.textContent = "等待執行...";
             
-            if (key === 'greeting') document.getElementById('visName').innerText = "?";
-            else if (key === 'average') { ['visAveX', 'visAveY', 'visAveZ'].forEach(id => document.getElementById(id).innerText = "?"); }
-            else if (key === 'triangle') { ['visTriBase', 'visTriHeight', 'visTriArea'].forEach(id => document.getElementById(id).innerText = "?"); document.getElementById('resultTriangle').innerText = "等待計算..."; }
-            else if (key === 'grade') { ['visGrdX', 'visGrdY', 'visGrdZ', 'visGrdTotal'].forEach(id => document.getElementById(id).innerText = "?"); }
-            else if (key === 'a051') { document.getElementById('visA051A').innerText = "?"; }
-            else if (key === 'loop') { st.i = 0; st.total = 0; document.getElementById('visLoopI').innerText = "0"; document.getElementById('visLoopTotal').innerText = "0"; document.getElementById('loopSteps').innerHTML = ""; }
-            else if (key === 'password') { st.times = 0; st.curr = ""; document.getElementById('visPwdTimes').innerText = "0"; document.getElementById('visPwdCurr').innerText = "?"; }
+            if (key === 'greeting') document.getElementById('visName').textContent = "?";
+            else if (key === 'average') { ['visAveX', 'visAveY', 'visAveZ'].forEach(id => document.getElementById(id).textContent = "?"); }
+            else if (key === 'triangle') { ['visTriBase', 'visTriHeight', 'visTriArea'].forEach(id => document.getElementById(id).textContent = "?"); document.getElementById('resultTriangle').textContent = "等待計算..."; }
+            else if (key === 'grade') { ['visGrdX', 'visGrdY', 'visGrdZ', 'visGrdTotal'].forEach(id => document.getElementById(id).textContent = "?"); }
+            else if (key === 'a051') { document.getElementById('visA051A').textContent = "?"; }
+            else if (key === 'loop') { st.i = 0; st.total = 0; document.getElementById('visLoopI').textContent = "0"; document.getElementById('visLoopTotal').textContent = "0"; document.getElementById('loopSteps').innerHTML = ""; }
+            else if (key === 'password') { st.times = 0; st.curr = ""; document.getElementById('visPwdTimes').textContent = "0"; document.getElementById('visPwdCurr').textContent = "?"; }
             else if (key === 'list') {
                 st.i = 0; st.factors = [];
-                document.getElementById('visListN').innerText = '?';
-                document.getElementById('visListI').innerText = '?';
-                document.getElementById('visListFactors').innerText = '[]';
-                document.getElementById('resultList').innerText = '等待計算...';
+                document.getElementById('visListN').textContent = '?';
+                document.getElementById('visListI').textContent = '?';
+                document.getElementById('visListFactors').textContent = '[]';
+                document.getElementById('resultList').textContent = '等待計算...';
             }
         }
 
@@ -644,7 +646,7 @@
 
         function bump(id, val) {
             const el = document.getElementById(id);
-            el.innerText = val;
+            el.textContent = val;
             el.classList.remove('value-bump');
             void el.offsetWidth;
             el.classList.add('value-bump');
@@ -652,66 +654,66 @@
 
         function nextStep(key) {
             const st = animStates[key];
-            const resEl = document.getElementById(`result${key.charAt(0).toUpperCase() + key.slice(1)}`);
+            const resEl = document.getElementById(`result${ucFirst(key)}`);
             
             if (key === 'greeting') {
                 const name = document.getElementById('inputName').value || "阿顯";
                 const p = "What is your name?\n";
-                if (st.step === 0) { hlite(key, 3); bump('visName', name); resEl.innerText = p + name; st.step = 1; }
-                else if (st.step === 1) { hlite(key, 6); resEl.innerText = p + name + "\nHello " + name + " !"; st.step = 2; }
+                if (st.step === 0) { hlite(key, 3); bump('visName', name); resEl.textContent = p + name; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 6); resEl.textContent = p + name + "\nHello " + name + " !"; st.step = 2; }
                 else resetAnim(key);
             } 
             else if (key === 'average') {
                 const vx = document.getElementById('numX').value || "0", vy = document.getElementById('numY').value || "0";
                 const px = "Please enter number x:\n", py = "Please enter number y:\n";
-                if (st.step === 0) { hlite(key, 3); bump('visAveX', vx); resEl.innerText = px + vx; st.step = 1; }
-                else if (st.step === 1) { hlite(key, 4); bump('visAveY', vy); resEl.innerText = px + vx + "\n" + py + vy; st.step = 2; }
+                if (st.step === 0) { hlite(key, 3); bump('visAveX', vx); resEl.textContent = px + vx; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 4); bump('visAveY', vy); resEl.textContent = px + vx + "\n" + py + vy; st.step = 2; }
                 else if (st.step === 2) { hlite(key, 7); st.z = ((parseFloat(vx) + parseFloat(vy)) / 2).toFixed(1); bump('visAveZ', st.z); st.step = 3; }
-                else if (st.step === 3) { hlite(key, 10); resEl.innerText = px + vx + "\n" + py + vy + "\nAverage is " + st.z; st.step = 4; }
+                else if (st.step === 3) { hlite(key, 10); resEl.textContent = px + vx + "\n" + py + vy + "\nAverage is " + st.z; st.step = 4; }
                 else resetAnim(key);
             }
             else if (key === 'triangle') {
                 const vb = document.getElementById('triBase').value || "0", vh = document.getElementById('triHeight').value || "0";
                 const pb = "Please enter the base of the triangle:\n", ph = "Please enter the height of the triangle:\n";
-                if (st.step === 0) { hlite(key, 3); bump('visTriBase', vb); resEl.innerText = pb + vb; st.step = 1; }
-                else if (st.step === 1) { hlite(key, 4); bump('visTriHeight', vh); resEl.innerText = pb + vb + "\n" + ph + vh; st.step = 2; }
+                if (st.step === 0) { hlite(key, 3); bump('visTriBase', vb); resEl.textContent = pb + vb; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 4); bump('visTriHeight', vh); resEl.textContent = pb + vb + "\n" + ph + vh; st.step = 2; }
                 else if (st.step === 2) { hlite(key, 7); st.area = (parseFloat(vb) * parseFloat(vh) / 2).toFixed(1); bump('visTriArea', st.area); st.step = 3; }
-                else if (st.step === 3) { hlite(key, 10); resEl.innerText = pb + vb + "\n" + ph + vh + "\nThe area of the triangle is " + st.area; st.step = 4; }
+                else if (st.step === 3) { hlite(key, 10); resEl.textContent = pb + vb + "\n" + ph + vh + "\nThe area of the triangle is " + st.area; st.step = 4; }
                 else resetAnim(key);
             }
             else if (key === 'grade') {
                 const vx = document.getElementById('scoreWork').value || "0", vy = document.getElementById('scoreExam').value || "0", vz = document.getElementById('scoreRoutine').value || "0";
                 const px = "Please enter homework grades:\n", py = "Please enter quiz score:\n", pz = "Please enter your usual grades:\n";
-                if (st.step === 0) { hlite(key, 2); bump('visGrdX', vx); resEl.innerText = px + vx; st.step = 1; }
-                else if (st.step === 1) { hlite(key, 3); bump('visGrdY', vy); resEl.innerText = px + vx + "\n" + py + vy; st.step = 2; }
-                else if (st.step === 2) { hlite(key, 4); bump('visGrdZ', vz); resEl.innerText = px + vx + "\n" + py + vy + "\n" + pz + vz; st.step = 3; }
+                if (st.step === 0) { hlite(key, 2); bump('visGrdX', vx); resEl.textContent = px + vx; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 3); bump('visGrdY', vy); resEl.textContent = px + vx + "\n" + py + vy; st.step = 2; }
+                else if (st.step === 2) { hlite(key, 4); bump('visGrdZ', vz); resEl.textContent = px + vx + "\n" + py + vy + "\n" + pz + vz; st.step = 3; }
                 else if (st.step === 3) { hlite(key, 7); st.g = (vx*0.4 + vy*0.4 + vz*0.2).toFixed(1); bump('visGrdTotal', st.g); st.step = 4; }
-                else if (st.step === 4) { hlite(key, 11); resEl.innerText = px + vx + "\n" + py + vy + "\n" + pz + vz + "\nSemester grades are " + st.g + " points."; st.step = 5; }
+                else if (st.step === 4) { hlite(key, 11); resEl.textContent = px + vx + "\n" + py + vy + "\n" + pz + vz + "\nSemester grades are " + st.g + " points."; st.step = 5; }
                 else if (st.step === 5) { hlite(key, 14); st.step = 6; }
                 else if (st.step === 6) {
-                    if (st.g < 60) { hlite(key, 16); resEl.innerText += "\nFailed!"; st.step = 8; }
+                    if (st.g < 60) { hlite(key, 16); resEl.textContent += "\nFailed!"; st.step = 8; }
                     else { hlite(key, 17); st.step = 7; }
                 }
-                else if (st.step === 7) { hlite(key, 19); resEl.innerText += "\nPass!"; st.step = 8; }
+                else if (st.step === 7) { hlite(key, 19); resEl.textContent += "\nPass!"; st.step = 8; }
                 else resetAnim(key);
             }
             else if (key === 'a051') {
                 const vx = document.getElementById('a051_chinese').value || "0", vy = document.getElementById('a051_english').value || "0", vz = document.getElementById('a051_math').value || "0";
-                if (st.step === 0) { hlite(key, 2); resEl.innerText = vx; st.step = 1; }
-                else if (st.step === 1) { hlite(key, 3); resEl.innerText = vx + "\n" + vy; st.step = 2; }
-                else if (st.step === 2) { hlite(key, 4); resEl.innerText = vx + "\n" + vy + "\n" + vz; st.step = 3; }
+                if (st.step === 0) { hlite(key, 2); resEl.textContent = vx; st.step = 1; }
+                else if (st.step === 1) { hlite(key, 3); resEl.textContent = vx + "\n" + vy; st.step = 2; }
+                else if (st.step === 2) { hlite(key, 4); resEl.textContent = vx + "\n" + vy + "\n" + vz; st.step = 3; }
                 else if (st.step === 3) { hlite(key, 7); st.a = ((parseFloat(vx)+parseFloat(vy)+parseFloat(vz))/3).toFixed(1); bump('visA051A', st.a); st.step = 4; }
                 else if (st.step === 4) { hlite(key, 8); st.step = 5; }
                 else if (st.step === 5) { hlite(key, 11); st.step = 6; }
                 else if (st.step === 6) {
-                    if (st.a > 70) { hlite(key, 12); resEl.innerText += "\nYou are great"; st.step = 10; }
+                    if (st.a > 70) { hlite(key, 12); resEl.textContent += "\nYou are great"; st.step = 10; }
                     else { hlite(key, 13); st.step = 7; }
                 }
                 else if (st.step === 7) {
-                    if (st.a < 70) { hlite(key, 14); resEl.innerText += "\nKeep on"; st.step = 10; }
+                    if (st.a < 70) { hlite(key, 14); resEl.textContent += "\nKeep on"; st.step = 10; }
                     else { hlite(key, 15); st.step = 8; }
                 }
-                else if (st.step === 8) { hlite(key, 17); resEl.innerText += "\nCome on"; st.step = 10; }
+                else if (st.step === 8) { hlite(key, 17); resEl.textContent += "\nCome on"; st.step = 10; }
                 else resetAnim(key);
             }
             else if (key === 'loop') {
@@ -736,12 +738,12 @@
             else if (st.step === 1) { hlite('password', 2); st.times = 1; bump('visPwdTimes', 1); st.step = 2; }
             else if (st.step === 2) { 
                 hlite('password', 3); st.curr = pwds[0]; bump('visPwdCurr', st.curr); 
-                resEl.innerText = prompt + st.curr; st.step = 3; 
+                resEl.textContent = prompt + st.curr; st.step = 3; 
             }
             else if (st.step === 3) { hlite('password', 6); st.step = 4; } // While check
             else if (st.step === 4) { // While body
                 if (st.curr !== correct && st.times < 3) {
-                    hlite('password', 7); resEl.innerText += "\nWrong password!"; st.step = 5;
+                    hlite('password', 7); resEl.textContent += "\nWrong password!"; st.step = 5;
                 } else {
                     hlite('password', 15); st.step = 8; // 跳到判斷
                 }
@@ -749,26 +751,26 @@
             else if (st.step === 5) { hlite('password', 8); st.times++; bump('visPwdTimes', st.times); st.step = 6; }
             else if (st.step === 6) { 
                 hlite('password', 10); st.curr = pwds[st.times-1]; bump('visPwdCurr', st.curr);
-                resEl.innerText += "\n" + prompt + st.curr; st.step = 3; // 回去 while 檢查
+                resEl.textContent += "\n" + prompt + st.curr; st.step = 3; // 回去 while 檢查
             }
             else if (st.step === 8) {
-                if (st.curr === correct) { hlite('password', 17); resEl.innerText += "\nWelcome to this system."; st.step = 10; }
+                if (st.curr === correct) { hlite('password', 17); resEl.textContent += "\nWelcome to this system."; st.step = 10; }
                 else { hlite('password', 18); st.step = 9; }
             }
-            else if (st.step === 9) { hlite('password', 20); resEl.innerText += "\nEnter wrong password 3 times, locked."; st.step = 10; }
+            else if (st.step === 9) { hlite('password', 20); resEl.textContent += "\nEnter wrong password 3 times, locked."; st.step = 10; }
             else resetAnim('password');
         }
 
         function startAnim(key) {
             const st = animStates[key];
-            const btn = document.getElementById(`btn${key.charAt(0).toUpperCase() + key.slice(1)}Auto`);
-            if (st.isAuto) { clearInterval(st.timer); st.isAuto = false; btn.innerText = "自動播放 (Play)"; }
+            const btn = document.getElementById(`btn${ucFirst(key)}Auto`);
+            if (st.isAuto) { clearInterval(st.timer); st.isAuto = false; btn.textContent = "自動播放 (Play)"; }
             else {
-                st.isAuto = true; btn.innerText = "暫停 (Pause)";
+                st.isAuto = true; btn.textContent = "暫停 (Pause)";
                 st.timer = setInterval(() => {
                     nextStep(key);
                     let endSteps = { greeting: 2, average: 4, triangle: 4, grade: 8, a051: 10, loop: 3, password: 10, list: 99 };
-                    if (st.step === endSteps[key]) { clearInterval(st.timer); st.isAuto = false; btn.innerText = "播放完畢"; }
+                    if (st.step === endSteps[key]) { clearInterval(st.timer); st.isAuto = false; btn.textContent = "播放完畢"; }
                 }, 750);
             }
         }
@@ -780,7 +782,7 @@
             if (st.step === 0) { hlite('loop', 4); st.total = 0; bump('visLoopTotal', 0); st.step = 1; }
             else if (st.step === 1) {
                 if (st.i < n) { st.i++; hlite('loop', 8); bump('visLoopI', st.i); st.step = 2; }
-                else { hlite('loop', 14); resEl.innerText = `1+2+...+${n}=${st.total}`; st.step = 3; }
+                else { hlite('loop', 14); resEl.textContent = `1+2+...+${n}=${st.total}`; st.step = 3; }
             }
             else if (st.step === 2) {
                 hlite('loop', 9); let old = st.total; st.total += st.i; bump('visLoopTotal', st.total);
@@ -790,25 +792,6 @@
                 document.getElementById('loopSteps').prepend(log); st.step = 1;
             } else resetAnim('loop');
         }
-
-        function runLoop() {
-            resetAnim('loop');
-            const n = parseInt(document.getElementById('numN').value) || 0;
-            if (isNaN(n) || n <= 0) { alert("請輸入大於 0 的整數"); return; }
-            let sum = 0;
-            let stepsHTML = ""; 
-            for (let i = 1; i <= n; i++) {
-                let oldSum = sum; sum += i;
-                if (n <= 100) stepsHTML = `<div class="border-b border-slate-700/50 py-1 text-sm"><span class="text-yellow-400 font-bold">i = ${i}</span> &nbsp;&nbsp; <span class="text-slate-400">${oldSum} + </span><span class="text-yellow-400">${i}</span><span class="text-slate-400"> = </span><span class="text-emerald-400 font-bold">${sum}</span></div>` + stepsHTML;
-            }
-            bump('visLoopI', n); bump('visLoopTotal', sum);
-            document.getElementById('loopSteps').innerHTML = stepsHTML;
-            document.getElementById('resultLoop').innerText = `1+2+...+${n}=${sum}`;
-            hlite('loop', 14); animStates.loop.step = 3;
-        }
-
-        function runA051() { resetAnim('a051'); while(animStates.a051.step < 10) nextStep('a051'); }
-        function runPassword() { resetAnim('password'); while(animStates.password.step < 10) nextStep('password'); }
 
         function updateListCode() {
             document.getElementById('codeListContainer').innerHTML = `
@@ -835,12 +818,12 @@
             if (st.step === 0) {
                 hlite('list', 1); st.i = 0; st.factors = [];
                 bump('visListN', n); bump('visListI', '?');
-                document.getElementById('visListFactors').innerText = '[]';
-                resEl.innerText = '請輸入數字 n :\n' + n;
+                document.getElementById('visListFactors').textContent = '[]';
+                resEl.textContent = '請輸入數字 n :\n' + n;
                 st.step = 1;
             } else if (st.step === 1) {
                 hlite('list', 3);
-                st.factors = []; document.getElementById('visListFactors').innerText = '[]';
+                st.factors = []; document.getElementById('visListFactors').textContent = '[]';
                 st.step = 2;
             } else if (st.step === 2) {
                 if (st.i < n) {
@@ -849,7 +832,7 @@
                     st.step = 3;
                 } else {
                     hlite('list', 11);
-                    resEl.innerText = '請輸入數字 n :\n' + n + '\n' + JSON.stringify(st.factors);
+                    resEl.textContent = '請輸入數字 n :\n' + n + '\n' + JSON.stringify(st.factors);
                     st.step = 99;
                 }
             } else if (st.step === 3) {
@@ -859,7 +842,7 @@
             } else if (st.step === 4) {
                 hlite('list', 9);
                 st.factors.push(st.i);
-                document.getElementById('visListFactors').innerText = JSON.stringify(st.factors);
+                document.getElementById('visListFactors').textContent = JSON.stringify(st.factors);
                 st.step = 2;
             } else {
                 resetAnim('list');

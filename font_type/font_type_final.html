@@ -84,7 +84,8 @@
         .rules-box{background:rgba(63,185,80,0.06);border:1px solid rgba(63,185,80,0.2);border-radius:10px;padding:18px 22px;margin-bottom:22px;font-size:.9rem;line-height:2;}
         .rules-box h3{color:#3fb950;margin-bottom:8px;font-size:1rem;}
 
-        .btn-start{width:100%;padding:15px;background:var(--accent);color:#000;font-size:1.05rem;border-radius:10px;border:none;cursor:pointer;font-weight:900;letter-spacing:.05em;font-family:inherit;transition:background .2s;}
+        .btn-start,.btn-to-quiz,.btn-view-result,.btn-submit-gas,.btn-retry{width:100%;border-radius:10px;cursor:pointer;font-weight:700;font-family:inherit;}
+        .btn-start{padding:15px;background:var(--accent);color:#000;font-size:1.05rem;font-weight:900;letter-spacing:.05em;transition:background .2s;}
         .btn-start:hover{background:#79b8ff;}
 
         /* Learn page */
@@ -106,7 +107,7 @@
         .keyboard-visual{display:flex;justify-content:center;gap:10px;margin-top:18px;flex-wrap:wrap;}
         .key{border:2px solid var(--border);border-radius:6px;padding:10px 15px;font-family:'JetBrains Mono',monospace;font-weight:700;box-shadow:0 4px 0 #21262d;background:#21262d;color:var(--text);transition:.1s;font-size:.9rem;}
         .key.active{transform:translateY(4px);box-shadow:none;background:rgba(88,166,255,0.2);border-color:var(--accent);color:var(--accent);}
-        .btn-to-quiz{width:100%;padding:14px;background:#21262d;color:var(--text);border:1px solid var(--border);font-size:1rem;border-radius:10px;cursor:pointer;font-weight:700;font-family:inherit;transition:all .2s;margin-top:6px;}
+        .btn-to-quiz{padding:14px;background:#21262d;color:var(--text);border:1px solid var(--border);transition:all .2s;margin-top:6px;}
         .btn-to-quiz:hover{border-color:var(--accent);color:var(--accent);}
 
         /* Quiz page */
@@ -146,7 +147,7 @@
         .section-done{display:none;background:rgba(63,185,80,0.08);border:2px solid rgba(63,185,80,0.35);border-radius:10px;padding:18px;text-align:center;font-size:1rem;font-weight:700;color:#3fb950;margin-top:10px;}
         .section-done.show{display:block;}
 
-        .btn-view-result{width:100%;padding:14px;background:#3fb950;color:#000;font-size:1rem;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-family:inherit;transition:background .2s;margin-top:6px;}
+        .btn-view-result{padding:14px;background:#3fb950;color:#000;border:none;transition:background .2s;margin-top:6px;}
         .btn-view-result:hover{background:#2ea043;}
 
         /* Result page */
@@ -188,14 +189,14 @@
         .divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
         .sec-title{font-size:.95rem;font-weight:700;margin-bottom:12px;color:var(--text);}
 
-        .btn-submit-gas{width:100%;padding:14px;background:var(--accent);color:#000;font-size:1rem;border-radius:10px;border:none;cursor:pointer;font-weight:700;font-family:inherit;transition:background .2s;margin-bottom:10px;}
+        .btn-submit-gas{padding:14px;background:var(--accent);color:#000;border:none;transition:background .2s;margin-bottom:10px;}
         .btn-submit-gas:hover{background:#79b8ff;}
         .btn-submit-gas:disabled{background:#21262d;color:var(--muted);cursor:not-allowed;}
         .gas-notice{font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:10px;}
         .submit-msg{display:none;text-align:center;padding:13px;border-radius:8px;font-weight:700;margin-top:8px;}
         .submit-msg.ok{background:rgba(63,185,80,0.12);color:#3fb950;border:1px solid rgba(63,185,80,0.3);}
         .submit-msg.err{background:rgba(248,81,73,0.12);color:#f85149;border:1px solid rgba(248,81,73,0.3);}
-        .btn-retry{width:100%;padding:12px;background:transparent;color:var(--text);font-size:.95rem;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-weight:700;font-family:inherit;transition:all .2s;margin-top:8px;}
+        .btn-retry{padding:12px;background:transparent;color:var(--text);font-size:.95rem;border:1px solid var(--border);transition:all .2s;margin-top:8px;}
         .btn-retry:hover{border-color:var(--accent);color:var(--accent);}
 
         .c-case{border-top-color:#bc8cff;}
@@ -319,9 +320,9 @@
         <h2>1. 英文大小寫 (Case Sensitivity)</h2>
         <div class="card-desc">英文有大小寫之分，但<b>中文沒有</b>。點擊下方按鈕或輸入文字體驗差異。</div>
         <div class="case-controls">
-            <button class="btn btn-case" onclick="setCase('upper')">全部大寫 (UPPER)</button>
-            <button class="btn btn-case" onclick="setCase('lower')">全部小寫 (lower)</button>
-            <button class="btn btn-case active" onclick="setCase('original')">還原</button>
+            <button class="btn btn-case" onclick="setCase('upper',this)">全部大寫 (UPPER)</button>
+            <button class="btn btn-case" onclick="setCase('lower',this)">全部小寫 (lower)</button>
+            <button class="btn btn-case active" onclick="setCase('original',this)">還原</button>
         </div>
         <div class="textarea-wrapper grid-bg">
             <textarea id="caseInput">Type English here...</textarea>
@@ -346,9 +347,9 @@
     <div class="card c-key">
         <h2>3. 鍵盤切換指南</h2>
         <div class="switch-tabs">
-            <div class="tab active" onclick="showTab('win-half-full')">全形/半形</div>
-            <div class="tab" onclick="showTab('win-case')">大小寫</div>
-            <div class="tab" onclick="showTab('win-ime')">中英模式</div>
+            <div class="tab active" data-tab="win-half-full" onclick="showTab('win-half-full')">全形/半形</div>
+            <div class="tab" data-tab="win-case" onclick="showTab('win-case')">大小寫</div>
+            <div class="tab" data-tab="win-ime" onclick="showTab('win-ime')">中英模式</div>
         </div>
         <div id="instruction-text" class="card-desc"></div>
         <div class="keyboard-visual" id="keyboard-visual"></div>
@@ -377,7 +378,7 @@
             <button class="btn btn-half" id="btn-id-half" onclick="answerIdentify('half')">🔵 半形 Half-width</button>
             <button class="btn btn-full" id="btn-id-full" onclick="answerIdentify('full')">🟢 全形 Full-width</button>
         </div>
-        <div class="feedback-box" id="id-feedback"></div>
+        <div class="feedback-box" id="id-feedback" aria-live="polite"></div>
         <div class="section-done" id="id-done">
             ✅ 判斷測驗完成！得分：<span id="id-score-text">0</span> / <span id="id-total-text">0</span><br>
             <small style="color:#555;font-weight:400">請繼續完成下方輸入測驗</small>
@@ -401,7 +402,7 @@
                    onkeydown="if(event.key==='Enter')submitQuizAnswer()"/>
             <button class="btn btn-submit-quiz" onclick="submitQuizAnswer()">確認送出</button>
         </div>
-        <div class="feedback-box" id="quiz-feedback">
+        <div class="feedback-box" id="quiz-feedback" aria-live="polite">
             <div id="quiz-fb-text"></div>
             <div class="char-diff" id="char-diff"></div>
         </div>
@@ -465,7 +466,7 @@
     <div class="card-desc">請確認資料後送出成績到老師的 Google 試算表。</div>
     <button class="btn-submit-gas" id="btn-gas" onclick="submitToGAS()">📤 送出成績到 Google 試算表</button>
     <p class="gas-notice">⚙️ 請老師將 GAS Web App URL 填入程式碼 <b>GAS_URL</b> 變數後即可啟用。</p>
-    <div class="submit-msg" id="submit-msg"></div>
+    <div class="submit-msg" id="submit-msg" aria-live="polite"></div>
     <button class="btn-retry" onclick="location.reload()">🔄 重新作答</button>
 </div>
 </div>
@@ -573,26 +574,18 @@ function initLearn(){
     const ci=document.getElementById('caseInput');
     let orig=ci.value;
     ci.addEventListener('input',e=>orig=e.target.value);
-    window._setCase=type=>{
+    window._setCase=(type,btn)=>{
         document.querySelectorAll('.btn-case').forEach(b=>b.classList.remove('active'));
-        event.target.classList.add('active');
+        if(btn)btn.classList.add('active');
         ci.value=type==='upper'?orig.toUpperCase():type==='lower'?orig.toLowerCase():orig;
     };
     const hi=document.getElementById('halfInput');
     const fo=document.getElementById('fullOutput');
-    function toFull(str){
-        return[...str].map(c=>{
-            const code=c.charCodeAt(0);
-            if(code>=33&&code<=126)return String.fromCharCode(code+65248);
-            if(code===32)return String.fromCharCode(12288);
-            return c;
-        }).join('');
-    }
     hi.addEventListener('input',()=>fo.value=toFull(hi.value));
     fo.value=toFull(hi.value);
     showTab('win-half-full');
 }
-function setCase(t){if(window._setCase)window._setCase(t);}
+function setCase(t,el){if(window._setCase)window._setCase(t,el);}
 
 const TAB_MAP={
     'win-half-full':{text:'Windows 切換全形/半形：通常使用 <b>Shift + 空白鍵</b>。',keys:['Shift','+','Space']},
@@ -601,7 +594,7 @@ const TAB_MAP={
 };
 function showTab(id){
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    const el=document.querySelector(`[onclick="showTab('${id}')"]`);
+    const el=document.querySelector(`.tab[data-tab="${id}"]`);
     if(el)el.classList.add('active');
     const cur=TAB_MAP[id];if(!cur)return;
     document.getElementById('instruction-text').innerHTML=cur.text;
@@ -767,6 +760,14 @@ function shuffle(arr){
     for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
     return a;
 }
+function toFull(str){
+    return[...str].map(c=>{
+        const code=c.charCodeAt(0);
+        if(code>=33&&code<=126)return String.fromCharCode(code+65248);
+        if(code===32)return String.fromCharCode(12288);
+        return c;
+    }).join('');
+}
 function escH(s){
     return String(s)
         .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -870,9 +871,12 @@ function buildQuizQuestions(n){
 
     // 5. 從一般題庫補足剩餘題數，避免與保底題重複
     const remaining=n-3; // 剩餘題數（n最小5，所以remaining最小2）
-    const general=shuffle(POOL_GENERAL)
-        .filter(q=>!usedAnswers.has(q.answer))
-        .slice(0,remaining);
+    const available=shuffle(POOL_GENERAL)
+        .filter(q=>!usedAnswers.has(q.answer));
+    if(available.length<remaining){
+        console.warn(`一般題庫僅 ${available.length} 題可用，不足 ${remaining} 題`);
+    }
+    const general=available.slice(0,remaining);
 
     // 6. 合併並再次 shuffle，讓保底題位置隨機
     return shuffle([dq,sq,nl,...general]);
@@ -917,10 +921,10 @@ function submitQuizAnswer(){
     fb.style.display='block';
     fb.className=`feedback-box ${ok?'correct':'wrong'}`;
     if(ok){
-        ft.innerHTML='✅ 正確！';
+        ft.textContent='✅ 正確！';
         cd.style.display='none';
     }else{
-        ft.innerHTML=`❌ 答錯了！提示：${q.hint}`;
+        ft.textContent=`❌ 答錯了！提示：${q.hint}`;
         cd.innerHTML=charDiff(val===''?'':val,q.answer);
         cd.style.display='block';
     }
@@ -1038,8 +1042,9 @@ async function submitToGAS(){
         }))
     };
     try{
-        await fetch(GAS_URL,{method:'POST',mode:'no-cors',
+        const resp=await fetch(GAS_URL,{method:'POST',mode:'cors',
             headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+        if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
         msg.className='submit-msg ok';msg.style.display='block';
         msg.textContent=`✅ 成績已送出！${name} 同學，總分 ${idScore+quizScore} / ${SET_ID+SET_QUIZ}，作答時間 ${fmtTime(timerSec)}。`;
         btn.textContent='✅ 已送出';

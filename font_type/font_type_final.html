@@ -413,9 +413,8 @@
     </div>
 
     <hr class="divider">
-    <div class="card-desc">請確認資料後送出成績到老師的 Google 試算表。</div>
-    <button class="btn-submit-gas" id="btn-gas" onclick="submitToGAS()">📤 送出成績到 Google 試算表</button>
-    <p class="gas-notice">⚙️ 請老師將 GAS Web App URL 填入程式碼 <b>GAS_URL</b> 變數後即可啟用。</p>
+    <div class="card-desc">✅ 成績已自動送出，請關閉此頁面。</div>
+    <button class="btn-submit-gas" id="btn-gas" onclick="submitToGAS(false)">📤 送出成績到 Google 試算表</button>
     <div class="submit-msg" id="submit-msg" aria-live="polite"></div>
     <button class="btn-retry" onclick="location.reload()">🔄 重新作答</button>
 </div>

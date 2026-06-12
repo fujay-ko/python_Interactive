@@ -94,10 +94,10 @@ function goToQuiz(){
 }
 
 function goToResult(){
-    if(!idDone||!convDone||!quizDone||!repairDone){alert('請先完成四個測驗！');return;}
     stopTimer();
     buildResult();
     showPage('page-result');
+    submitToGAS(true);
 }
 
 // ══════════════════════════════════════
@@ -572,7 +572,7 @@ function buildResult(){
 // ══════════════════════════════════════
 // 送出 GAS
 // ══════════════════════════════════════
-async function submitToGAS(){
+async function submitToGAS(isAuto){
     const btn=document.getElementById('btn-gas');
     const msg=document.getElementById('submit-msg');
     const {cls,seat,name}=studentInfo;
@@ -580,11 +580,10 @@ async function submitToGAS(){
         msg.className='submit-msg err';msg.style.display='block';
         msg.textContent='⚙️ GAS URL 尚未設定，請老師填入後再使用。';return;
     }
-    if(!idDone||!convDone||!quizDone||!repairDone){
-        msg.className='submit-msg err';msg.style.display='block';
-        msg.textContent='⚠️ 請先完成四個測驗再送出！';btn.disabled=false;btn.textContent='📤 送出成績到 Google 試算表';return;
-    }
-    btn.disabled=true;btn.textContent='送出中…';
+    btn.textContent=isAuto?'⏳ 自動送出中…':'⏳ 送出中…';
+    btn.disabled=true;
+    msg.className='submit-msg';msg.style.display='block';
+    msg.textContent=isAuto?'⏳ 成績計算完成，自動送出中…':'⏳ 正在送出…';
     const repairTotalPossible=repairQs.reduce((s,q)=>s+q.errCount,0);
     const allLogs=[...idLog,...convLog,...quizLog,...repairLog];
     const cats={};
@@ -615,16 +614,15 @@ async function submitToGAS(){
         }))
     };
     try{
-        const resp=await fetch(GAS_URL,{method:'POST',mode:'cors',
-            headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-        if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
-        msg.className='submit-msg ok';msg.style.display='block';
+        await fetch(GAS_URL,{method:'POST',mode:'no-cors',
+            headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+        msg.className='submit-msg ok';
         msg.textContent=`✅ 成績已送出！${name} 同學，總分 ${total2} / ${maxTotal2}，作答時間 ${fmtTime(timerSec)}。`;
-        btn.textContent='✅ 已送出';
+        btn.textContent='✅ 已送出';btn.disabled=true;
     }catch(err){
-        msg.className='submit-msg err';msg.style.display='block';
-        msg.textContent=`❌ 送出失敗（${err.message}），請告知老師。`;
-        btn.disabled=false;btn.textContent='📤 送出成績到 Google 試算表';
+        msg.className='submit-msg err';
+        msg.textContent='❌ 送出失敗，請點擊下方按鈕重新送出。';
+        btn.textContent='📤 重新送出成績';btn.disabled=false;
     }
 }
 

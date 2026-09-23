@@ -13,7 +13,7 @@
             --color-cyan-accent: #06b6d4; --color-rose-accent: #f43f5e; --color-amber-accent: #f59e0b;
             --color-violet-accent: #8b5cf6; --color-red-accent: #ef4444;
         }
-        body { background-color: var(--color-bg-dark); color: #f8fafc; font-family: 'Inter', 'Noto Sans TC', sans-serif; min-height: 100vh; }
+        body { background-color: var(--color-bg-dark); color: #f8fafc; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", "Heiti TC", sans-serif; min-height: 100vh; }
         html { scroll-behavior: smooth; font-size: 112%; }
         section { scroll-margin-top: 5rem; } /* 增加偏移量，避開導覽列 */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -38,9 +38,53 @@
         .char-highlight { background-color: #f59e0b; color: #000; transform: scale(1.1); font-weight: bold; border-radius: 4px; }
         .func-btn { transition: all 0.2s; border: 1px solid transparent; }
         .func-btn.active { background-color: #059669; color: white; border-color: #34d399; }
-        .tip-box { @apply mt-1 text-xs text-slate-500 leading-relaxed; }
-        .white-card { @apply bg-slate-900 p-4 rounded-lg border border-slate-700 shadow-inner; }
-        
+        /* 章節導覽 scrollspy 作用中樣式 */
+        .nav-active { outline: 2px solid rgba(255, 255, 255, 0.85); outline-offset: 1px; }
+        /* lucide CDN 載入失敗時的優雅退化：隱藏空圖示佔位 */
+        .no-lucide i[data-lucide] { display: none; }
+        /* ---- 補上預編譯 Tailwind 缺少的 utilities（本檔 CSS 為靜態編譯，新增 class 需手寫） ---- */
+        .fixed { position: fixed; }
+        .right-4 { right: 1rem; }
+        .justify-end { justify-content: flex-end; }
+        .float-btn { background-color: rgba(30, 41, 59, 0.95); }
+        .runner-card { background-color: rgba(6, 78, 59, 0.2); border-color: rgba(16, 185, 129, 0.4); }
+        .hover\:bg-amber-600:hover { background-color: #d97706; }
+        .hover\:bg-cyan-700:hover { background-color: #0e7490; }
+        .hover\:bg-rose-600:hover { background-color: #e11d48; }
+        @keyframes panel-in { from { opacity: 0; transform: translateY(-0.5rem); } to { opacity: 1; transform: none; } }
+        #color-detail-panel:not(.hidden) { animation: panel-in 0.3s ease; }
+        /* 浮動導覽淡入淡出 */
+        .fadeable { transition: opacity 0.3s ease; }
+        .fade-hidden { opacity: 0; pointer-events: none; }
+        /* 複製按鈕（通用 data-copy 機制） */
+        .copy-btn { font-size: 11px; padding: 2px 8px; border-radius: 6px; background-color: #334155; color: #cbd5e1; border: 1px solid #475569; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+        .copy-btn:hover { background-color: #475569; color: #fff; }
+        .copy-btn.copied { background-color: #059669; color: #fff; border-color: #34d399; }
+        /* 章末小測驗 */
+        .quiz-wrap { padding: 0 1.5rem 1.5rem; }
+        .quiz-box { border: 1px solid #334155; border-radius: 0.75rem; background-color: rgba(15, 23, 42, 0.6); }
+        .quiz-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; font-size: 0.8rem; font-weight: bold; color: #fcd34d; cursor: pointer; background: none; border: none; }
+        .quiz-body { padding: 0 1rem 1rem; }
+        .quiz-q { font-size: 0.85rem; color: #e2e8f0; margin-bottom: 0.6rem; font-weight: bold; }
+        .quiz-opts { display: grid; gap: 0.4rem; }
+        .quiz-opt { text-align: left; font-size: 0.8rem; padding: 0.45rem 0.7rem; border-radius: 0.5rem; background-color: #1e293b; border: 1px solid #475569; color: #e2e8f0; cursor: pointer; transition: all 0.15s; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+        .quiz-opt:hover:not(:disabled) { border-color: #818cf8; background-color: #273449; }
+        .quiz-opt:disabled { cursor: default; }
+        .quiz-opt.correct { border-color: #34d399; background-color: rgba(6, 78, 59, 0.5); color: #a7f3d0; }
+        .quiz-opt.wrong { border-color: #f87171; background-color: rgba(127, 29, 29, 0.4); color: #fecaca; }
+        .quiz-feedback { font-size: 0.78rem; margin-top: 0.6rem; line-height: 1.6; }
+        .quiz-feedback.ok { color: #6ee7b7; }
+        .quiz-feedback.no { color: #fca5a5; }
+        .quiz-next { margin-top: 0.6rem; font-size: 11px; padding: 2px 8px; border-radius: 6px; background-color: #334155; color: #cbd5e1; border: 1px solid #475569; cursor: pointer; }
+        .quiz-next:hover { background-color: #475569; color: #fff; }
+        /* 學習進度追蹤 */
+        .done-check { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 11px; font-weight: normal; color: #94a3b8; cursor: pointer; margin-left: 0.5rem; }
+        .done-check input { accent-color: #10b981; cursor: pointer; }
+        .nav-done { text-decoration: none; }
+        .nav-done::after { content: ' ✓'; color: #34d399; font-weight: bold; }
+        .link-btn { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: inherit; text-decoration: underline; padding: 0; }
+        .link-btn:hover { color: #e2e8f0; }
+
         @keyframes flash-red { 0%, 100% { background-color: #000; } 50% { background-color: #450a0a; } }
         .infinite-loop-active { animation: flash-red 1s infinite; border-color: #ef4444 !important; transition: border-color 0.3s; }
     </style>
@@ -52,7 +96,10 @@
         <!-- 章節導覽 -->
         <nav class="sticky top-0 z-50 -mx-4 md:-mx-8 px-4 md:px-8 py-2 bg-slate-900/90 backdrop-blur border-b border-slate-700 shadow-lg">
             <div class="max-w-6xl mx-auto">
-                <div class="flex items-center gap-2 flex-wrap pb-1">
+                <div class="flex items-center gap-2 md:hidden pb-1">
+                    <button onclick="toggleNav()" id="nav-toggle-btn" aria-expanded="false" aria-controls="chapter-links" class="text-xs px-2 py-1 rounded bg-indigo-600 text-white shrink-0">章節選單 <span id="nav-toggle-caret" class="inline-block transition-all">▾</span></button>
+                </div>
+                <div id="chapter-links" class="hidden md:flex items-center gap-2 flex-wrap pb-1 pt-1">
                     <span class="text-xs text-slate-500 shrink-0">跳至：</span>
                     <a href="#thinking-section"    class="shrink-0 text-xs px-2 py-1 rounded bg-slate-800 hover:bg-indigo-600  text-slate-300 hover:text-white transition-all">1.運算思維</a>
                     <a href="#syntax-colors"       class="shrink-0 text-xs px-2 py-1 rounded bg-slate-800 hover:bg-pink-600    text-slate-300 hover:text-white transition-all">2.色彩密碼</a>
@@ -81,6 +128,12 @@
             </div>
             <p class="max-w-2xl mx-auto text-slate-400 font-medium">專為初學者設計，將程式概念轉化為白話與生活實例！</p>
         </header>
+
+        <!-- 動手做：本頁為概念模擬，實際執行請用真正的 Python -->
+        <div class="mx-auto max-w-2xl rounded-xl border runner-card p-4 text-center">
+            <p class="text-sm text-emerald-100 font-bold">本頁所有執行結果皆為「概念模擬」，想親手執行真正的 Python 嗎？</p>
+            <a href="https://www.programiz.com/python-programming/online-compiler/" target="_blank" rel="noopener" class="mt-2 inline-block rounded bg-emerald-600 px-4 py-1.5 text-sm font-bold text-white hover:bg-emerald-500 transition">開啟線上 Python 編譯器 ↗</a>
+        </div>
 
         <!-- STEP 00: COMPUTATIONAL THINKING (New) -->
         <section id="thinking-section" class="relative overflow-hidden rounded-xl border border-indigo-500/50 bg-slate-800 shadow-lg shadow-indigo-500/10">
@@ -118,7 +171,7 @@
                 <span class="flex h-6 w-6 items-center justify-center rounded-full bg-pink-500 text-sm font-bold text-white">2</span>
                 <i data-lucide="palette" class="w-5 h-5 text-pink-400"></i>
                 <h2 class="text-lg font-bold text-slate-100">顏色小字典：編輯器的「色彩密碼」</h2>
-                <span class="ml-auto text-[10px] text-slate-500 bg-slate-950 px-2 py-1 rounded">Tomorrow Night Eighties 配色方案</span>
+                <span class="ml-auto text-[10px] text-slate-400 bg-slate-950 px-2 py-1 rounded">Tomorrow Night Eighties 配色方案</span>
             </div>
             <div class="p-6">
                 <!-- Theme Introduction -->
@@ -134,42 +187,42 @@
                     <button onclick="showColorDetail('keyword')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-violet-300 transition-all text-center">
                         <div class="w-full h-2 rounded-full bg-[#c397d8] mb-3 shadow-[0_0_10px_rgba(195,151,216,0.3)]"></div>
                         <div class="text-xs font-bold text-[#c397d8] mb-1">淡紫色</div>
-                        <div class="text-[10px] text-slate-500">關鍵字 (Keywords)</div>
+                        <div class="text-[10px] text-slate-400">關鍵字 (Keywords)</div>
                     </button>
 
                     <!-- Functions -->
                     <button onclick="showColorDetail('func-builtin')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 transition-all text-center">
                         <div class="w-full h-2 rounded-full bg-[#70c0b1] mb-3 shadow-[0_0_10px_rgba(112,192,177,0.3)]"></div>
                         <div class="text-xs font-bold text-[#70c0b1] mb-1">淡藍色</div>
-                        <div class="text-[10px] text-slate-500">函數與類別</div>
+                        <div class="text-[10px] text-slate-400">函數與類別</div>
                     </button>
 
                     <!-- Strings -->
                     <button onclick="showColorDetail('string')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-400 transition-all text-center">
                         <div class="w-full h-2 rounded-full bg-[#b9ca4a] mb-3 shadow-[0_0_10px_rgba(185,202,74,0.3)]"></div>
                         <div class="text-xs font-bold text-[#b9ca4a] mb-1">淺綠色</div>
-                        <div class="text-[10px] text-slate-500">字串 (Strings)</div>
+                        <div class="text-[10px] text-slate-400">字串 (Strings)</div>
                     </button>
 
                     <!-- Variables/Numbers -->
                     <button onclick="showColorDetail('variable')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-orange-400 transition-all text-center">
                         <div class="w-full h-2 rounded-full bg-[#e78c45] mb-3 shadow-[0_0_10px_rgba(231,140,69,0.3)]"></div>
                         <div class="text-xs font-bold text-[#e78c45] mb-1">淡紅 / 橘色</div>
-                        <div class="text-[10px] text-slate-500">變數與數字</div>
+                        <div class="text-[10px] text-slate-400">變數與數字</div>
                     </button>
 
                     <!-- Comments -->
                     <button onclick="showColorDetail('comment')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-500 transition-all text-center">
                         <div class="w-full h-2 rounded-full bg-[#969896] mb-3 shadow-[0_0_10px_rgba(150,152,150,0.3)]"></div>
                         <div class="text-xs font-bold text-[#969896] mb-1">中灰色</div>
-                        <div class="text-[10px] text-slate-500">註解 (Comments)</div>
+                        <div class="text-[10px] text-slate-400">註解 (Comments)</div>
                     </button>
 
                     <!-- Operators -->
                     <button onclick="showColorDetail('operator')" class="group p-3 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-300 transition-all text-center">
                         <div class="w-full h-2 rounded-full bg-[#dedede] mb-3 shadow-[0_0_10px_rgba(222,222,222,0.3)]"></div>
                         <div class="text-xs font-bold text-[#dedede] mb-1">白 / 淺灰色</div>
-                        <div class="text-[10px] text-slate-500">運算子與標點</div>
+                        <div class="text-[10px] text-slate-400">運算子與標點</div>
                     </button>
 
                 </div>
@@ -308,7 +361,7 @@
                         </label>
                         <input type="text" name="name" value="小明" oninput="handleInputChange(this)" class="w-full rounded border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-yellow-500 transition-all" />
                         <div class="space-y-1">
-                            <div class="text-[10px] text-slate-500 font-mono"># 基本用法</div>
+                            <div class="text-[10px] text-slate-400 font-mono"># 基本用法</div>
                             <div class="text-xs text-yellow-400 font-mono bg-black/30 p-1.5 rounded">name = input("姓名？")</div>
                         </div>
                     </div>
@@ -320,7 +373,7 @@
                         </label>
                         <input type="number" name="age" value="18" oninput="handleInputChange(this)" class="w-full rounded border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all" />
                         <div class="space-y-1">
-                            <div class="text-[10px] text-slate-500 font-mono"># 轉型為整數</div>
+                            <div class="text-[10px] text-slate-400 font-mono"># 轉型為整數</div>
                             <div class="text-xs text-blue-400 font-mono bg-black/30 p-1.5 rounded">age = int(input())</div>
                         </div>
                     </div>
@@ -332,10 +385,15 @@
                         </label>
                         <input type="number" step="0.1" name="height" value="175.5" oninput="handleInputChange(this)" class="w-full rounded border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-purple-500 transition-all" />
                         <div class="space-y-1">
-                            <div class="text-[10px] text-slate-500 font-mono"># 轉型為小數</div>
+                            <div class="text-[10px] text-slate-400 font-mono"># 轉型為小數</div>
                             <div class="text-xs text-purple-400 font-mono bg-black/30 p-1.5 rounded">h = float(input())</div>
                         </div>
                     </div>
+                </div>
+
+                <!-- 即時變數監看：讓三個輸入框的值與型態即時可見 -->
+                <div class="rounded-lg border border-slate-700 bg-black/40 px-4 py-2 font-mono text-xs text-slate-300" aria-live="polite">
+                    <span class="text-slate-500">目前變數 → </span><span id="live-vars-readout"></span>
                 </div>
 
                 <!-- Bottom Row: Concept & Extras -->
@@ -350,7 +408,7 @@
                                 <span><strong class="text-slate-200">引號是「內容」的標記：</strong> 
                                     <code class="text-yellow-400 font-bold">"小明"</code> 是內容，像一張寫了名字的紙；
                                     <code class="text-blue-400 font-bold">name</code> 是盒子，用來裝那張紙。
-                                    <span class="block text-[10px] text-slate-500 mt-1 italic">※ 沒加引號，電腦會去找一個叫這名字的<strong class="text-yellow-400">變數盒子</strong>，但我們還沒宣告它，所以會出錯！</span>
+                                    <span class="block text-[10px] text-slate-400 mt-1 italic">※ 沒加引號，電腦會去找一個叫這名字的<strong class="text-yellow-400">變數盒子</strong>，但我們還沒宣告它，所以會出錯！</span>
                                 </span>
                             </li>
                             <li class="flex items-start gap-2 border-t border-slate-800 pt-2">
@@ -393,21 +451,24 @@
                                 <label class="text-xs text-slate-400 mb-1 block">解題網站 (OJ) 測資輸入 (Input)</label>
                                 <input type="text" id="oj-input-raw" value="10 20 30" oninput="updateOJInput()" class="w-full bg-slate-900 border border-slate-600 text-white rounded px-3 py-2 font-mono text-sm focus:ring-2 focus:ring-indigo-500 outline-none placeholder-slate-600" placeholder="例如: 10 20 30">
                             </div>
-                            <div class="bg-black/50 p-3 rounded font-mono text-xs text-indigo-200 border border-indigo-500/20">
+                            <div class="flex items-center justify-end">
+                                <button data-copy="#oj-starter-code" class="copy-btn" title="複製起手式，貼到真正的 Python 執行看看">複製起手式</button>
+                            </div>
+                            <div id="oj-starter-code" class="bg-black/50 p-3 rounded font-mono text-xs text-indigo-200 border border-indigo-500/20">
                                 <span class="text-slate-500"># 萬用解題起手式 (必背!)</span><br>
                                 nums = list(map(int, input().split()))
                             </div>
-                            <p class="text-[10px] text-slate-500 leading-relaxed">這行程式碼是解題網站 (OJ) 最常用的寫法，能一次把「一行空白隔開的數字」全部轉成「整數串列」。</p>
+                            <p class="text-[10px] text-slate-400 leading-relaxed">這行程式碼是解題網站 (OJ) 最常用的寫法，能一次把「一行空白隔開的數字」全部轉成「整數串列」。</p>
                         </div>
                         <div class="space-y-3 relative">
                             <div class="absolute left-[15px] top-4 bottom-4 w-0.5 bg-slate-800 -z-10"></div>
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] text-slate-400 font-bold">1</div>
-                                <div class="flex-1"><div class="text-[10px] text-slate-500">input() 讀進來是字串</div><div class="bg-slate-800 px-2 py-1.5 rounded text-yellow-400 font-mono text-xs border border-slate-700" id="oj-step-1" aria-live="polite"></div></div>
+                                <div class="flex-1"><div class="text-[10px] text-slate-400">input() 讀進來是字串</div><div class="bg-slate-800 px-2 py-1.5 rounded text-yellow-400 font-mono text-xs border border-slate-700" id="oj-step-1" aria-live="polite"></div></div>
                             </div>
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] text-slate-400 font-bold">2</div>
-                                <div class="flex-1"><div class="text-[10px] text-slate-500">.split() 切成很多塊</div><div class="bg-slate-800 px-2 py-1.5 rounded text-green-400 font-mono text-xs border border-slate-700" id="oj-step-2" aria-live="polite"></div></div>
+                                <div class="flex-1"><div class="text-[10px] text-slate-400">.split() 切成很多塊</div><div class="bg-slate-800 px-2 py-1.5 rounded text-green-400 font-mono text-xs border border-slate-700" id="oj-step-2" aria-live="polite"></div></div>
                             </div>
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-indigo-600 border border-indigo-400 flex items-center justify-center text-[10px] text-white font-bold shadow-lg shadow-indigo-500/50">3</div>
@@ -431,7 +492,10 @@
             <div class="p-6">
                 <div class="grid gap-6 md:grid-cols-2">
                     <div class="space-y-3">
-                        <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Python 程式碼</h3>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Python 程式碼</h3>
+                            <button data-copy="#output-code-display" class="copy-btn" title="複製這段程式碼，貼到真正的 Python 執行看看">複製</button>
+                        </div>
                         <div class="rounded-lg border border-slate-700 bg-slate-950 p-4 font-mono text-sm min-h-[100px] flex items-center">
                            <code id="output-code-display" aria-live="polite" class="block min-h-[1.5em] text-blue-300"></code>
                         </div>
@@ -515,7 +579,7 @@
                             <div class="mb-2 flex items-center justify-between text-xs text-slate-500"><span>運算式</span><span>結果</span></div>
                             <div class="flex items-end justify-between"><code id="arith-code" class="text-lg text-blue-300"></code><span class="text-xl text-slate-600">➜</span><span id="arith-result" aria-live="polite" class="text-2xl font-bold text-white"></span></div>
                             <div id="arith-desc" class="mt-2 border-t border-slate-800 pt-2 text-xs text-purple-300 font-medium"></div>
-                            <div id="arith-life-example" class="text-[10px] text-slate-500 mt-1 italic"></div>
+                            <div id="arith-life-example" class="text-[10px] text-slate-400 mt-1 italic"></div>
                         </div>
                     </div>
                 </div>
@@ -619,6 +683,7 @@
                         <div class="flex-1 rounded-lg border border-slate-700 bg-slate-950 p-4 font-mono text-sm leading-relaxed shadow-inner">
                             <div id="ifelifelse-if-line" class="code-line"></div><div class="indent-guide-container"><div id="ifelifelse-if-body" class="code-line indented-line"></div></div>
                             <div id="ifelifelse-elif-line" class="code-line"></div><div class="indent-guide-container"><div id="ifelifelse-elif-body" class="code-line indented-line"></div></div>
+                            <div id="ifelifelse-elif2-line" class="code-line"></div><div class="indent-guide-container"><div id="ifelifelse-elif2-body" class="code-line indented-line"></div></div>
                             <div id="ifelifelse-else-line" class="code-line"></div><div class="indent-guide-container"><div id="ifelifelse-else-body" class="code-line indented-line"></div></div>
                         </div>
                         <div class="rounded bg-slate-800 p-3 text-sm text-white border-l-4 border-indigo-500"><p id="ifelifelse-output" aria-live="polite" class="font-bold"></p></div>
@@ -640,7 +705,10 @@
                 
                 <!-- List Display (Shared) -->
                 <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 space-y-2">
-                    <h4 class="text-lg font-semibold text-cyan-300">範例串列 (fruits)</h4>
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-semibold text-cyan-300">範例串列 (fruits)</h4>
+                        <button onclick="resetListData()" class="text-xs px-2 py-1 rounded bg-slate-700 hover:bg-slate-600 text-slate-300 transition">重置串列</button>
+                    </div>
                     <div id="fruits-list-display" aria-live="polite" class="bg-slate-950 p-3 rounded font-mono text-white text-sm break-all"></div>
                 </div>
 
@@ -657,9 +725,9 @@
                     <div class="bg-slate-900 p-5 rounded-lg border border-slate-700 space-y-4">
                         <h4 class="text-lg font-semibold text-cyan-300">切片 (Slicing)</h4>
                         <div class="flex gap-2">
-                            <div class="flex-1"><input id="slice-start" type="text" placeholder="Start" title="開始位置 (包含)" oninput="updateLoopState('sliceStart', this.value)" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 text-center text-sm"><div class="text-[9px] text-slate-500 mt-1 text-center">開始(包含)</div></div>
+                            <div class="flex-1"><input id="slice-start" type="text" placeholder="Start" title="開始位置 (包含)" oninput="updateLoopState('sliceStart', this.value)" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 text-center text-sm"><div class="text-[9px] text-slate-400 mt-1 text-center">開始(包含)</div></div>
                             <div class="flex-1"><input id="slice-stop" type="text" placeholder="Stop" title="停止位置 (不包含！！)" oninput="updateLoopState('sliceStop', this.value)" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 text-center text-sm"><div class="text-[9px] text-rose-400 mt-1 text-center font-bold">停止(不包含)</div></div>
-                            <div class="flex-1"><input id="slice-step" type="text" placeholder="Step" title="間隔步數" oninput="updateLoopState('sliceStep', this.value)" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 text-center text-sm"><div class="text-[9px] text-slate-500 mt-1 text-center">間隔步數</div></div>
+                            <div class="flex-1"><input id="slice-step" type="text" placeholder="Step" title="間隔步數" oninput="updateLoopState('sliceStep', this.value)" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 text-center text-sm"><div class="text-[9px] text-slate-400 mt-1 text-center">間隔步數</div></div>
                         </div>
                         <div class="bg-slate-950 p-2 rounded font-mono text-cyan-200 text-sm">fruits[<span id="slice-code" class="text-white"></span>]</div>
                         <div id="slice-result" aria-live="polite" class="font-mono text-white text-sm bg-slate-950 p-2 rounded min-h-[2.5rem] flex items-center">['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry']</div>
@@ -915,7 +983,7 @@
             <div class="p-6 grid gap-8 lg:grid-cols-2">
                 <div class="space-y-6">
                     <div class="bg-slate-900 p-5 rounded-lg border border-slate-700 space-y-4">
-                        <div class="flex justify-between items-center"><h3 class="text-sm font-bold text-violet-300 uppercase">1. 定義函式 (Define)</h3><span class="text-[10px] text-slate-500">「參數像是空格 (佔位符)」</span></div>
+                        <div class="flex justify-between items-center"><h3 class="text-sm font-bold text-violet-300 uppercase">1. 定義函式 (Define)</h3><span class="text-[10px] text-slate-400">「參數像是空格 (佔位符)」</span></div>
                         <div class="grid grid-cols-2 gap-4">
                             <div><label class="text-xs text-slate-500 block mb-1">函式名稱</label><input type="text" id="func-name" value="greet" oninput="updateFunctionLab()" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 font-mono text-sm"></div>
                             <div><label class="text-xs text-slate-500 block mb-1">參數 (Parameter)</label><input type="text" id="func-param" value="name" oninput="updateFunctionLab()" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 font-mono text-sm"></div>
@@ -936,7 +1004,7 @@
                         </div>
                     </div>
                     <div class="bg-slate-900 p-5 rounded-lg border border-slate-700 space-y-4">
-                        <div class="flex justify-between items-center"><h3 class="text-sm font-bold text-violet-300 uppercase">2. 呼叫函式 (Call)</h3><span class="text-[10px] text-slate-500">「引數是填進去的答案」</span></div>
+                        <div class="flex justify-between items-center"><h3 class="text-sm font-bold text-violet-300 uppercase">2. 呼叫函式 (Call)</h3><span class="text-[10px] text-slate-400">「引數是填進去的答案」</span></div>
                         <div><label class="text-xs text-slate-500 block mb-1">傳入引數 (Argument)</label><input type="text" id="func-arg" value="Alice" oninput="updateFunctionLab()" class="w-full bg-slate-800 border border-slate-600 text-white rounded px-2 py-1 font-mono text-sm"></div>
                         <div class="bg-slate-950 p-3 rounded border border-slate-800 font-mono text-sm">
                             <div class="text-slate-300"><span id="code-var-result" class="text-slate-500">result = </span><span id="code-func-call-name" class="text-yellow-400">greet</span>(<span id="code-func-call-arg" class="text-green-300">"Alice"</span>)</div>
@@ -972,8 +1040,11 @@
                 <!-- Visual Area -->
                 <div class="space-y-4">
                     <div class="flex justify-between items-end">
-                        <h3 class="text-sm font-bold text-orange-300 uppercase">當前字典內容 (student)</h3>
-                        <span class="text-[10px] text-slate-500">Key (標籤) : Value (內容)</span>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-sm font-bold text-orange-300 uppercase">當前字典內容 (student)</h3>
+                            <button onclick="resetDictData()" class="text-[10px] px-2 py-1 rounded bg-slate-700 hover:bg-slate-600 text-slate-300 transition">重置字典</button>
+                        </div>
+                        <span class="text-[10px] text-slate-400">Key (標籤) : Value (內容)</span>
                     </div>
                     <div id="dict-visual" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <!-- Generated by JS -->
@@ -1000,7 +1071,7 @@
                     </div>
 
                     <div class="bg-black/50 p-4 rounded border border-slate-800 min-h-[4rem] flex flex-col justify-center">
-                        <div class="text-[10px] text-slate-500 font-mono mb-1">PYTHON CODE & RESULT</div>
+                        <div class="text-[10px] text-slate-400 font-mono mb-1">PYTHON CODE & RESULT</div>
                         <div id="dict-code-feedback" class="font-mono text-sm text-white">準備就緒...</div>
                     </div>
                 </div>
@@ -1024,14 +1095,14 @@
                 <div class="grid gap-8 lg:grid-cols-2">
                     <div class="space-y-4">
                         <div class="flex items-center justify-between"><h3 class="text-lg font-bold text-red-300 flex items-center gap-2"><i data-lucide="bug" class="w-5 h-5"></i> 錯誤程式碼</h3><span class="text-xs bg-slate-700 px-2 py-1 rounded text-slate-300" id="err-title">語法錯誤</span></div>
-                        <div class="bg-slate-950 p-4 rounded-lg border-l-4 border-red-500 font-mono text-sm relative group cursor-pointer" onclick="revealFix()">
+                        <div class="bg-slate-950 p-4 rounded-lg border-l-4 border-red-500 font-mono text-sm relative group cursor-pointer" onclick="revealFix()" role="button" tabindex="0" aria-label="點擊顯示修復後的程式碼" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();revealFix();}">
                             <div id="err-code-bad" class="text-slate-300 whitespace-pre-wrap">if x &gt; 5</div>
                             <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"><span class="bg-black/80 text-white text-xs px-2 py-1 rounded">點擊修復</span></div>
                         </div>
                         <div class="bg-black p-4 rounded-lg border border-slate-800 font-mono text-xs text-red-400 overflow-x-auto"><div class="text-slate-600 mb-1">Traceback (most recent call last):</div><div id="err-msg" aria-live="polite">File "main.py", line 1<br>    if x &gt; 5<br>           ^<br>SyntaxError: expected ":"</div></div>
                     </div>
                     <div id="fix-panel" class="space-y-4 opacity-50 filter blur-sm transition-all duration-500">
-                        <div class="flex items-center justify-between"><h3 class="text-lg font-bold text-green-400 flex items-center gap-2"><i data-lucide="check-circle" class="w-5 h-5"></i> 修復後</h3><div class="text-xs text-slate-400">除錯技巧: <span id="err-tip" aria-live="polite" class="text-white">檢查行尾冒號</span></div></div>
+                        <div class="flex items-center justify-between"><h3 class="text-lg font-bold text-green-400 flex items-center gap-2"><i data-lucide="check-circle" class="w-5 h-5"></i> 修復後</h3><div class="flex items-center gap-2"><button data-copy="#err-code-good" class="copy-btn" title="複製修復後的程式碼">複製</button><div class="text-xs text-slate-400">除錯技巧: <span id="err-tip" aria-live="polite" class="text-white">檢查行尾冒號</span></div></div></div>
                         <div class="bg-slate-950 p-4 rounded-lg border-l-4 border-green-500 font-mono text-sm"><div id="err-code-good" class="text-slate-300 whitespace-pre-wrap">if x &gt; 5<span class="text-green-400 font-bold">:</span></div></div>
                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 text-sm text-slate-300 font-bold"><p id="err-explanation" aria-live="polite">Python 的複合語句必須以冒號結尾。</p></div>
                     </div>
@@ -1082,15 +1153,81 @@
             </div>
         </section>
 
-        <footer class="text-center text-slate-500 text-xs pt-8 pb-4">Python Interactive Playground &copy; 2024 | v5 Enhanced Edition</footer>
+        <!-- 浮動章節導覽：上一章 / 下一章 / 回頂端 -->
+        <div id="float-nav" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 fadeable">
+            <div id="float-chapter-label" aria-live="polite" class="text-center text-[10px] text-slate-400 bg-slate-900/90 border border-slate-700 rounded px-2 py-1">第 1/16 章</div>
+            <button onclick="stepSection(-1)" aria-label="上一章" class="rounded-lg border border-slate-600 float-btn px-3 py-2 text-xs font-bold text-slate-200 shadow-lg hover:bg-slate-700 transition">▲ 上一章</button>
+            <button onclick="stepSection(1)" aria-label="下一章" class="rounded-lg border border-slate-600 float-btn px-3 py-2 text-xs font-bold text-slate-200 shadow-lg hover:bg-slate-700 transition">▼ 下一章</button>
+            <button onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到頂端" class="rounded-lg border border-slate-600 float-btn px-3 py-2 text-xs font-bold text-slate-200 shadow-lg hover:bg-slate-700 transition">⤒ 頂端</button>
+        </div>
+
+        <footer class="text-center text-slate-500 text-xs pt-8 pb-4">
+            <div>Python Interactive Playground &copy; <span id="foot-year">2024</span> | v6 Enhanced Edition</div>
+            <div class="pt-1"><span id="progress-count" aria-live="polite"></span> · <button onclick="resetProgress()" class="link-btn">重設進度</button></div>
+        </footer>
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/lucide@0.428.0/dist/umd/lucide.min.js" onload="if(typeof lucide!=='undefined') lucide.createIcons()"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.428.0/dist/umd/lucide.min.js" onload="if(typeof lucide!=='undefined') lucide.createIcons()" onerror="document.body.classList.add('no-lucide')"></script>
     <script>
         'use strict';
-        // 初始化 Lucide 圖示
-        function initLucide() { if (typeof lucide !== "undefined") lucide.createIcons(); }
+        // 初始化 Lucide 圖示（裝飾性圖示對螢幕閱讀器隱藏）
+        function initLucide() {
+            if (typeof lucide !== "undefined") {
+                lucide.createIcons();
+                document.querySelectorAll('svg.lucide:not([aria-hidden])').forEach(s => s.setAttribute('aria-hidden', 'true'));
+            }
+        }
+
+        // HTML 跳脫：所有使用者輸入在進入 innerHTML 前都必須經過此函式（XSS 基本防護）
+        const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        // 共用分頁按鈕樣式切換（取代四組重複的 switch*Tab 樣式邏輯）
+        function styleTabButtons(ids, activeId, activeClass, idleClass) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.className = (id === activeId) ? activeClass : idleClass;
+            });
+        }
+
+        // 共用 lab 顯示切換
+        function showLab(ids, activeId) {
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('hidden', id !== activeId);
+            });
+        }
+
+        // 複製機制：任何 <button data-copy="#目標"> 都可複製該區塊文字
+        // 含 file:// 情境 fallback（本機開啟時 navigator.clipboard 通常不可用）
+        function copyTextFrom(selector, btn) {
+            const target = document.querySelector(selector);
+            if (!target) return;
+            const text = target.textContent;
+            const done = () => {
+                const orig = btn.textContent;
+                btn.textContent = '已複製 ✓';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1500);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+            } else {
+                fallbackCopy(text, done);
+            }
+        }
+        function fallbackCopy(text, done) {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed'; ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                done();
+            } catch (e) { /* 靜默失敗：不打斷教學流程 */ }
+        }
         const pythonKeywords = new Set(['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with', 'yield']);
 
         // --- State Management ---
@@ -1230,11 +1367,25 @@
             selectFunc('type'); // Init common func
             setRangeMode(1); // Init range mode
             renderSumLab();
+            setupSectionSpy(); // 章節 scrollspy + 手機選單點擊收合
+            document.getElementById('foot-year').textContent = new Date().getFullYear();
+            setupCopyButtons(); // data-copy 委派
+            setupQuizzes(); // 章末小測驗
+            setupProgress(); // 學習進度追蹤
+            setupFloatNavFade(); // 浮動列捲動淡出
         });
+
+        // 即時變數監看：讓 name / age / height 的值與型態即時可見
+        function renderLiveVars() {
+            const el = document.getElementById('live-vars-readout');
+            if (!el) return;
+            el.innerHTML = `<span class="text-yellow-300">name</span> = <span class="text-green-300">"${esc(state.name)}"</span> <span class="text-slate-600">(str)</span> &nbsp;|&nbsp; <span class="text-blue-300">age</span> = <span class="text-orange-300">${esc(state.age)}</span> <span class="text-slate-600">(int)</span> &nbsp;|&nbsp; <span class="text-purple-300">height</span> = <span class="text-orange-300">${esc(state.height)}</span> <span class="text-slate-600">(float)</span>`;
+        }
 
         function renderAll() {
             initLucide();
             checkVarName(document.getElementById('var-name-check').value);
+            renderLiveVars();
             renderOutputSection();
             renderOperationsSection();
             renderConditionalSection();
@@ -1251,7 +1402,11 @@
         
         function handleInputChange(element) {
             state[element.name] = (element.name === 'age' || element.name === 'height') ? (parseFloat(element.value) || 0) : element.value;
-            renderAll();
+            // 只更新真正依賴 name/age 的區塊，避免每次按鍵全頁重 render
+            renderLiveVars();
+            renderOutputSection();
+            setAdditionScenario(state.currentAddScenario);
+            handleRelationalInput();
         }
 
         function checkVarName(name) {
@@ -1272,7 +1427,7 @@
             } else if (/^[0-9]/.test(name)) {
                 feedback.textContent = "❌ 錯誤：變數名稱不能以數字開頭"; feedback.classList.add('text-red-400', 'font-bold');
                 input.classList.add('border-red-500'); iconContainer.innerHTML = '<i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i>';
-            } else if (/ /.test(name) || !/^[a-zA-Z0-9_]+$/.test(name)) {
+            } else if (!/^[a-zA-Z0-9_]+$/.test(name)) {
                 feedback.textContent = "❌ 錯誤：包含非法字元"; feedback.classList.add('text-red-400', 'font-bold');
                 input.classList.add('border-red-500'); iconContainer.innerHTML = '<i data-lucide="x-circle" class="w-5 h-5 text-red-500"></i>';
             } else if (/[A-Z]/.test(name)) {
@@ -1313,12 +1468,12 @@
                     <div class="mt-4 grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-[10px] font-mono text-slate-500">sep (分隔符)預設為一個空白字元</label>
-                            <input type="text" value="${state.sep}" oninput="state.sep = this.value; renderOutputSection();"
+                            <input type="text" value="${esc(state.sep)}" oninput="state.sep = this.value; renderOutputSection();"
                                    class="w-full mt-1 rounded border border-slate-600 bg-slate-800 px-2 py-1 font-mono text-white text-xs outline-none focus:ring-2 focus:ring-emerald-500">
                         </div>
                         <div>
                             <label class="text-[10px] font-mono text-slate-500">end (結尾符)預設為換行符號</label>
-                            <input type="text" value="${state.end}" oninput="state.end = this.value; renderOutputSection();"
+                            <input type="text" value="${esc(state.end)}" oninput="state.end = this.value; renderOutputSection();"
                                    class="w-full mt-1 rounded border border-slate-600 bg-slate-800 px-2 py-1 font-mono text-white text-xs outline-none focus:ring-2 focus:ring-emerald-500">
                         </div>
                     </div>
@@ -1334,7 +1489,7 @@
                 ${interactiveControls}
             `;
 
-            let displayHtml = outputString;
+            let displayHtml = esc(outputString);
             if (showSpaces) {
                 displayHtml = displayHtml.replace(/ /g, `<span class="show-spaces-char">␣</span>`);
             }
@@ -1347,14 +1502,12 @@
             setAdditionScenario(state.currentAddScenario);
             calcArithmetic();
         }
-        function switchOpTab(t){ 
+        function switchOpTab(t){
             state.opTab = t;
-            document.getElementById('tab-content-addition').classList.toggle('hidden', t !== 'addition');
-            document.getElementById('tab-content-arithmetic').classList.toggle('hidden', t !== 'arithmetic');
-            ['addition', 'arithmetic'].forEach(id => {
-                const el = document.getElementById(`tab-btn-${id}`);
-                if (el) el.className = `rounded px-4 py-1.5 text-sm font-medium transition-all ${t === id ? 'shadow bg-purple-600 text-white' : 'text-slate-400 hover:text-white'}`;
-            });
+            showLab(['tab-content-addition', 'tab-content-arithmetic'], 'tab-content-' + t);
+            styleTabButtons(['tab-btn-addition', 'tab-btn-arithmetic'], `tab-btn-${t}`,
+                'rounded px-4 py-1.5 text-sm font-medium transition-all shadow bg-purple-600 text-white',
+                'rounded px-4 py-1.5 text-sm font-medium transition-all text-slate-400 hover:text-white');
         }
         function setAdditionScenario(s){
             state.currentAddScenario = s;
@@ -1438,43 +1591,61 @@
         }
         function switchConditionTab(t) {
             state.condTab = t;
-            ['relation', 'logical', 'structure'].forEach(id => {
-                const content = document.getElementById(`tab-content-${id}`);
-                const btn = document.getElementById(`tab-btn-${id}`);
-                if (content) content.classList.toggle('hidden', t !== id);
-                if (btn) btn.className = `rounded px-4 py-1.5 text-sm font-medium transition-all ${t === id ? 'shadow bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`;
-            });
+            showLab(['tab-content-relation', 'tab-content-logical', 'tab-content-structure'], 'tab-content-' + t);
+            styleTabButtons(['tab-btn-relation', 'tab-btn-logical', 'tab-btn-structure'], `tab-btn-${t}`,
+                'rounded px-4 py-1.5 text-sm font-medium transition-all shadow bg-indigo-600 text-white',
+                'rounded px-4 py-1.5 text-sm font-medium transition-all text-slate-400 hover:text-white');
         }
         function handleRelationalInput() {
             state.relA = document.getElementById('rel-a').value;
             state.relB = document.getElementById('rel-b').value;
             document.getElementById('rel-var-age').textContent = state.age;
             document.getElementById('relational-operator-grid').innerHTML = Object.keys(relationalDescriptions).map(op => `<button onclick="state.currentRelOperator='${op}';handleRelationalInput()" class="${state.currentRelOperator === op ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-400'} p-1 rounded font-mono">${op}</button>`).join('');
-            let valA = state.relA === 'age' ? state.age : (isNaN(parseFloat(state.relA)) ? `"${state.relA}"` : parseFloat(state.relA));
-            let valB = state.relB === 'age' ? state.age : (isNaN(parseFloat(state.relB)) ? `"${state.relB}"` : parseFloat(state.relB));
-            let result = false;
-            try { 
-                if(state.currentRelOperator === '==') result = valA == valB;
-                else if(state.currentRelOperator === '!=') result = valA != valB;
-                else if(state.currentRelOperator === '>') result = valA > valB;
-                else if(state.currentRelOperator === '<') result = valA < valB;
-                else if(state.currentRelOperator === '>=') result = valA >= valB;
-                else if(state.currentRelOperator === '<=') result = valA <= valB;
-            } catch(e) {}
+            // 模擬 Python 語意：先判型別。數字字面量視為數字，其餘視為字串；
+            // 混合型別時 == / != 回 False / True，排序比較則丟 TypeError（對應 Python 行為）
+            const toPyVal = (raw) => {
+                if (raw === 'age') return { value: state.age, type: Number.isInteger(state.age) ? 'int' : 'float' };
+                const trimmed = String(raw).trim();
+                if (trimmed !== '' && !isNaN(Number(trimmed))) {
+                    const n = Number(trimmed);
+                    return { value: n, type: Number.isInteger(n) ? 'int' : 'float' };
+                }
+                return { value: String(raw), type: 'str' };
+            };
+            const valA = toPyVal(state.relA);
+            const valB = toPyVal(state.relB);
+            const op = state.currentRelOperator;
+            let result = false, typeError = null;
+            if (valA.type !== valB.type) {
+                if (op === '==') result = false;
+                else if (op === '!=') result = true;
+                else typeError = `TypeError: '${op}' not supported between instances of '${valA.type}' and '${valB.type}'`;
+            } else if (op === '==') result = valA.value === valB.value;
+            else if (op === '!=') result = valA.value !== valB.value;
+            else if (op === '>') result = valA.value > valB.value;
+            else if (op === '<') result = valA.value < valB.value;
+            else if (op === '>=') result = valA.value >= valB.value;
+            else if (op === '<=') result = valA.value <= valB.value;
             document.getElementById('rel-code-display').textContent = `${state.relA} ${state.currentRelOperator} ${state.relB}`;
-            document.getElementById('rel-result-display').textContent = result ? "True" : "False";
-            document.getElementById('rel-result-display').className = `text-3xl font-bold ${result ? 'text-green-400' : 'text-red-400'}`;
-            document.getElementById('rel-desc').textContent = relationalDescriptions[state.currentRelOperator];
+            const relResultEl = document.getElementById('rel-result-display');
+            if (typeError) {
+                relResultEl.textContent = "TypeError";
+                relResultEl.className = "text-3xl font-bold text-red-400";
+                document.getElementById('rel-desc').textContent = typeError + "（數字和字串不能比大小，要先轉型！）";
+            } else {
+                relResultEl.textContent = result ? "True" : "False";
+                relResultEl.className = `text-3xl font-bold ${result ? 'text-green-400' : 'text-red-400'}`;
+                document.getElementById('rel-desc').textContent = relationalDescriptions[state.currentRelOperator];
+            }
         }
         function updateLogicalState(key, val) {
             if (key === 'op') state.logical.op = val;
             else if (key) state.logical[key] = !state.logical[key];
             const { op, a, b } = state.logical;
             let result = op === 'and' ? (a && b) : op === 'or' ? (a || b) : !a;
-            ['and', 'or', 'not'].forEach(o => {
-                const el = document.getElementById(`log-btn-${o}`);
-                if (el) el.className = `flex-1 rounded px-4 py-2 font-mono text-sm font-bold transition-all ${op === o ? 'bg-indigo-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:text-white'}`;
-            });
+            styleTabButtons(['log-btn-and', 'log-btn-or', 'log-btn-not'], `log-btn-${op}`,
+                'flex-1 rounded px-4 py-2 font-mono text-sm font-bold transition-all bg-indigo-600 text-white shadow',
+                'flex-1 rounded px-4 py-2 font-mono text-sm font-bold transition-all bg-slate-800 text-slate-400 hover:text-white');
             const inputB = document.getElementById('log-input-b-container');
             if (inputB) inputB.style.display = op === 'not' ? 'none' : 'flex';
             document.getElementById('log-desc').textContent = logicalDescriptions[op].desc;
@@ -1504,13 +1675,16 @@
             else { dim(ifelseIf); dim(ifelseIfBody); highlight(ifelseElse); highlight(ifelseElseBody); document.getElementById('ifelse-output').textContent = '輸出: 不及格'; }
             const elifIf = document.getElementById('ifelifelse-if-line'), elifIfBody = document.getElementById('ifelifelse-if-body');
             const elifElif = document.getElementById('ifelifelse-elif-line'), elifElifBody = document.getElementById('ifelifelse-elif-body');
+            const elifElif2 = document.getElementById('ifelifelse-elif2-line'), elifElif2Body = document.getElementById('ifelifelse-elif2-body');
             const elifElse = document.getElementById('ifelifelse-else-line'), elifElseBody = document.getElementById('ifelifelse-else-body');
             elifIf.textContent = `if score >= 90:`; elifIfBody.textContent = `print("A")`;
-            elifElif.textContent = `elif score >= 60:`; elifElifBody.textContent = `print("C")`;
+            elifElif.textContent = `elif score >= 80:`; elifElifBody.textContent = `print("B")`;
+            elifElif2.textContent = `elif score >= 60:`; elifElif2Body.textContent = `print("C")`;
             elifElse.textContent = `else:`; elifElseBody.textContent = `print("D")`;
-            [elifIf, elifIfBody, elifElif, elifElifBody, elifElse, elifElseBody].forEach(dim);
+            [elifIf, elifIfBody, elifElif, elifElifBody, elifElif2, elifElif2Body, elifElse, elifElseBody].forEach(dim);
             if (score >= 90) { highlight(elifIf); highlight(elifIfBody); document.getElementById('ifelifelse-output').textContent = '輸出: A'; }
-            else if (score >= 60) { highlight(elifElif); highlight(elifElifBody); document.getElementById('ifelifelse-output').textContent = '輸出: C'; }
+            else if (score >= 80) { highlight(elifElif); highlight(elifElifBody); document.getElementById('ifelifelse-output').textContent = '輸出: B'; }
+            else if (score >= 60) { highlight(elifElif2); highlight(elifElif2Body); document.getElementById('ifelifelse-output').textContent = '輸出: C'; }
             else { highlight(elifElse); highlight(elifElseBody); document.getElementById('ifelifelse-output').textContent = '輸出: D'; }
         }
 
@@ -1518,46 +1692,80 @@
         function updateLoopState(k,v){ state[k]=v; if(k.startsWith('slice')||k==='listIndex')renderListLab(); else if(k.startsWith('range'))renderRangeLab(); else renderIterationLab(); }
         
         function switchListTab(t) {
-            ['list_index', 'list_methods'].forEach(x => document.getElementById(`${x.replace('_','-')}-lab`).classList.add('hidden'));
-            document.getElementById(`${t.replace('_','-')}-lab`).classList.remove('hidden'); 
-            const btns = ['list_index', 'list_methods'];
-            btns.forEach(btn => {
-                const el = document.getElementById(`list-btn-${btn}`);
-                if(btn === t) el.className='rounded px-3 py-1.5 text-xs sm:text-sm font-medium bg-cyan-600 text-white shadow';
-                else el.className='rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white';
-            });
+            showLab(['list-index-lab', 'list-methods-lab'], t.replace('_', '-') + '-lab');
+            styleTabButtons(['list-btn-list_index', 'list-btn-list_methods'], `list-btn-${t}`,
+                'rounded px-3 py-1.5 text-xs sm:text-sm font-medium bg-cyan-600 text-white shadow',
+                'rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white');
         }
 
         function switchForLoopTab(t) {
-            ['range', 'iteration', 'sum'].forEach(x => document.getElementById(`${x}-lab`).classList.add('hidden'));
-            document.getElementById(`${t}-lab`).classList.remove('hidden');
-            const btns = ['range', 'iteration', 'sum'];
-            btns.forEach(btn => {
-                const el = document.getElementById(`for-btn-${btn}`);
-                if(btn === t) el.className='rounded px-3 py-1.5 text-xs sm:text-sm font-medium bg-cyan-600 text-white shadow';
-                else el.className='rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white';
-            });
+            showLab(['range-lab', 'iteration-lab', 'sum-lab'], t + '-lab');
+            styleTabButtons(['for-btn-range', 'for-btn-iteration', 'for-btn-sum'], `for-btn-${t}`,
+                'rounded px-3 py-1.5 text-xs sm:text-sm font-medium bg-cyan-600 text-white shadow',
+                'rounded px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white');
+        }
+
+        // Python 風格切片：pythonSlice(arr, start, stop, step)，空字串表省略
+        function pythonSlice(arr, startInput, stopInput, stepInput) {
+            const len = arr.length;
+            const parseOrNull = (s) => {
+                if (s === '') return { v: null };
+                const n = parseInt(s, 10);
+                return isNaN(n) ? { err: true } : { v: n };
+            };
+            const pStep = parseOrNull(stepInput);
+            const pStart = parseOrNull(startInput);
+            const pStop = parseOrNull(stopInput);
+            if (pStep.err || pStart.err || pStop.err) return { error: "TypeError: slice indices must be integers（切片位置必須是整數！）" };
+            let step = pStep.v === null ? 1 : pStep.v;
+            if (step === 0) return { error: "ValueError: slice step cannot be zero" };
+            let start = pStart.v;
+            let stop = pStop.v;
+            const out = [];
+            if (step > 0) {
+                if (start === null) start = 0; else if (start < 0) start = Math.max(len + start, 0); else start = Math.min(start, len);
+                if (stop === null) stop = len; else if (stop < 0) stop = Math.max(len + stop, 0); else stop = Math.min(stop, len);
+                for (let i = start; i < stop; i += step) out.push(arr[i]);
+            } else {
+                if (start === null) start = len - 1; else if (start < 0) start = len + start; else start = Math.min(start, len - 1);
+                if (stop === null) stop = -len - 1; else if (stop < 0) stop = len + stop;
+                for (let i = start; i > stop; i += step) { if (i >= 0 && i < len) out.push(arr[i]); }
+            }
+            return { value: out };
+        }
+
+        const defaultListData = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'];
+        function resetListData() {
+            state.listData = [...defaultListData];
+            state.listIndex = 2;
+            document.getElementById('list-index').value = 2;
+            const fb = document.getElementById('method-feedback');
+            fb.textContent = '準備就緒...';
+            fb.className = "text-sm text-slate-400 font-mono mt-2 min-h-[1.5em] p-2 bg-black/20 rounded";
+            renderListLab(); renderIterationLab();
         }
 
         function renderListLab(){
             document.getElementById('fruits-list-display').textContent = `fruits = ${JSON.stringify(state.listData)}`;
-            const inputIndex = parseInt(state.listIndex);
-            document.getElementById('index-code').textContent = inputIndex;
+            const rawIndex = String(state.listIndex);
+            const inputIndex = rawIndex.trim() === '' ? NaN : parseInt(rawIndex, 10);
+            document.getElementById('index-code').textContent = rawIndex.trim() === '' ? '?' : inputIndex;
             let indexResult;
-            let effectiveIndex = inputIndex;
-            if (inputIndex < 0) { effectiveIndex = state.listData.length + inputIndex; }
-            if (effectiveIndex >= 0 && effectiveIndex < state.listData.length) { indexResult = state.listData[effectiveIndex]; } 
-            else { indexResult = "IndexError: list index out of range"; }
+            if (isNaN(inputIndex)) { indexResult = "TypeError: list indices must be integers（索引必須是整數！）"; }
+            else {
+                let effectiveIndex = inputIndex;
+                if (inputIndex < 0) { effectiveIndex = state.listData.length + inputIndex; }
+                if (effectiveIndex >= 0 && effectiveIndex < state.listData.length) { indexResult = state.listData[effectiveIndex]; }
+                else { indexResult = "IndexError: list index out of range"; }
+            }
             document.getElementById('index-result').textContent = indexResult;
             document.getElementById('index-result').classList.toggle('text-red-500', indexResult.toString().includes('Error'));
+            // 完整模擬 Python 切片語意（含 step 與負步；JS 的 Array.slice 不支援 step）
             const startInput = String(state.sliceStart); const stopInput = String(state.sliceStop); const stepInput = String(state.sliceStep);
-            let start = startInput === '' ? 0 : parseInt(startInput);
-            let stop = stopInput === '' ? state.listData.length : parseInt(stopInput);
-            let step = stepInput === '' ? 1 : parseInt(stepInput);
-            if (isNaN(start)) start = 0; if (isNaN(stop)) stop = state.listData.length; if (isNaN(step)) step = 1;
+            const sliceRes = pythonSlice(state.listData, startInput, stopInput, stepInput);
             let slicedList = []; let isSliceError = false;
-            if (step === 0) { slicedList = "ValueError: slice step cannot be zero"; isSliceError = true; } 
-            else { slicedList = state.listData.slice(start, stop); }
+            if (sliceRes.error) { slicedList = sliceRes.error; isSliceError = true; }
+            else { slicedList = sliceRes.value; }
             const displaySliceStart = startInput === '' ? '' : startInput;
             const displaySliceStop = stopInput === '' ? '' : stopInput;
             const displaySliceStep = stepInput === '' ? '' : (stepInput === '1' ? '' : `:${stepInput}`);
@@ -1607,7 +1815,12 @@
                     const popped = state.listData.splice(idx, 1);
                     feedback.textContent = `>>> fruits.pop(${idxVal === '' ? '' : idxVal}) -> ${typeof popped[0] === 'string' ? `'${popped}'` : popped}`;
                 } else if (method === 'sort') {
-                    state.listData.sort();
+                    // 模擬 Python：全數字才做數字排序，全字串做字串排序，混合型別丟 TypeError
+                    const hasNum = state.listData.some(x => typeof x === 'number');
+                    const hasStr = state.listData.some(x => typeof x === 'string');
+                    if (hasNum && hasStr) throw new Error("TypeError: '<' not supported between instances of 'str' and 'int'");
+                    if (hasNum) state.listData.sort((a, b) => a - b);
+                    else state.listData.sort();
                     feedback.textContent = `>>> fruits.sort()`;
                 }
                 feedback.className = "text-sm text-green-400 font-mono mt-2 min-h-[1.5em] p-2 bg-black/20 rounded";
@@ -1632,21 +1845,35 @@
         }
 
         function renderRangeLab(){
-            const startVal = parseInt(document.getElementById('range-start').value);
-            const stopVal = parseInt(document.getElementById('range-stop').value);
-            const stepVal = parseInt(document.getElementById('range-step').value);
+            const rawStart = document.getElementById('range-start').value;
+            const rawStop = document.getElementById('range-stop').value;
+            const rawStep = document.getElementById('range-step').value;
+            // Python 的 range() 只接受整數：空值、小數、非數字一律 TypeError
+            const toInt = (s) => {
+                const t = String(s).trim();
+                if (t === '' || isNaN(Number(t)) || !Number.isInteger(Number(t))) return NaN;
+                return Number(t);
+            };
+            const disp = (s) => (String(s).trim() === '' ? '?' : s);
+            const startVal = toInt(rawStart);
+            const stopVal = toInt(rawStop);
+            const stepVal = toInt(rawStep);
+            const intErr = "TypeError: range() 參數必須是整數";
             let arr = []; let isError = false;
             let codeStr = '';
             if (state.rangeMode === 1) {
-                codeStr = `range(${stopVal})`;
-                if (stopVal > 0) { for(let i=0; i<stopVal; i++) arr.push(i); }
+                codeStr = `range(${disp(rawStop)})`;
+                if (isNaN(stopVal)) { arr = [intErr]; isError = true; }
+                else if (stopVal > 0) { for(let i=0; i<stopVal; i++) arr.push(i); }
             } else if (state.rangeMode === 2) {
-                codeStr = `range(${startVal}, ${stopVal})`;
-                if (stopVal > startVal) { for(let i=startVal; i<stopVal; i++) arr.push(i); }
+                codeStr = `range(${disp(rawStart)}, ${disp(rawStop)})`;
+                if (isNaN(startVal) || isNaN(stopVal)) { arr = [intErr]; isError = true; }
+                else if (stopVal > startVal) { for(let i=startVal; i<stopVal; i++) arr.push(i); }
             } else {
-                codeStr = `range(${startVal}, ${stopVal}, ${stepVal})`;
-                if (stepVal === 0) { arr = ["ValueError: range() arg 3 must not be zero"]; isError = true; } 
-                else if (stepVal > 0) { for (let i = startVal; i < stopVal; i += stepVal) arr.push(i); } 
+                codeStr = `range(${disp(rawStart)}, ${disp(rawStop)}, ${disp(rawStep)})`;
+                if (isNaN(startVal) || isNaN(stopVal) || isNaN(stepVal)) { arr = [intErr]; isError = true; }
+                else if (stepVal === 0) { arr = ["ValueError: range() arg 3 must not be zero"]; isError = true; }
+                else if (stepVal > 0) { for (let i = startVal; i < stopVal; i += stepVal) arr.push(i); }
                 else { for (let i = startVal; i > stopVal; i += stepVal) arr.push(i); }
             }
             document.getElementById('range-code-display').textContent = codeStr;
@@ -1675,10 +1902,9 @@
                 outputEl.textContent = sampleStr.split('').join('\n');
             }
             
-            document.getElementById('iter-btn-direct').className = t==='direct' ? "px-3 py-1 text-xs font-medium rounded bg-cyan-600 text-white shadow" : "px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white";
-            document.getElementById('iter-btn-range_len').className = t==='range_len' ? "px-3 py-1 text-xs font-medium rounded bg-cyan-600 text-white shadow" : "px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white";
-            document.getElementById('iter-btn-range').className = t==='range' ? "px-3 py-1 text-xs font-medium rounded bg-cyan-600 text-white shadow" : "px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white";
-            document.getElementById('iter-btn-string').className = t==='string' ? "px-3 py-1 text-xs font-medium rounded bg-cyan-600 text-white shadow" : "px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white";
+            styleTabButtons(['iter-btn-direct', 'iter-btn-range_len', 'iter-btn-range', 'iter-btn-string'], `iter-btn-${t}`,
+                "px-3 py-1 text-xs font-medium rounded bg-cyan-600 text-white shadow",
+                "px-3 py-1 text-xs font-medium rounded text-slate-400 hover:text-white");
         }
 
         // --- Sum Lab Functions ---
@@ -1720,13 +1946,20 @@
             // Render Visual Cards
             container.innerHTML = Object.entries(state.dictData).map(([k, v]) => `
                 <div class="flex items-center bg-slate-900 border border-slate-600 rounded-lg overflow-hidden group hover:border-orange-400 transition-colors">
-                    <div class="bg-slate-800 px-3 py-2 text-xs font-bold text-slate-400 border-r border-slate-600 min-w-[3rem] text-center font-mono group-hover:text-orange-300 group-hover:bg-slate-700">${k}</div>
-                    <div class="px-3 py-2 text-sm font-mono text-white truncate flex-1">${typeof v === 'string' ? `"${v}"` : v}</div>
+                    <div class="bg-slate-800 px-3 py-2 text-xs font-bold text-slate-400 border-r border-slate-600 min-w-[3rem] text-center font-mono group-hover:text-orange-300 group-hover:bg-slate-700">${esc(k)}</div>
+                    <div class="px-3 py-2 text-sm font-mono text-white truncate flex-1">${typeof v === 'string' ? `"${esc(v)}"` : esc(v)}</div>
                 </div>
             `).join('');
             
             // Render JSON text
             jsonEl.textContent = JSON.stringify(state.dictData).replace(/,/g, ', ');
+        }
+
+        const defaultDictData = { name: 'Mario', score: 95, level: 'A' };
+        function resetDictData() {
+            state.dictData = { ...defaultDictData };
+            document.getElementById('dict-code-feedback').textContent = '準備就緒...';
+            renderDictLab();
         }
 
         function runDictAction(action) {
@@ -1739,23 +1972,23 @@
             if (action === 'get') {
                 if (key in state.dictData) {
                     const res = state.dictData[key];
-                    feedback.innerHTML = `<span class="text-slate-400">print(student['${key}'])</span> <span class="text-slate-600">-></span> <span class="text-orange-300 font-bold">${typeof res === 'string' ? `"${res}"` : res}</span>`;
+                    feedback.innerHTML = `<span class="text-slate-400">print(student['${esc(key)}'])</span> <span class="text-slate-600">-></span> <span class="text-orange-300 font-bold">${typeof res === 'string' ? `"${esc(res)}"` : esc(res)}</span>`;
                 } else {
-                    feedback.innerHTML = `<span class="text-red-400">KeyError: '${key}' (找不到這個標籤)</span>`;
+                    feedback.innerHTML = `<span class="text-red-400">KeyError: '${esc(key)}' (找不到這個標籤)</span>`;
                 }
             } else if (action === 'set') {
                 if (!valInput) { feedback.innerHTML = `<span class="text-red-400">錯誤：新增/修改需要 Value (值)</span>`; return; }
                 const finalVal = isNaN(Number(valInput)) ? valInput : Number(valInput);
                 state.dictData[key] = finalVal;
-                feedback.innerHTML = `<span class="text-slate-400">student['${key}'] = ${typeof finalVal === 'string' ? `"${finalVal}"` : finalVal}</span>`;
+                feedback.innerHTML = `<span class="text-slate-400">student['${esc(key)}'] = ${typeof finalVal === 'string' ? `"${esc(finalVal)}"` : esc(finalVal)}</span>`;
                 renderDictLab();
             } else if (action === 'del') {
                 if (key in state.dictData) {
                     delete state.dictData[key];
-                    feedback.innerHTML = `<span class="text-slate-400">del student['${key}']</span>`;
+                    feedback.innerHTML = `<span class="text-slate-400">del student['${esc(key)}']</span>`;
                     renderDictLab();
                 } else {
-                    feedback.innerHTML = `<span class="text-red-400">KeyError: '${key}' (無法刪除不存在的鍵)</span>`;
+                    feedback.innerHTML = `<span class="text-red-400">KeyError: '${esc(key)}' (無法刪除不存在的鍵)</span>`;
                 }
             }
         }
@@ -1912,14 +2145,213 @@
             document.getElementById('err-tip').textContent = data.tip;
             document.getElementById('err-explanation').textContent = data.desc;
             document.getElementById('fix-panel').classList.add('opacity-50', 'filter', 'blur-sm', 'pointer-events-none');
-            ['syntax','name','type','index','logic'].forEach(t => {
-                const btn = document.getElementById(`err-btn-${t}`);
-                btn.className = "p-2 rounded border text-xs font-bold transition-all";
-                if(t === type) btn.classList.add('bg-red-900/30', 'border-red-500/30', 'text-red-200', 'ring-1', 'ring-red-500');
-                else btn.classList.add('bg-slate-800', 'border-slate-700', 'text-slate-400', 'hover:text-white');
-            });
+            styleTabButtons(['err-btn-syntax', 'err-btn-name', 'err-btn-type', 'err-btn-index', 'err-btn-logic'], `err-btn-${type}`,
+                "p-2 rounded border text-xs font-bold transition-all bg-red-900/30 border-red-500/30 text-red-200 ring-1 ring-red-500",
+                "p-2 rounded border text-xs font-bold transition-all bg-slate-800 border-slate-700 text-slate-400 hover:text-white");
         }
         function revealFix() { document.getElementById('fix-panel').classList.remove('opacity-50', 'filter', 'blur-sm', 'pointer-events-none'); }
+
+        // --- 章節導覽：scrollspy + 上一章/下一章 + 手機選單收合 ---
+        const sectionIds = ['thinking-section', 'syntax-colors', 'naming-section', 'concept-comparison', 'input-section', 'output-section', 'operations-section', 'conditional-section', 'list-section', 'for-loop-section', 'while-section', 'string-section', 'function-section', 'dict-section', 'error-section', 'common-funcs'];
+        let currentSectionIdx = 0;
+        function stepSection(dir) {
+            currentSectionIdx = Math.min(sectionIds.length - 1, Math.max(0, currentSectionIdx + dir));
+            const target = document.getElementById(sectionIds[currentSectionIdx]);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        function toggleNav() {
+            const el = document.getElementById('chapter-links');
+            const btn = document.getElementById('nav-toggle-btn');
+            const caret = document.getElementById('nav-toggle-caret');
+            if (!el) return;
+            const nowHidden = el.classList.toggle('hidden');
+            el.classList.toggle('flex', !nowHidden);
+            if (btn) btn.setAttribute('aria-expanded', String(!nowHidden));
+            if (caret) caret.style.transform = nowHidden ? '' : 'rotate(180deg)';
+        }
+        // 浮動列：往下捲超過 300px 淡出，往上捲或回頂部復現
+        let lastScrollY = 0;
+        function setupFloatNavFade() {
+            const nav = document.getElementById('float-nav');
+            if (!nav) return;
+            lastScrollY = window.scrollY;
+            window.addEventListener('scroll', () => {
+                const y = window.scrollY;
+                nav.classList.toggle('fade-hidden', y > lastScrollY && y > 300);
+                lastScrollY = y;
+            }, { passive: true });
+        }
+        // --- 章末小測驗：資料驅動，每章 1 題選擇題，即時回饋＋解析 ---
+        const quizzes = {
+            'input-section': [
+                { q: '執行 age = int(input())，使用者輸入 18 後，age 的資料型態是？', options: ['str（字串）', 'int（整數）', 'float（浮點數）'], answer: 1, explain: '解析：input() 拿到的都是字串，但 int() 會把它轉成整數。' }
+            ],
+            'output-section': [
+                { q: 'print("a", "b", sep="-") 的輸出是？', options: ['a b', 'a-b', 'a- b'], answer: 1, explain: '解析：sep 會取代預設的空白分隔符號，變成用 - 連接。' }
+            ],
+            'operations-section': [
+                { q: 'print("5" + 3) 會發生什麼事？', options: ['輸出 8', '輸出 "53"', 'TypeError（字串和數字不能直接相加）'], answer: 2, explain: '解析：字串和數字是不同型態，要先用 int() 或 str() 轉型才能運算。' }
+            ],
+            'conditional-section': [
+                { q: 'x = 15；if x > 10: print("大") else: print("小")，輸出是？', options: ['大', '小', '程式報錯'], answer: 0, explain: '解析：15 > 10 為 True，所以執行 if 底下縮排的那一行。' }
+            ],
+            'list-section': [
+                { q: 'fruits = ["a", "b", "c"]，fruits[1] 是？', options: ['"a"', '"b"', '"c"'], answer: 1, explain: '解析：串列索引從 0 開始數，索引 1 是第二個元素。' }
+            ],
+            'for-loop-section': [
+                { q: 'for i in range(3): print(i) 會印出？', options: ['0 1 2', '1 2 3', '0 1 2 3'], answer: 0, explain: '解析：range(3) 產生 0, 1, 2（不包含 3）。' }
+            ],
+            'while-section': [
+                { q: 'i = 0；while i < 3: i += 1，迴圈結束後 i 是？', options: ['2', '3', '無窮迴圈停不下來'], answer: 1, explain: '解析：i 依序變成 1, 2, 3；當 i < 3 不成立（i 是 3）就離開迴圈。' }
+            ],
+            'string-section': [
+                { q: '"  Hi  ".strip() 的結果是？', options: ['"  Hi  "（不變）', '"Hi"', '"hi"'], answer: 1, explain: '解析：strip() 修掉頭尾空白，但不會改變字母大小寫。' }
+            ],
+            'function-section': [
+                { q: 'def f(x): return x + 1，呼叫 f(5) 會得到？', options: ['5', '6', 'None'], answer: 1, explain: '解析：return 會把 x + 1（也就是 6）交還給呼叫的地方。' }
+            ],
+            'dict-section': [
+                { q: 'd = {"a": 1}；執行 d["b"] = 2 後，d["a"] 是？', options: ['1', '2', 'KeyError'], answer: 0, explain: '解析：新增鍵 "b" 不影響原本的鍵 "a"，d["a"] 還是 1。' }
+            ],
+            'error-section': [
+                { q: 'print("Age: " + 18) 會出現哪種錯誤？', options: ['SyntaxError', 'TypeError', '正常輸出 Age: 18'], answer: 1, explain: '解析：字串和整數不能用 + 連接，要先 str(18) 轉型。' }
+            ]
+        };
+        function setupQuizzes() {
+            Object.keys(quizzes).forEach(secId => {
+                const sec = document.getElementById(secId);
+                if (!sec) return;
+                const wrap = document.createElement('div');
+                wrap.className = 'quiz-wrap';
+                wrap.innerHTML = `<div class="quiz-box"><button id="quiz-toggle-${secId}" class="quiz-toggle" aria-expanded="false" onclick="toggleQuiz('${secId}')">📝 本章小測驗 <span>▾</span></button><div id="quiz-body-${secId}" class="quiz-body hidden"></div></div>`;
+                sec.appendChild(wrap);
+            });
+        }
+        function toggleQuiz(secId) {
+            const body = document.getElementById(`quiz-body-${secId}`);
+            const btn = document.getElementById(`quiz-toggle-${secId}`);
+            if (!body || !btn) return;
+            const nowHidden = body.classList.toggle('hidden');
+            btn.setAttribute('aria-expanded', String(!nowHidden));
+            if (!nowHidden && !body.dataset.init) { body.dataset.init = '1'; renderQuiz(secId, 0); }
+        }
+        function renderQuiz(secId, qIdx) {
+            const qs = quizzes[secId];
+            if (!qs) return;
+            const qi = qIdx % qs.length;
+            const q = qs[qi];
+            const body = document.getElementById(`quiz-body-${secId}`);
+            if (!body) return;
+            body.innerHTML = `<div class="quiz-q">Q${qi + 1}. ${esc(q.q)}</div><div class="quiz-opts">` +
+                q.options.map((opt, i) => `<button class="quiz-opt" onclick="answerQuiz('${secId}', ${qIdx}, ${i})">${String.fromCharCode(65 + i)}. ${esc(opt)}</button>`).join('') +
+                `</div><div id="quiz-feedback-${secId}" class="quiz-feedback" aria-live="polite"></div>` +
+                (qs.length > 1 ? `<button class="quiz-next" onclick="renderQuiz('${secId}', ${qIdx + 1})">換一題 →</button>` : '');
+        }
+        function answerQuiz(secId, qIdx, choice) {
+            const q = quizzes[secId][qIdx % quizzes[secId].length];
+            const body = document.getElementById(`quiz-body-${secId}`);
+            if (!body) return;
+            body.querySelectorAll('.quiz-opt').forEach((b, i) => {
+                b.disabled = true;
+                if (i === q.answer) b.classList.add('correct');
+                else if (i === choice) b.classList.add('wrong');
+            });
+            const fb = document.getElementById(`quiz-feedback-${secId}`);
+            const ok = choice === q.answer;
+            fb.className = 'quiz-feedback ' + (ok ? 'ok' : 'no');
+            fb.textContent = (ok ? '✅ 答對了！' : '❌ 再想想看…') + q.explain;
+        }
+
+        function setupCopyButtons() {
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-copy]');
+                if (btn) copyTextFrom(btn.getAttribute('data-copy'), btn);
+            });
+        }
+        function setupSectionSpy() {
+            const links = document.querySelectorAll('nav a[href^="#"]');
+            const floatLabel = document.getElementById('float-chapter-label');
+            const setActive = (id) => {
+                links.forEach(a => a.classList.toggle('nav-active', a.getAttribute('href') === '#' + id));
+                if (floatLabel) {
+                    const idx = sectionIds.indexOf(id);
+                    const link = document.querySelector('nav a[href="#' + id + '"]');
+                    const name = link ? link.textContent.trim() : '';
+                    floatLabel.textContent = `第 ${idx + 1}/${sectionIds.length} 章 · ${name}`;
+                }
+            };
+            if ('IntersectionObserver' in window) {
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach(e => {
+                        if (e.isIntersecting) {
+                            const idx = sectionIds.indexOf(e.target.id);
+                            if (idx !== -1) { currentSectionIdx = idx; setActive(e.target.id); }
+                        }
+                    });
+                }, { rootMargin: '-30% 0px -60% 0px' });
+                sectionIds.forEach(id => { const s = document.getElementById(id); if (s) obs.observe(s); });
+            }
+            // 手機上點選章節後自動收合選單
+            const chapterLinks = document.getElementById('chapter-links');
+            if (chapterLinks) chapterLinks.addEventListener('click', (e) => {
+                if (e.target.closest('a') && window.innerWidth < 768 && !chapterLinks.classList.contains('hidden')) toggleNav();
+            });
+        }
+
+        // --- 學習進度追蹤：每章「完成」勾選，存 localStorage，導覽列同步打勾 ---
+        const PROGRESS_KEY = 'py_interactive_progress_v1';
+        function loadProgress() {
+            try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {}; }
+            catch (e) { return {}; }
+        }
+        function saveProgress(p) {
+            try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch (e) { /* 私密模式等情境靜默略過 */ }
+        }
+        function setupProgress() {
+            const prog = loadProgress();
+            sectionIds.forEach(id => {
+                const sec = document.getElementById(id);
+                if (!sec) return;
+                const h2 = sec.querySelector('h2');
+                if (!h2 || h2.querySelector('[data-progress]')) return;
+                const label = document.createElement('label');
+                label.className = 'done-check';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.setAttribute('data-progress', id);
+                cb.checked = !!prog[id];
+                cb.setAttribute('aria-label', '標記本章為已完成');
+                label.appendChild(cb);
+                label.appendChild(document.createTextNode(' 完成'));
+                h2.appendChild(label);
+            });
+            document.addEventListener('change', (e) => {
+                const cb = e.target.closest ? e.target.closest('[data-progress]') : null;
+                if (!cb) return;
+                const p = loadProgress();
+                if (cb.checked) p[cb.getAttribute('data-progress')] = true;
+                else delete p[cb.getAttribute('data-progress')];
+                saveProgress(p);
+                paintProgress(p);
+            });
+            paintProgress(prog);
+        }
+        function paintProgress(prog) {
+            document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+                const id = a.getAttribute('href').slice(1);
+                a.classList.toggle('nav-done', !!prog[id]);
+            });
+            const label = document.getElementById('progress-count');
+            if (label) {
+                const done = sectionIds.filter(id => prog[id]).length;
+                label.textContent = `已完成 ${done}/${sectionIds.length} 章`;
+            }
+        }
+        function resetProgress() {
+            saveProgress({});
+            document.querySelectorAll('[data-progress]').forEach(cb => { cb.checked = false; });
+            paintProgress({});
+        }
 
     </script>
 </body>

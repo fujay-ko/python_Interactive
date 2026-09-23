@@ -1,0 +1,123 @@
+╔══════════════════════════════════════════════════╗
+║  字形實驗室 Type Lab — Google Apps Script 設定  ║
+╚══════════════════════════════════════════════════╝
+
+
+■  前置準備
+
+  開啟 https://sheets.new 建立一個新試算表
+
+
+■  分頁名稱（建立兩個分頁）
+
+  分頁 1：成績總表
+    標題列（第一行手動輸入）：
+    A1: 時間  B1: 班級  C1: 座號  D1: 姓名
+    E1: 判斷測驗  F1: 轉換測驗  G1: 輸入測驗  H1: 程式修復
+    I1: 總分  J1: 滿分  K1: 作答時間  L1: 分類統計
+
+  分頁 2：作答明細
+    標題列（第一行手動輸入）：
+    A1: 時間  B1: 班級  C1: 座號  D1: 姓名
+    E1: 題號  F1: 類型  G1: 題目  H1: 學生答案
+    I1: 正確答案  J1: 正確與否  K1: 分類
+
+
+■  Google Apps Script 程式碼
+
+  1. 在試算表中點選單「擴充功能 → Apps Script」
+  2. 將預設的 Code.gs 內容全部取代為下方程式碼
+  3. 按 Ctrl+S 存檔
+
+═══════════════════════════════════════════════
+  Code.gs
+═══════════════════════════════════════════════
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    // ── 成績總表 ──
+    let summarySheet = ss.getSheetByName('成績總表');
+    if (!summarySheet) {
+      summarySheet = ss.insertSheet('成績總表');
+      summarySheet.appendRow([
+        '時間','班級','座號','姓名','判斷測驗','轉換測驗',
+        '輸入測驗','程式修復','總分','滿分','作答時間','分類統計'
+      ]);
+    }
+    const catStr = Object.entries(data.categoryStats||{})
+      .map(([k,v])=>`${k}:${v.correct}/${v.total}`).join('; ');
+    summarySheet.appendRow([
+      data.timestamp, data.cls, data.seat, data.name,
+      data.identifyScore, data.convScore, data.quizScore, data.repairScore,
+      data.totalScore, data.maxScore, data.timeTaken, catStr
+    ]);
+
+    // ── 作答明細 ──
+    let detailSheet = ss.getSheetByName('作答明細');
+    if (!detailSheet) {
+      detailSheet = ss.insertSheet('作答明細');
+      detailSheet.appendRow([
+        '時間','班級','座號','姓名','題號','類型','題目',
+        '學生答案','正確答案','正確與否','分類'
+      ]);
+    }
+    (data.details||[]).forEach(d => {
+      detailSheet.appendRow([
+        data.timestamp, data.cls, data.seat, data.name,
+        d.qNum, d.type, d.question,
+        d.userAnswer, d.correctAnswer, d.isCorrect, d.category
+      ]);
+    });
+
+    return ContentService.createTextOutput(
+      JSON.stringify({status:'ok'})
+    ).setMimeType(ContentService.MimeType.JSON);
+
+  } catch(err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({status:'error', msg:err.toString()})
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet() {
+  return ContentService.createTextOutput('Type Lab GAS is running.');
+}
+
+
+■  部署步驟
+
+  1. 在 Apps Script 編輯器中按「部署 → 新增部署作業」
+  2. 類型選「網頁應用程式」
+  3. 執行身份：選「我」（就是你自己）
+  4. 誰可以存取：選「任何人」
+  5. 按「部署」
+  6. 第一次會要求授權，按「審查權限」→ 選你的 Google 帳號 → 按「允許」
+  7. 複製產生的「網頁應用程式網址」（類似
+     https://script.google.com/macros/s/XXXXXXX/exec）
+
+
+■  將網址寫入 app.js
+
+  打開 font_type 資料夾中的 app.js
+  找到第 4 行：
+
+    const GAS_URL = "https://script.google.com/macros/s/xxx/exec";
+
+  把雙引號內的網址換成你剛剛複製的網址。
+
+
+■  測試
+
+  在網頁上完成四個測驗後，會自動送出成績。
+  結果頁上方狀態列說明：
+    ✅ 成績已成功送出 → 試算表重新整理即可看到資料
+    ❌ 自動送出失敗 → 成績已暫存於本機，按「重新送出成績」
+  也可按「📤 送出成績到 Google 試算表」手動送出。
+
+  附註：前端以 CORS 驗證送出結果，並以 ISO 8601 時間戳
+  （例 2026-09-23T08:30:00.000Z）寫入「時間」欄，
+  每次送出另帶 attemptId 以供去重比對。

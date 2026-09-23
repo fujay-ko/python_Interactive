@@ -31,28 +31,12 @@
             <label>班級 *</label>
             <select id="sel-class">
                 <option value="">請選擇班級</option>
-                <optgroup label="七年級">
-                    <option>701</option><option>702</option><option>703</option><option>704</option><option>705</option>
-                    <option>706</option><option>707</option><option>708</option><option>709</option><option>710</option>
-                    <option>711</option><option>712</option><option>713</option><option>714</option><option>715</option>
-                </optgroup>
-                <optgroup label="八年級">
-                    <option>801</option><option>802</option><option>803</option><option>804</option><option>805</option>
-                    <option>806</option><option>807</option><option>808</option><option>809</option><option>810</option>
-                    <option>811</option><option>812</option><option>813</option><option>814</option><option>815</option>
-                </optgroup>
-                <optgroup label="九年級">
-                    <option>901</option><option>902</option><option>903</option><option>904</option><option>905</option>
-                    <option>906</option><option>907</option><option>908</option><option>909</option><option>910</option>
-                    <option>911</option><option>912</option><option>913</option><option>914</option><option>915</option>
-                </optgroup>
             </select>
         </div>
         <div class="form-group">
             <label>座號 *</label>
             <select id="sel-seat">
                 <option value="">請選擇座號</option>
-                <script>for(let i=1;i<=35;i++)document.write(`<option>${i}</option>`);</script>
             </select>
         </div>
         <div class="form-group">
@@ -60,6 +44,7 @@
             <input type="text" id="inp-name" placeholder="請輸入姓名" autocomplete="off"/>
         </div>
     </div>
+    <div class="form-err" id="form-err" role="alert" style="display:none"></div>
 
     <!-- 題數設定 -->
     <div class="quiz-settings">
@@ -105,11 +90,9 @@
             程式修復 <b>3</b> 題（依錯誤數計分）<br>
             <span class="sp-total">預估總分：25+ 分</span>
         </div>
+        <div class="lock-note" id="lock-note" style="display:none">🔒 測驗模式：題數已由老師鎖定，無法調整</div>
         <div class="guaranteed-note">
-            📌 無論題數設定為何，輸入測驗一定包含：<br>
-            ① Python 雙引號題（如 <code>"Hello"</code>）&nbsp;
-            ② Python 單引號題（如 <code>'Hello'</code>）&nbsp;
-            ③ Python 換行字串題（<code>"What is your name?\n"</code>）
+            📌 輸入測驗包含 <b>Python 字串題型</b>（引號、跳脫字元等），請先在學習區熟悉全形／半形切換。
         </div>
     </div>
 
@@ -128,6 +111,7 @@
     </div>
 
     <button class="btn-start" onclick="goToLearn()">▶ 開始學習</button>
+    <button class="btn-retry" id="btn-resume" style="display:none;margin-top:10px" onclick="restoreProgress()">↩️ 繼續上次未完成的作答</button>
 </div>
 </div>
 </div>
@@ -235,6 +219,8 @@
             <div class="tab active" data-tab="win-half-full" onclick="showTab('win-half-full')">全形/半形</div>
             <div class="tab" data-tab="win-case" onclick="showTab('win-case')">大小寫</div>
             <div class="tab" data-tab="win-ime" onclick="showTab('win-ime')">中英模式</div>
+            <div class="tab" data-tab="mac-ime" onclick="showTab('mac-ime')">macOS</div>
+            <div class="tab" data-tab="mobile-ime" onclick="showTab('mobile-ime')">手機/平板</div>
         </div>
         <div id="instruction-text" class="card-desc"></div>
         <div class="keyboard-visual" id="keyboard-visual"></div>
@@ -257,7 +243,7 @@
         </div>
         <div class="q-progress" id="id-progress">第 1 題 / 共 ? 題</div>
         <div class="progress-wrap"><div class="progress-fill pf-id" id="id-bar" style="width:0%"></div></div>
-        <div class="id-q-label">請判斷句子中紅色底線字元的字形類型：</div>
+        <div class="id-q-label">請判斷句子中紅色底線字元的字形類型：<span class="kbd-hint">（可按 1 = 半形／2 = 全形）</span></div>
         <div class="id-sentence-box" id="id-sentence"></div>
         <div class="id-btns">
             <button class="btn btn-half" id="btn-id-half" onclick="answerIdentify('half')">🔵 半形 Half-width</button>
@@ -283,11 +269,12 @@
         <div class="id-sentence-box" id="conv-display" style="font-size:1.8rem;text-align:center;letter-spacing:.15em;"></div>
         <div class="quiz-answer-row">
             <input type="text" class="quiz-input" id="conv-input"
-                   placeholder="在此輸入轉換結果" maxlength="30" autocomplete="off"
-                   autocorrect="off" autocapitalize="off" spellcheck="false"
-                   onkeydown="if(event.key==='Enter'){event.preventDefault();submitConvAnswer()}"/>
+                   placeholder="在此輸入轉換結果" autocomplete="new-password"
+                   autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text"/>
             <button type="button" class="btn btn-submit-quiz" onclick="submitConvAnswer()">確認送出</button>
+            <button type="button" class="btn btn-skip" onclick="skipConvQuestion()">跳過（0 分）</button>
         </div>
+        <div class="input-meta"><span class="ime-hint" id="conv-ime"></span><span class="len-count" id="conv-len"></span><span class="width-badge" id="conv-width"></span></div>
         <div class="feedback-box" id="conv-feedback" aria-live="polite">
             <div id="conv-fb-text"></div>
             <div class="char-diff" id="conv-char-diff"></div>
@@ -310,11 +297,12 @@
         <div class="quiz-q-box" id="quiz-question">載入中…</div>
         <div class="quiz-answer-row">
             <input type="text" class="quiz-input" id="quiz-input"
-                   placeholder="在此輸入" maxlength="30" autocomplete="off"
-                   autocorrect="off" autocapitalize="off" spellcheck="false"
-                   onkeydown="if(event.key==='Enter'){event.preventDefault();submitQuizAnswer()}"/>
+                   placeholder="在此輸入" autocomplete="new-password"
+                   autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text"/>
             <button type="button" class="btn btn-submit-quiz" onclick="submitQuizAnswer()">確認送出</button>
+            <button type="button" class="btn btn-skip" onclick="skipQuizQuestion()">跳過（0 分）</button>
         </div>
+        <div class="input-meta"><span class="ime-hint" id="quiz-ime"></span><span class="len-count" id="quiz-len"></span><span class="width-badge" id="quiz-width"></span></div>
         <div class="feedback-box" id="quiz-feedback" aria-live="polite">
             <div id="quiz-fb-text"></div>
             <div class="char-diff" id="char-diff"></div>
@@ -330,19 +318,22 @@
         <h2>程式修復 <span class="badge badge-wait" id="repair-badge">未完成</span></h2>
         <div class="card-desc">
             以下程式碼含有全形/半形錯誤，請輸入<b>修正後的完整版本</b>。每找出一個錯誤得 1 分。<br>
-            ⚠️ 輸入框禁止貼上，需手動輸入。按 Enter 或點「確認」送出。
+            ⚠️ 輸入框禁止貼上，需手動輸入。Enter 換行，<b>Ctrl+Enter</b> 或點「確認」送出。
         </div>
         <div class="q-progress" id="repair-progress">第 1 題 / 共 ? 題</div>
         <div class="progress-wrap"><div class="progress-fill pf-repair" id="repair-bar" style="width:0%"></div></div>
         <div class="id-q-label">修正以下程式碼中的全形/半形錯誤：</div>
         <div class="quiz-q-box" id="repair-display" style="font-size:1.15rem;"></div>
-        <div class="quiz-answer-row">
-            <input type="text" class="quiz-input" id="repair-input"
-                   placeholder="在此輸入修正後的程式碼" maxlength="60" autocomplete="off"
-                   autocorrect="off" autocapitalize="off" spellcheck="false"
-                   onkeydown="if(event.key==='Enter'){event.preventDefault();submitRepairAnswer()}"/>
-            <button type="button" class="btn btn-submit-quiz" onclick="submitRepairAnswer()">確認送出</button>
+        <div class="quiz-answer-row quiz-answer-col">
+            <textarea class="quiz-input quiz-textarea" id="repair-input"
+                   placeholder="在此輸入修正後的程式碼（Enter 換行，Ctrl+Enter 送出）" autocomplete="new-password"
+                   autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="text" rows="3"></textarea>
+            <div class="quiz-btn-col">
+                <button type="button" class="btn btn-submit-quiz" onclick="submitRepairAnswer()">確認送出</button>
+                <button type="button" class="btn btn-skip" onclick="skipRepairQuestion()">跳過（0 分）</button>
+            </div>
         </div>
+        <div class="input-meta"><span class="ime-hint" id="repair-ime"></span><span class="len-count" id="repair-len"></span><span class="width-badge" id="repair-width"></span></div>
         <div class="feedback-box" id="repair-feedback" aria-live="polite">
             <div id="repair-fb-text"></div>
             <div class="char-diff" id="repair-char-diff"></div>
@@ -413,10 +404,10 @@
     </div>
 
     <hr class="divider">
-    <div class="card-desc">✅ 成績已自動送出，請關閉此頁面。</div>
+    <div class="card-desc auto-status" id="auto-status">⏳ 成績計算中…</div>
     <button class="btn-submit-gas" id="btn-gas" onclick="submitToGAS(false)">📤 送出成績到 Google 試算表</button>
     <div class="submit-msg" id="submit-msg" aria-live="polite"></div>
-    <button class="btn-retry" onclick="location.reload()">🔄 重新作答</button>
+    <button class="btn-retry" onclick="confirmRetry()">🔄 重新作答</button>
 </div>
 </div>
 
@@ -427,66 +418,15 @@
 
 <!--
 ═══════════════════════════════════════════════════════
-📋 GAS 程式碼範本（貼入 Google Apps Script）
-部署為 Web App → 執行身分：我 → 存取權：任何人
-將部署 URL 貼入上方 JS 的 GAS_URL 變數即可啟用
-═══════════════════════════════════════════════════════
-
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    // 工作表1：成績摘要
-    let s1 = ss.getSheetByName("成績摘要");
-    if (!s1) {
-      s1 = ss.insertSheet("成績摘要");
-      s1.appendRow(["時間","班級","座號","姓名",
-        "判斷題數","判斷分","轉換題數","轉換分","輸入題數","輸入分",
-        "修復題數","修復分","總分","滿分","作答時間"]);
-    }
-    s1.appendRow([data.timestamp,data.cls,data.seat,data.name,
-      data.idCount,data.identifyScore,
-      data.convCount,data.convScore,
-      data.quizCount,data.quizScore,
-      data.repairCount,data.repairScore,
-      data.totalScore,data.maxScore,data.timeTaken]);
-
-    // 工作表2：逐題明細
-    let s2 = ss.getSheetByName("逐題明細");
-    if (!s2) {
-      s2 = ss.insertSheet("逐題明細");
-      s2.appendRow(["時間","班級","座號","姓名","題號","類型","題目","學生答","正解","結果","分類"]);
-    }
-    data.details.forEach(function(r) {
-      s2.appendRow([data.timestamp,data.cls,data.seat,data.name,
-        r.qNum,r.type,r.question,r.userAnswer,r.correctAnswer,r.isCorrect,r.category]);
-    });
-
-    // 工作表3：分類統計
-    let s3 = ss.getSheetByName("分類統計");
-    if (!s3) {
-      s3 = ss.insertSheet("分類統計");
-      s3.appendRow(["時間","班級","座號","姓名",
-        "半形英文","抬頭大寫","全形英文","半形數字","全形數字",
-        "半形符號","全形符號","中文標點","Python符號",
-        "程式碼找錯","轉換練習","程式碼修復"]);
-    }
-    const c = data.categoryStats || {};
-    function cs(k){ return c[k] ? c[k].correct+"/"+c[k].total : "-"; }
-    s3.appendRow([data.timestamp,data.cls,data.seat,data.name,
-      cs("半形英文"),cs("抬頭大寫"),cs("全形英文"),cs("半形數字"),cs("全形數字"),
-      cs("半形符號"),cs("全形符號"),cs("中文標點"),cs("Python符號"),
-      cs("程式碼找錯"),cs("轉換練習"),cs("程式碼修復")]);
-
-    return ContentService.createTextOutput(JSON.stringify({status:"ok"}))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({status:"error",message:err.message}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
+📋 GAS 部署說明（單一真相來源：同目錄 gas_setup.txt）
+───────────────────────────────────────────────
+Google Apps Script 程式碼與部署步驟請見 gas_setup.txt，
+請勿在此維護第二份範本（避免欄位漂移）。
+前端 payload 欄位：timestamp(ISO8601) / cls / seat / name /
+idCount,convCount,quizCount,repairCount /
+identifyScore,convScore,quizScore,repairScore /
+totalScore,maxScore / timeTaken,timeSeconds /
+categoryStats / details[] / attemptId
 ═══════════════════════════════════════════════════════
 -->
 </body>

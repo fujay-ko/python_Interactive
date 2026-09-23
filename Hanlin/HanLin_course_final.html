@@ -153,6 +153,11 @@
                             <label>請問您的名字是？ (name)</label>
                             <input type="text" id="inputName" placeholder="例如：阿顯" oninput="resetAnim('greeting')">
                         </div>
+                        <!-- 換行符號切換 -->
+                        <div class="flex items-center mb-4 bg-blue-900/30 p-2 rounded border border-blue-700/50">
+                            <input type="checkbox" id="useNewline" checked class="w-4 h-4 accent-blue-500" onchange="updateGreetingCode()">
+                            <label for="useNewline" class="ml-2 text-sm font-medium text-slate-300">在提示字串後加入換行符號 (\n)</label>
+                        </div>
                         <div class="grid grid-cols-2 gap-2 mb-4">
                             <button onclick="nextStep('greeting')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
                             <button onclick="startAnim('greeting')" id="btnGreetingAuto" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold shadow-lg">自動播放 (Play)</button>
@@ -176,6 +181,7 @@
                             <ul class="list-disc pl-5 space-y-1">
                                 <li><strong>變數型態</strong>：<code>name</code> 是 <strong>字串 (str)</strong>。</li>
                                 <li><strong>input()</strong>：讀取的使用者輸入永遠是 <strong>字串</strong>。</li>
+                                <li><strong>換行符號 \n</strong>：勾選＝提示後換行、輸入在下一行；取消勾選＝輸入接在提示後面同一行。切換後按「單步執行」觀察差異。</li>
                             </ul>
                         </div>
                     </div>
@@ -191,6 +197,11 @@
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="input-group"><label>輸入數字 x</label><input type="number" id="numX" value="17" oninput="resetAnim('average')"></div>
                             <div class="input-group"><label>輸入數字 y</label><input type="number" id="numY" value="5" oninput="resetAnim('average')"></div>
+                        </div>
+                        <!-- 換行符號切換 -->
+                        <div class="flex items-center mb-4 bg-blue-900/30 p-2 rounded border border-blue-700/50">
+                            <input type="checkbox" id="useNewlineAverage" checked class="w-4 h-4 accent-blue-500" onchange="updateAverageCode()">
+                            <label for="useNewlineAverage" class="ml-2 text-sm font-medium text-slate-300">在提示字串後加入換行符號 (\n)</label>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mb-4">
                             <button onclick="nextStep('average')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
@@ -233,6 +244,11 @@
                             <div class="input-group"><label>輸入底 base</label><input type="number" id="triBase" value="8" oninput="resetAnim('triangle')"></div>
                             <div class="input-group"><label>輸入高 height</label><input type="number" id="triHeight" value="4" oninput="resetAnim('triangle')"></div>
                         </div>
+                        <!-- 換行符號切換 -->
+                        <div class="flex items-center mb-4 bg-blue-900/30 p-2 rounded border border-blue-700/50">
+                            <input type="checkbox" id="useNewlineTriangle" checked class="w-4 h-4 accent-blue-500" onchange="updateTriangleCode()">
+                            <label for="useNewlineTriangle" class="ml-2 text-sm font-medium text-slate-300">在提示字串後加入換行符號 (\n)</label>
+                        </div>
                         <div class="grid grid-cols-2 gap-2 mb-4">
                             <button onclick="nextStep('triangle')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
                             <button onclick="startAnim('triangle')" id="btnTriangleAuto" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 font-bold shadow-lg">自動播放 (Play)</button>
@@ -272,6 +288,11 @@
                             <div class="input-group"><label class="text-xs">作業</label><input type="number" id="scoreWork" value="80" oninput="resetAnim('grade')"></div>
                             <div class="input-group"><label class="text-xs">測驗</label><input type="number" id="scoreExam" value="70" oninput="resetAnim('grade')"></div>
                             <div class="input-group"><label class="text-xs">平時</label><input type="number" id="scoreRoutine" value="90" oninput="resetAnim('grade')"></div>
+                        </div>
+                        <!-- 換行符號切換 -->
+                        <div class="flex items-center mb-4 bg-blue-900/30 p-2 rounded border border-blue-700/50">
+                            <input type="checkbox" id="useNewlineGrade" checked class="w-4 h-4 accent-blue-500" onchange="updateGradeCode()">
+                            <label for="useNewlineGrade" class="ml-2 text-sm font-medium text-slate-300">在提示字串後加入換行符號 (\n)</label>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mb-4">
                             <button onclick="nextStep('grade')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
@@ -347,6 +368,14 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="input-group mb-4"><label>輸入數字 n</label><input type="number" id="numN" value="10" oninput="resetAnim('loop')"></div>
+                        <!-- 換行符號切換 -->
+                        <div class="mb-4 bg-blue-900/30 p-2 rounded border border-blue-700/50">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="useNewlineLoop" checked class="w-4 h-4 accent-blue-500" onchange="updateLoopCode()">
+                                <label for="useNewlineLoop" class="ml-2 text-sm font-medium text-slate-300">在提示字串後加入換行符號 (\n)</label>
+                            </div>
+                            <p class="mt-1 ml-6 text-xs text-slate-500">※ 此區動畫不顯示輸入提示，取消勾選僅影響上方程式碼。</p>
+                        </div>
                         <div class="grid grid-cols-2 gap-2 mb-4">
                             <button onclick="nextStep('loop')" class="bg-indigo-600 text-white px-4 py-2 rounded font-bold shadow-lg">單步執行 (Step)</button>
                             <button onclick="startAnim('loop')" id="btnLoopAuto" class="bg-blue-600 text-white px-4 py-2 rounded font-bold shadow-lg">自動播放 (Play)</button>
@@ -385,6 +414,11 @@
                             <div class="input-group"><label class="text-xs">第 1 次輸入</label><input type="text" id="pwd_1" value="123" oninput="resetAnim('password')"></div>
                             <div class="input-group"><label class="text-xs">第 2 次輸入</label><input type="text" id="pwd_2" value="456" oninput="resetAnim('password')"></div>
                             <div class="input-group"><label class="text-xs">第 3 次輸入</label><input type="text" id="pwd_3" value="137" oninput="resetAnim('password')"></div>
+                        </div>
+                        <!-- 換行符號切換 -->
+                        <div class="flex items-center mb-4 bg-indigo-900/30 p-2 rounded border border-indigo-700/50">
+                            <input type="checkbox" id="useNewlinePwd" checked class="w-4 h-4 accent-indigo-500" onchange="updatePasswordCode()">
+                            <label for="useNewlinePwd" class="ml-2 text-sm font-medium text-slate-300">在提示字串後加入換行符號 (\n)</label>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mb-4">
                             <button onclick="nextStep('password')" class="bg-indigo-600 text-white px-4 py-2 rounded font-bold shadow-lg">單步執行 (Step)</button>
@@ -426,6 +460,11 @@
                         <div class="input-group mb-4">
                             <label>輸入數字 n</label>
                             <input type="number" id="listN" value="12" oninput="resetAnim('list')">
+                        </div>
+                        <!-- 換行符號切換 -->
+                        <div class="flex items-center mb-4 bg-blue-900/30 p-2 rounded border border-blue-700/50">
+                            <input type="checkbox" id="useNewlineList" checked class="w-4 h-4 accent-blue-500" onchange="updateListCode()">
+                            <label for="useNewlineList" class="ml-2 text-sm font-medium text-slate-300">在提示字串後加入換行符號 (\n)</label>
                         </div>
                         <div class="grid grid-cols-2 gap-2 mb-4">
                             <button onclick="nextStep('list')" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-bold shadow-lg">單步執行 (Step)</button>
@@ -475,10 +514,11 @@
         };
 
         function updateGreetingCode() {
+            const nl = codeNL('useNewline');
             document.getElementById('codeGreetingContainer').innerHTML = `
                 <span id="line-greeting-1" class="code-line text-slate-500"># input() 讀取輸入，回傳的是「字串 (str)」型態</span>
                 <span id="line-greeting-2" class="code-line text-slate-500"># 變數 name 儲存了輸入值，所以 name 的型態也是字串</span>
-                <span id="line-greeting-3" class="code-line">name = input('What is your name?\\n')</span>
+                <span id="line-greeting-3" class="code-line">name = input('What is your name?${nl}')</span>
                 <span id="line-greeting-4" class="code-line"></span>
                 <span id="line-greeting-5" class="code-line text-slate-500"># print() 使用逗號 (,) 分隔時，Python 會自動處理型態並加入空格</span>
                 <span id="line-greeting-6" class="code-line">print('Hello', name, '!')</span>
@@ -487,11 +527,12 @@
         }
 
         function updateAverageCode() {
+            const nl = codeNL('useNewlineAverage');
             document.getElementById('codeAverageContainer').innerHTML = `
                 <span id="line-average-1" class="code-line text-slate-500"># input() 讀取的是字串，無法直接做數學運算</span>
                 <span id="line-average-2" class="code-line text-slate-500"># 必須使用 int() 函式，將字串轉換成「整數 (int)」</span>
-                <span id="line-average-3" class="code-line">x = int(input('Please enter number x:\\n'))</span>
-                <span id="line-average-4" class="code-line">y = int(input('Please enter number y:\\n'))</span>
+                <span id="line-average-3" class="code-line">x = int(input('Please enter number x:${nl}'))</span>
+                <span id="line-average-4" class="code-line">y = int(input('Please enter number y:${nl}'))</span>
                 <span id="line-average-5" class="code-line"></span>
                 <span id="line-average-6" class="code-line text-slate-500"># 計算平均，結果會是小數 (float)</span>
                 <span id="line-average-7" class="code-line">z = (x + y) / 2</span>
@@ -506,10 +547,11 @@
         }
 
         function updateTriangleCode() {
+            const nl = codeNL('useNewlineTriangle');
             document.getElementById('codeTriangleContainer').innerHTML = `
                 <span id="line-triangle-1" class="code-line text-slate-500"># input() 讀取的是字串，int() 將字串轉成「整數 (int)」</span>
-                <span id="line-triangle-3" class="code-line">base = int(input('Please enter the base of the triangle:\\n'))</span>
-                <span id="line-triangle-4" class="code-line">height = int(input('Please enter the height of the triangle:\\n'))</span>
+                <span id="line-triangle-3" class="code-line">base = int(input('Please enter the base of the triangle:${nl}'))</span>
+                <span id="line-triangle-4" class="code-line">height = int(input('Please enter the height of the triangle:${nl}'))</span>
                 <span id="line-triangle-5" class="code-line"></span>
                 <span id="line-triangle-6" class="code-line text-slate-500"># 三角形面積公式：底 × 高 ÷ 2</span>
                 <span id="line-triangle-7" class="code-line">area = base * height / 2</span>
@@ -521,11 +563,12 @@
         }
         
         function updateGradeCode() {
+            const nl = codeNL('useNewlineGrade');
             document.getElementById('codeGradeContainer').innerHTML = `
                 <span id="line-grade-1" class="code-line text-slate-500"># 使用 int() 將輸入的字串轉換成整數</span>
-                <span id="line-grade-2" class="code-line">x = int(input('Please enter homework grades:\\n'))</span>
-                <span id="line-grade-3" class="code-line">y = int(input('Please enter quiz score:\\n'))</span>
-                <span id="line-grade-4" class="code-line">z = int(input('Please enter your usual grades:\\n'))</span>
+                <span id="line-grade-2" class="code-line">x = int(input('Please enter homework grades:${nl}'))</span>
+                <span id="line-grade-3" class="code-line">y = int(input('Please enter quiz score:${nl}'))</span>
+                <span id="line-grade-4" class="code-line">z = int(input('Please enter your usual grades:${nl}'))</span>
                 <span id="line-grade-5" class="code-line"></span>
                 <span id="line-grade-6" class="code-line text-slate-500"># 計算加權分數，結果為浮點數 (float)</span>
                 <span id="line-grade-7" class="code-line">grade = x * 0.4 + y * 0.4 + z * 0.2</span>
@@ -566,9 +609,10 @@
         }
 
         function updateLoopCode() {
+            const nl = codeNL('useNewlineLoop');
             document.getElementById('codeLoopContainer').innerHTML = `
                 <span id="line-loop-1" class="code-line text-slate-500"># 輸入必須用 int() 轉換成整數</span>
-                <span id="line-loop-2" class="code-line">n = int(input('Please enter the number n:\\n'))</span>
+                <span id="line-loop-2" class="code-line">n = int(input('Please enter the number n:${nl}'))</span>
                 <span id="line-loop-3" class="code-line text-slate-500"># 計算總和，要先歸零</span>
                 <span id="line-loop-4" class="code-line">total = 0</span>
                 <span id="line-loop-5" class="code-line"></span>
@@ -586,17 +630,18 @@
         }
 
         function updatePasswordCode() {
+            const nl = codeNL('useNewlinePwd');
             document.getElementById('codePasswordContainer').innerHTML = `
                 <span id="line-password-1" class="code-line">password = "137"</span>
                 <span id="line-password-2" class="code-line">times = 1     <span class="text-slate-500"># 將輸入次數設為 1 存到變數 times。</span></span>
-                <span id="line-password-3" class="code-line">password2 = input('Please enter password:\\n')</span>
+                <span id="line-password-3" class="code-line">password2 = input('Please enter password:${nl}')</span>
                 <span id="line-password-4" class="code-line"></span>
                 <span id="line-password-5" class="code-line text-slate-500"># 使用 while 迴圈，當密碼不正確且次數小於 3 時執行</span>
                 <span id="line-password-6" class="code-line">while (password != password2) and (times < 3):</span>
                 <span id="line-password-7" class="code-line ml-4">print('Wrong password!')</span>
                 <span id="line-password-8" class="code-line ml-4">times = times + 1   <span class="text-slate-500"># 錯誤次數加 1</span></span>
                 <span id="line-password-9" class="code-line ml-4 text-slate-500"># 再次輸入密碼</span>
-                <span id="line-password-10" class="code-line ml-4">password2 = input('Please enter password:\\n')</span>
+                <span id="line-password-10" class="code-line ml-4">password2 = input('Please enter password:${nl}')</span>
                 <span id="line-password-11" class="code-line"></span>
                 <span id="line-password-12" class="code-line text-slate-500"># 跳出迴圈表示密碼正確或已達 3 次錯誤</span>
                 <span id="line-password-13" class="code-line"></span>
@@ -612,6 +657,10 @@
         }
 
         function ucFirst(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+        // 換行符號勾選：codeNL 給程式碼顯示用（字面 \n），outNL 給模擬 Console 用（真換行）
+        function codeNL(id){ const el=document.getElementById(id); return (el&&el.checked) ? '\\n' : ''; }
+        function outNL(id){ const el=document.getElementById(id); return (el&&el.checked) ? '\n' : ''; }
 
         function resetAnim(key) {
             const st = animStates[key];
@@ -659,14 +708,14 @@
             
             if (key === 'greeting') {
                 const name = document.getElementById('inputName').value || "阿顯";
-                const p = "What is your name?\n";
+                const p = "What is your name?" + outNL('useNewline');
                 if (st.step === 0) { hlite(key, 3); bump('visName', name); resEl.textContent = p + name; st.step = 1; }
                 else if (st.step === 1) { hlite(key, 6); resEl.textContent = p + name + "\nHello " + name + " !"; st.step = 2; }
                 else resetAnim(key);
             } 
             else if (key === 'average') {
                 const vx = document.getElementById('numX').value || "0", vy = document.getElementById('numY').value || "0";
-                const px = "Please enter number x:\n", py = "Please enter number y:\n";
+                const px = "Please enter number x:" + outNL('useNewlineAverage'), py = "Please enter number y:" + outNL('useNewlineAverage');
                 if (st.step === 0) { hlite(key, 3); bump('visAveX', vx); resEl.textContent = px + vx; st.step = 1; }
                 else if (st.step === 1) { hlite(key, 4); bump('visAveY', vy); resEl.textContent = px + vx + "\n" + py + vy; st.step = 2; }
                 else if (st.step === 2) { hlite(key, 7); st.z = ((parseFloat(vx) + parseFloat(vy)) / 2).toFixed(1); bump('visAveZ', st.z); st.step = 3; }
@@ -675,7 +724,7 @@
             }
             else if (key === 'triangle') {
                 const vb = document.getElementById('triBase').value || "0", vh = document.getElementById('triHeight').value || "0";
-                const pb = "Please enter the base of the triangle:\n", ph = "Please enter the height of the triangle:\n";
+                const pb = "Please enter the base of the triangle:" + outNL('useNewlineTriangle'), ph = "Please enter the height of the triangle:" + outNL('useNewlineTriangle');
                 if (st.step === 0) { hlite(key, 3); bump('visTriBase', vb); resEl.textContent = pb + vb; st.step = 1; }
                 else if (st.step === 1) { hlite(key, 4); bump('visTriHeight', vh); resEl.textContent = pb + vb + "\n" + ph + vh; st.step = 2; }
                 else if (st.step === 2) { hlite(key, 7); st.area = (parseFloat(vb) * parseFloat(vh) / 2).toFixed(1); bump('visTriArea', st.area); st.step = 3; }
@@ -684,7 +733,7 @@
             }
             else if (key === 'grade') {
                 const vx = document.getElementById('scoreWork').value || "0", vy = document.getElementById('scoreExam').value || "0", vz = document.getElementById('scoreRoutine').value || "0";
-                const px = "Please enter homework grades:\n", py = "Please enter quiz score:\n", pz = "Please enter your usual grades:\n";
+                const px = "Please enter homework grades:" + outNL('useNewlineGrade'), py = "Please enter quiz score:" + outNL('useNewlineGrade'), pz = "Please enter your usual grades:" + outNL('useNewlineGrade');
                 if (st.step === 0) { hlite(key, 2); bump('visGrdX', vx); resEl.textContent = px + vx; st.step = 1; }
                 else if (st.step === 1) { hlite(key, 3); bump('visGrdY', vy); resEl.textContent = px + vx + "\n" + py + vy; st.step = 2; }
                 else if (st.step === 2) { hlite(key, 4); bump('visGrdZ', vz); resEl.textContent = px + vx + "\n" + py + vy + "\n" + pz + vz; st.step = 3; }
@@ -733,7 +782,7 @@
             const resEl = document.getElementById('resultPassword');
             const pwds = [document.getElementById('pwd_1').value, document.getElementById('pwd_2').value, document.getElementById('pwd_3').value];
             const correct = "137";
-            const prompt = "Please enter password:\n";
+            const prompt = "Please enter password:" + outNL('useNewlinePwd');
 
             if (st.step === 0) { hlite('password', 1); st.step = 1; }
             else if (st.step === 1) { hlite('password', 2); st.times = 1; bump('visPwdTimes', 1); st.step = 2; }
@@ -795,8 +844,9 @@
         }
 
         function updateListCode() {
+            const nl = codeNL('useNewlineList');
             document.getElementById('codeListContainer').innerHTML = `
-                <span id="line-list-1" class="code-line">n = int(input('Please enter the number n:\\n'))</span>
+                <span id="line-list-1" class="code-line">n = int(input('Please enter the number n:${nl}'))</span>
                 <span id="line-list-2" class="code-line text-slate-500"># 建立一個空串列為 factors</span>
                 <span id="line-list-3" class="code-line">factors = []</span>
                 <span id="line-list-4" class="code-line text-slate-500"># 執行計次式迴圈</span>
@@ -820,7 +870,7 @@
                 hlite('list', 1); st.i = 0; st.factors = [];
                 bump('visListN', n); bump('visListI', '?');
                 document.getElementById('visListFactors').textContent = '[]';
-                resEl.textContent = '請輸入數字 n :\n' + n;
+                resEl.textContent = '請輸入數字 n :' + outNL('useNewlineList') + n;
                 st.step = 1;
             } else if (st.step === 1) {
                 hlite('list', 3);
@@ -833,7 +883,7 @@
                     st.step = 3;
                 } else {
                     hlite('list', 11);
-                    resEl.textContent = '請輸入數字 n :\n' + n + '\n' + JSON.stringify(st.factors);
+                    resEl.textContent = '請輸入數字 n :' + outNL('useNewlineList') + n + '\n' + JSON.stringify(st.factors);
                     st.step = 99;
                 }
             } else if (st.step === 3) {

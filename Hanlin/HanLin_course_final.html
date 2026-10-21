@@ -7,6 +7,13 @@
     <!-- 使用 Tailwind CSS 進行快速排版 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* ====== 程式碼區樣式設定（改這裡就好）====== */
+        :root {
+            --code-font-size: 1.45rem;    /* 程式碼字級：1rem ≈ 16px */
+            --code-color: #f8fafc;       /* 程式碼本體顏色（亮白） */
+            --code-comment: #a5b4c8;     /* 註解顏色（亮灰藍） */
+            --code-highlight: #ffffff;   /* 執行到的高亮行顏色（純白） */
+        }
         /* 簡單的自定義樣式 */
         body {
             font-family: 'Noto Sans TC', sans-serif;
@@ -31,9 +38,9 @@
         }
         .code-block {
             background-color: #000000;
-            color: #d4d4d4;
+            color: var(--code-color);
             font-family: 'Courier New', Courier, monospace;
-            font-size: 0.95rem;
+            font-size: var(--code-font-size);
             padding: 1rem;
             border-radius: 0.5rem;
             overflow-x: auto;
@@ -46,11 +53,34 @@
             border-radius: 2px;
             transition: background-color 0.2s;
             min-height: 1.6em;
+            white-space: pre;
         }
         .code-line.highlight {
             background-color: rgba(59, 130, 246, 0.4);
-            color: #fff;
+            color: var(--code-highlight);
             box-shadow: inset 2px 0 0 #3b82f6;
+        }
+        /* 註解行在黑底上提高亮度（蓋過 Tailwind 的 text-slate-500） */
+        .code-block .code-line.text-slate-500 {
+            color: var(--code-comment);
+        }
+        /* 讓水平捲軸在黑底上看得見 */
+        .code-block {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 #111827;
+        }
+        .code-block::-webkit-scrollbar {
+            height: 10px;
+        }
+        .code-block::-webkit-scrollbar-track {
+            background: #111827;
+        }
+        .code-block::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 5px;
+        }
+        .code-block::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
         }
         .input-group label {
             display: block;
@@ -691,7 +721,11 @@
         function hlite(key, line) {
             document.querySelectorAll(`[id^='line-${key}']`).forEach(el => el.classList.remove('highlight'));
             const el = document.getElementById(`line-${key}-${line}`);
-            if (el) el.classList.add('highlight');
+            if (el) {
+                el.classList.add('highlight');
+                // 高亮行若超出可視範圍（超長行的右側），自動捲到看得見
+                el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
         }
 
         function bump(id, val) {
@@ -906,7 +940,47 @@
             document.getElementById('content-' + tabName).classList.remove('hidden');
             document.getElementById('tab-' + tabName).classList.add('active');
             Object.keys(animStates).forEach(k => resetAnim(k));
+            // 切換分頁後（該分頁的程式碼區轉為可見）重新量測一次
+            requestAnimationFrame(fitVisibleCodeBlocks);
         }
+
+        // ===== 讓超出寬度的程式碼行自動微縮字級，避免出現水平捲軸 =====
+        function fitCodeLines(cb) {
+            if (cb.clientWidth <= 0) {
+                // 隱藏中的分頁無法量測，先還原字級，等切換顯示時再量
+                cb.querySelectorAll('.code-line').forEach(l => l.style.fontSize = '');
+                return;
+            }
+            cb.querySelectorAll('.code-line').forEach(line => {
+                line.style.fontSize = '';
+                let guard = 0;
+                // 量到超出（容忍 2px 誤差）就按比例縮小字級，最多迭代 3 次收斂
+                while (line.scrollWidth - line.clientWidth > 2 && guard < 3) {
+                    const base = parseFloat(getComputedStyle(line).fontSize);
+                    line.style.fontSize = (base * line.clientWidth / line.scrollWidth * 0.99) + 'px';
+                    guard++;
+                }
+            });
+        }
+        function fitVisibleCodeBlocks() {
+            document.querySelectorAll('.code-block').forEach(cb => { if (cb.clientWidth > 0) fitCodeLines(cb); });
+        }
+        // 程式碼內容重新渲染時（例如換行符號勾選、輸入值改變後重算）自動重跑
+        const codeFitObserver = new MutationObserver(ms => {
+            const cbs = new Set();
+            ms.forEach(m => {
+                const t = m.target instanceof Element ? m.target : m.target.parentElement;
+                if (t) { const cb = t.closest('.code-block'); if (cb) cbs.add(cb); }
+            });
+            cbs.forEach(cb => requestAnimationFrame(() => fitCodeLines(cb)));
+        });
+        document.querySelectorAll('.code-block').forEach(cb => codeFitObserver.observe(cb, { childList: true, subtree: true }));
+        // 視窗大小改變（投影解析度不同）時重新量測
+        let resizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(fitVisibleCodeBlocks, 100);
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             updateGreetingCode(); updateAverageCode(); updateTriangleCode(); updateGradeCode(); updateLoopCode(); updatePasswordCode(); updateListCode();

@@ -142,7 +142,7 @@
 <body class="p-4 md:p-8" oncontextmenu="return false;"> 
 
     <!-- 主容器 -->
-    <div class="max-w-7xl mx-auto bg-slate-800 shadow-2xl rounded-lg overflow-hidden border border-slate-700">
+    <div class="max-w-[1600px] mx-auto bg-slate-800 shadow-2xl rounded-lg overflow-hidden border border-slate-700">
         <div class="bg-slate-900 p-6 text-white border-b border-slate-700">
             <h1 class="text-2xl font-bold">Python 程式設計概念互動網頁 (翰林版)</h1>
             <p class="text-slate-400 mt-2">對應章節：2-2 變數、運算、判斷與迴圈</p>
@@ -177,7 +177,7 @@
             <div id="content-greeting" class="tab-content block">
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">哈囉(input/print)</h2>
                 <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入名字後，電腦會將名字呈現在畫面上與使用者打招呼。</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6">
                     <div>
                         <div class="input-group mb-4">
                             <label>請問您的名字是？ (name)</label>
@@ -222,7 +222,7 @@
             <div id="content-average" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">求平均數 (變數與運算)</h2>
                 <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入兩個數字後，再呈現兩個數字的平均值。</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6">
                     <div>
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="input-group"><label>輸入數字 x</label><input type="number" id="numX" value="17" oninput="resetAnim('average')"></div>
@@ -268,7 +268,7 @@
                 <!-- 2-2. 三角形面積區塊 -->
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">求三角形面積 (變數與運算)</h2>
                 <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入三角形的底、高後，再呈現出此三角形的面積。</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6">
                     <div>
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="input-group"><label>輸入底 base</label><input type="number" id="triBase" value="8" oninput="resetAnim('triangle')"></div>
@@ -312,7 +312,7 @@
             <div id="content-grade" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">計算學期成績 (if/else)</h2>
                  <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入各項成績後，再將各項成績轉換為學期成績，並判斷學期成績是否及格？（其中，作業成績占 40％，測驗成績占 40％，平時成績占120％，學期成績 60 分為及格分數。）</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6 mb-8">
                     <div>
                         <div class="grid grid-cols-3 gap-2 mb-4">
                             <div class="input-group"><label class="text-xs">作業</label><input type="number" id="scoreWork" value="80" oninput="resetAnim('grade')"></div>
@@ -356,7 +356,7 @@
 
                 <h2 class="text-2xl font-bold mb-4 text-purple-400">個人平均成績比較(if/elif/else)</h2>
                  <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入自己的國文、英文及數學段考成績後，計算個人平均成績，再與班級總平均成績相比，並判斷個人平均成績是否高於、低於或等於班級總平均成績。（其中，國文的班級平均成績為 70 分，英文的班級平均成績為 75 分，數學的班級平均成績為 65 分。）</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6">
                     <div>
                         <div class="grid grid-cols-3 gap-2 mb-4">
                             <div class="input-group"><label class="text-xs">國文</label><input type="number" id="a051_chinese" value="85" oninput="resetAnim('a051')"></div>
@@ -395,7 +395,7 @@
             <div id="content-loop" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-4 text-blue-400">累加計算 (for迴圈)</h2>
                 <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入數字 n 後，再計算 1 ＋ 2 ＋ 3 ＋…＋ n 的值。</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6">
                     <div>
                         <div class="input-group mb-4"><label>輸入數字 n</label><input type="number" id="numN" value="10" oninput="resetAnim('loop')"></div>
                         <!-- 換行符號切換 -->
@@ -438,7 +438,7 @@
             <div id="content-password" class="tab-content hidden">
                 <h2 class="text-2xl font-bold mb-4 text-indigo-400">密碼檢查程式 (while 迴圈)</h2>
                 <p class="text-slate-400 mb-4 text-base">請設計一個電腦系統的密碼驗證機制,條件如下:1若第一次輸入密碼錯誤後,可再重複嘗試輸入兩次。2.若三次密碼都錯誤,跳出使用者帳號被鎖定的訊息。</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6">
                     <div>
                         <div class="space-y-2 mb-4">
                             <div class="input-group"><label class="text-xs">第 1 次輸入</label><input type="text" id="pwd_1" value="123" oninput="resetAnim('password')"></div>
@@ -484,7 +484,7 @@
                 <h2 class="text-2xl font-bold mb-1 text-blue-400">串列 (List)</h2>
                 <p class="text-slate-400 mb-4 text-base">請設計一個程式，讓使用者輸入一個數字後，再找出該數字的所有因數。</p>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-6">
                     <!-- 左側：輸入控制 -->
                     <div>
                         <div class="input-group mb-4">

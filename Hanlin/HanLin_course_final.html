@@ -13,6 +13,8 @@
             --code-color: #f8fafc;       /* 程式碼本體顏色（亮白） */
             --code-comment: #a5b4c8;     /* 註解顏色（亮灰藍） */
             --code-highlight: #ffffff;   /* 執行到的高亮行顏色（純白） */
+            --code-function: #c084fc;    /* 函式名稱＋配對括號顏色（紫） */
+            --code-string: #fb923c;      /* 字串顏色（橘） */
         }
         /* 簡單的自定義樣式 */
         body {
@@ -63,6 +65,40 @@
         /* 註解行在黑底上提高亮度（蓋過 Tailwind 的 text-slate-500） */
         .code-block .code-line.text-slate-500 {
             color: var(--code-comment);
+        }
+        /* 函式呼叫（名稱＋配對括號）：紫色加粗 */
+        .code-block .code-f {
+            color: var(--code-function);
+            font-weight: bold;
+        }
+        /* 字串：橘色 */
+        .code-block .code-s {
+            color: var(--code-string);
+        }
+        /* 行尾／行內註解（非整行註解）：改用註解灰，與手寫 text-slate-500 的行一致 */
+        .code-block .code-cm {
+            color: var(--code-comment);
+        }
+        /* 程式碼區下方色票圖例 */
+        .code-legend {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 0.4rem 1.25rem;
+            padding: 0.5rem 0.25rem 0;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .code-legend .dot {
+            display: inline-block;
+            width: 0.65em;
+            height: 0.65em;
+            border-radius: 50%;
+            margin-right: 0.35em;
+            vertical-align: -0.05em;
+            font-style: normal;
         }
         /* 讓水平捲軸在黑底上看得見 */
         .code-block {
@@ -951,6 +987,17 @@
             a: '#67e8f9', b: '#fda4af', n: '#a3e635', total: '#f0abfc',
             i: '#93c5fd', password: '#fca5a5', password2: '#a5b4fc', factors: '#6ee7b7'
         };
+
+        // ===== 函式名稱上色：每個函式（含配對括號）固定一個顏色 =====
+        const FUNC_COLORS = {
+            input:  '#22c55e',  // 綠 — 從外面「進來」的資料
+            print:  '#38bdf8',  // 天藍 — 「出去」到畫面
+            int:    '#f59e0b',  // 琥珀 — 轉成整數
+            str:    '#f472b6',  // 粉紅 — 轉成字串
+            range:  '#c084fc',  // 紫 — 原有函式紫
+            append: '#e879f9'   // 桃紫 — 串列專屬操作
+            // 未收錄的函式會自動落回 --code-function（紫）
+        };
         const VAR_RE = /\b(name|password2|password|times|factors|height|total|grade|area|base|x|y|z|a|b|n|i)\b/g;
 
         function paintVarNames(cb) {
@@ -960,8 +1007,8 @@
                 const nodes = [];
                 while (walker.nextNode()) {
                     const n = walker.currentNode;
-                    // 跳過註解（整行註解或行內註解）
-                    if (n.parentElement && n.parentElement.closest('.text-slate-500')) continue;
+                    // 跳過註解（整行註解或行內註解）以及函式／字串上色的 span 內容
+                    if (n.parentElement && n.parentElement.closest('.text-slate-500, .code-f, .code-s, .code-cm')) continue;
                     nodes.push(n);
                 }
                 nodes.forEach(n => colorizeTextNode(n));
@@ -1001,6 +1048,121 @@
             }
         }
 
+        // ===== 函式呼叫與字串上色 =====
+        // 函式名稱＋配對括號 → .code-f（紫）、字串 → .code-s（橘）、行尾註解 → .code-cm（灰）
+        const PY_KEYWORDS = new Set([
+            'if', 'elif', 'else', 'while', 'for', 'in', 'and', 'or', 'not',
+            'def', 'return', 'break', 'continue', 'pass', 'True', 'False', 'None'
+        ]);
+
+        function collectSegments(text, out) {
+            let i = 0;
+            const n = text.length;
+            const emit = (t, cls, color) => { if (t) out.push({ t, cls, color }); };
+            while (i < n) {
+                const ch = text[i];
+                // 行尾註解：# 之後整段是註解
+                if (ch === '#') { emit(text.slice(i), 'code-cm'); return; }
+                // 字串：吃到配對的引號
+                if (ch === "'" || ch === '"') {
+                    let j = i + 1;
+                    while (j < n && text[j] !== ch) j++;
+                    j = Math.min(j + 1, n);
+                    emit(text.slice(i, j), 'code-s');
+                    i = j;
+                    continue;
+                }
+                // 識別字：判斷是否為函式呼叫（名稱後直接接括號）
+                if (/[A-Za-z_]/.test(ch)) {
+                    let j = i;
+                    while (j < n && /[A-Za-z0-9_]/.test(text[j])) j++;
+                    const word = text.slice(i, j);
+                    let k = j;
+                    while (k < n && text[k] === ' ') k++;
+                    if (text[k] === '(' && !PY_KEYWORDS.has(word)) {
+                        // 找配對右括號（跳過字串內容、計算括號深度）
+                        let depth = 0, m = k, inQ = '';
+                        while (m < n) {
+                            const c2 = text[m];
+                            if (inQ) { if (c2 === inQ) inQ = ''; }
+                            else if (c2 === "'" || c2 === '"') inQ = c2;
+                            else if (c2 === '(') depth++;
+                            else if (c2 === ')') { depth--; if (!depth) break; }
+                            m++;
+                        }
+                        const fColor = FUNC_COLORS[word] || '';              // 查函式專屬顏色，未收錄則留空（落回 CSS 的 --code-function）
+                        emit(word + text.slice(j, k) + '(', 'code-f', fColor); // 名稱＋左括號
+                        if (m < n) {
+                            collectSegments(text.slice(k + 1, m), out);      // 參數照常上色（支援巢狀）
+                            emit(')', 'code-f', fColor);                     // 配對右括號（跟函式同色)
+                            i = m + 1;
+                        } else {
+                            collectSegments(text.slice(k + 1), out);         // 未配對，到行尾為止
+                            i = n;
+                        }
+                        continue;
+                    }
+                    emit(word, '');
+                    i = j;
+                    continue;
+                }
+                // 其他字元（數字、運算子、空白）成段輸出
+                let j = i;
+                while (j < n && !/[A-Za-z_#'"]/.test(text[j])) j++;
+                emit(text.slice(i, j), '');
+                i = j;
+            }
+        }
+
+        function paintFuncStrings(cb) {
+            cb.querySelectorAll('.code-line').forEach(line => {
+                if (line.classList.contains('text-slate-500')) return;   // 整行註解
+                if (line.dataset.pyPainted) return;                      // 已上色過
+                const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+                const nodes = [];
+                while (walker.nextNode()) {
+                    const nd = walker.currentNode;
+                    // 跳過註解（整行註解或行內註解 span）
+                    if (nd.parentElement && nd.parentElement.closest('.text-slate-500')) continue;
+                    nodes.push(nd);
+                }
+                nodes.forEach(nd => {
+                    const segs = [];
+                    collectSegments(nd.nodeValue, segs);
+                    if (!segs.some(s => s.cls)) return;                  // 沒有要上色的部分就不動 DOM
+                    const frag = document.createDocumentFragment();
+                    segs.forEach(({ t, cls, color }) => {
+                        if (cls) {
+                            const sp = document.createElement('span');
+                            sp.className = cls;
+                            if (color) sp.style.color = color;
+                            sp.textContent = t;
+                            frag.appendChild(sp);
+                        } else {
+                            frag.appendChild(document.createTextNode(t));
+                        }
+                    });
+                    nd.replaceWith(frag);
+                });
+                line.dataset.pyPainted = '1';
+            });
+        }
+
+        // ===== 在每個程式碼區塊下方加上色票圖例（每個函式一個色票） =====
+        document.querySelectorAll('.code-block').forEach(cb => {
+            if (cb.dataset.legendAdded) return;
+            cb.dataset.legendAdded = '1';
+            const lg = document.createElement('div');
+            lg.className = 'code-legend';
+            lg.innerHTML =
+                Object.keys(FUNC_COLORS).map(fname =>
+                    `<span style="color:${FUNC_COLORS[fname]}"><i class="dot" style="background:${FUNC_COLORS[fname]}"></i>${fname}</span>`
+                ).join('') +
+                '<span><i class="dot" style="background:var(--code-string)"></i>字串</span>' +
+                '<span><i class="dot" style="background:var(--code-comment)"></i>註解</span>';
+            cb.insertAdjacentElement('afterend', lg);
+        });
+
         // ===== 讓超出寬度的程式碼行自動微縮字級，避免出現水平捲軸 =====
         function fitCodeLines(cb) {
             if (cb.clientWidth <= 0) {
@@ -1029,7 +1191,7 @@
                 const t = m.target instanceof Element ? m.target : m.target.parentElement;
                 if (t) { const cb = t.closest('.code-block'); if (cb) cbs.add(cb); }
             });
-            cbs.forEach(cb => requestAnimationFrame(() => { paintVarNames(cb); fitCodeLines(cb); }));
+            cbs.forEach(cb => requestAnimationFrame(() => { paintFuncStrings(cb); paintVarNames(cb); fitCodeLines(cb); }));
         });
         document.querySelectorAll('.code-block').forEach(cb => codeFitObserver.observe(cb, { childList: true, subtree: true }));
         // 視窗大小改變（投影解析度不同）時重新量測

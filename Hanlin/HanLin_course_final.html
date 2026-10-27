@@ -597,8 +597,8 @@
             document.getElementById('codeAverageContainer').innerHTML = `
                 <span id="line-average-1" class="code-line text-slate-500"># input() 讀取的是字串，無法直接做數學運算</span>
                 <span id="line-average-2" class="code-line text-slate-500"># 必須使用 int() 函式，將字串轉換成「整數 (int)」</span>
-                <span id="line-average-3" class="code-line">x = int(input('Please enter number x:${nl}'))</span>
-                <span id="line-average-4" class="code-line">y = int(input('Please enter number y:${nl}'))</span>
+                <span id="line-average-3" class="code-line">x = int(input('Please enter the number x:${nl}'))</span>
+                <span id="line-average-4" class="code-line">y = int(input('Please enter the number y:${nl}'))</span>
                 <span id="line-average-5" class="code-line"></span>
                 <span id="line-average-6" class="code-line text-slate-500"># 計算平均，結果會是小數 (float)</span>
                 <span id="line-average-7" class="code-line">z = (x + y) / 2</span>
@@ -785,7 +785,7 @@
             } 
             else if (key === 'average') {
                 const vx = document.getElementById('numX').value || "0", vy = document.getElementById('numY').value || "0";
-                const px = "Please enter number x:" + outNL('useNewlineAverage'), py = "Please enter number y:" + outNL('useNewlineAverage');
+                const px = "Please enter the number x:" + outNL('useNewlineAverage'), py = "Please enter the number y:" + outNL('useNewlineAverage');
                 if (st.step === 0) { hlite(key, 3); bump('visAveX', vx); resEl.textContent = px + vx; st.step = 1; }
                 else if (st.step === 1) { hlite(key, 4); bump('visAveY', vy); resEl.textContent = px + vx + "\n" + py + vy; st.step = 2; }
                 else if (st.step === 2) { hlite(key, 7); st.z = ((parseFloat(vx) + parseFloat(vy)) / 2).toFixed(1); bump('visAveZ', st.z); st.step = 3; }

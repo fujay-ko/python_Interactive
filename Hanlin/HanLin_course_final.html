@@ -616,8 +616,8 @@
             const nl = codeNL('useNewlineTriangle');
             document.getElementById('codeTriangleContainer').innerHTML = `
                 <span id="line-triangle-1" class="code-line text-slate-500"># input() 讀取的是字串，int() 將字串轉成「整數 (int)」</span>
-                <span id="line-triangle-3" class="code-line">base = int(input('Please enter the base of the triangle:${nl}'))</span>
-                <span id="line-triangle-4" class="code-line">height = int(input('Please enter the height of the triangle:${nl}'))</span>
+                <span id="line-triangle-3" class="code-line">base = int(input('Please enter the base of the triangle : a${nl}'))</span>
+                <span id="line-triangle-4" class="code-line">height = int(input('Please enter the height of the triangle : b${nl}'))</span>
                 <span id="line-triangle-5" class="code-line"></span>
                 <span id="line-triangle-6" class="code-line text-slate-500"># 三角形面積公式：底 × 高 ÷ 2</span>
                 <span id="line-triangle-7" class="code-line">area = base * height / 2</span>
@@ -794,7 +794,7 @@
             }
             else if (key === 'triangle') {
                 const vb = document.getElementById('triBase').value || "0", vh = document.getElementById('triHeight').value || "0";
-                const pb = "Please enter the base of the triangle:" + outNL('useNewlineTriangle'), ph = "Please enter the height of the triangle:" + outNL('useNewlineTriangle');
+                const pb = "Please enter the base of the triangle : a" + outNL('useNewlineTriangle'), ph = "Please enter the height of the triangle : b" + outNL('useNewlineTriangle');
                 if (st.step === 0) { hlite(key, 3); bump('visTriBase', vb); resEl.textContent = pb + vb; st.step = 1; }
                 else if (st.step === 1) { hlite(key, 4); bump('visTriHeight', vh); resEl.textContent = pb + vb + "\n" + ph + vh; st.step = 2; }
                 else if (st.step === 2) { hlite(key, 7); st.area = (parseFloat(vb) * parseFloat(vh) / 2).toFixed(1); bump('visTriArea', st.area); st.step = 3; }
